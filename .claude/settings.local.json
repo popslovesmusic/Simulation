@@ -108,7 +108,9 @@
       "Bash(./rebuild_2d3d.bat)",
       "Bash(test:*)",
       "Bash(nul)",
-      "Bash(dase_cli\\dase_cli.exe:*)"
+      "Bash(dase_cli\\dase_cli.exe:*)",
+      "Bash(cmake:*)",
+      "Bash(./test_gw_engine_basic.exe)"
     ],
     "deny": [],
     "ask": []

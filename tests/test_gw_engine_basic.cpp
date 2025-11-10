@@ -7,11 +7,16 @@
  * - Basic field evolution
  */
 
+#define _USE_MATH_DEFINES  // Enable M_PI on MSVC
+#include <cmath>
 #include "../src/cpp/igsoa_gw_engine/core/symmetry_field.h"
 #include "../src/cpp/igsoa_gw_engine/core/fractional_solver.h"
 #include <iostream>
 #include <iomanip>
-#include <cmath>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 using namespace dase::igsoa::gw;
 
@@ -135,13 +140,27 @@ bool test_derivatives() {
     std::cout << "Computed Laplacian: " << laplacian.real() << std::endl;
     std::cout << "Expected Laplacian: " << expected_laplacian << std::endl;
 
-    double laplacian_rel_error = std::abs(laplacian.real() - expected_laplacian) / std::abs(expected_laplacian);
-    if (laplacian_rel_error > 0.15) {
-        std::cout << "FAILED: Laplacian error too large: " << laplacian_rel_error * 100 << "%" << std::endl;
-        return false;
+    // For very small expected values (near machine precision), check absolute error
+    double laplacian_abs_error = std::abs(laplacian.real() - expected_laplacian);
+    double laplacian_rel_error = 0.0;
+
+    if (std::abs(expected_laplacian) < 1e-10) {
+        // Use absolute error for tiny values
+        if (laplacian_abs_error > 1e-10) {
+            std::cout << "FAILED: Laplacian absolute error too large: " << laplacian_abs_error << std::endl;
+            return false;
+        }
+        laplacian_rel_error = 0.0;  // Effectively zero for tiny values
+    } else {
+        // Use relative error for normal values
+        laplacian_rel_error = laplacian_abs_error / std::abs(expected_laplacian);
+        if (laplacian_rel_error > 0.15) {
+            std::cout << "FAILED: Laplacian error too large: " << laplacian_rel_error * 100 << "%" << std::endl;
+            return false;
+        }
     }
 
-    std::cout << "✓ Laplacian computation (error: " << laplacian_rel_error * 100 << "%)" << std::endl;
+    std::cout << "✓ Laplacian computation (absolute error: " << laplacian_abs_error << ")" << std::endl;
 
     return true;
 }

@@ -1,1 +1,0 @@
-cppcheck: error: --enable parameter with the unknown name 'error'

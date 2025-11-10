@@ -108,6 +108,27 @@ target_link_libraries(dase_core PUBLIC ${FFTW3_LIBRARY})
 # Apply compiler optimizations
 target_compile_options(dase_core PRIVATE ${DASE_COMPILE_FLAGS})
 
+# ============================================================================
+# IGSOA GRAVITATIONAL WAVE ENGINE (Static Library)
+# ============================================================================
+
+add_library(igsoa_gw_core STATIC
+    src/cpp/igsoa_gw_engine/core/symmetry_field.cpp
+    src/cpp/igsoa_gw_engine/core/fractional_solver.cpp
+    src/cpp/igsoa_gw_engine/core/projection_operators.cpp
+)
+
+target_include_directories(igsoa_gw_core PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${FFTW3_INCLUDE_DIR}
+)
+
+target_link_libraries(igsoa_gw_core PUBLIC ${FFTW3_LIBRARY})
+
+# Apply compiler optimizations
+target_compile_options(igsoa_gw_core PRIVATE ${DASE_COMPILE_FLAGS})
+
 # AVX2 support
 if(DASE_ENABLE_AVX2)
     if(MSVC)
@@ -161,6 +182,21 @@ if(DASE_BUILD_JULIA_DLLS)
     add_dase_dll(dase_engine_phase4a "Phase 4A: Hot-path optimization")
     add_dase_dll(dase_engine_phase4b "Phase 4B: Barrier elimination (PRODUCTION)")
     add_dase_dll(dase_engine_phase4c "Phase 4C: AVX2 vectorization (deprecated)")
+endif()
+
+# ============================================================================
+# TESTS
+# ============================================================================
+
+if(DASE_BUILD_TESTS)
+    # GW Engine Basic Test
+    add_executable(test_gw_engine_basic
+        tests/test_gw_engine_basic.cpp
+    )
+    target_link_libraries(test_gw_engine_basic PRIVATE igsoa_gw_core)
+    target_compile_options(test_gw_engine_basic PRIVATE ${DASE_COMPILE_FLAGS})
+
+    message(STATUS "Configured test: test_gw_engine_basic")
 endif()
 
 # ============================================================================

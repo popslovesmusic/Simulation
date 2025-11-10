@@ -310,15 +310,71 @@ void SymmetryField::evolveStep(
     const std::vector<std::complex<double>>& fractional_derivatives,
     const std::vector<std::complex<double>>& source_terms)
 {
-    // TODO: Implement fractional wave equation evolution
+    // Implement fractional wave equation evolution
     // ∂²ₓψ - ₀D^α_t ψ - V(δΦ)ψ = S
     //
-    // This will use:
-    // - Laplacian (spatial part)
-    // - Fractional derivatives (from FractionalSolver)
-    // - Potential (effective mass term)
-    // - Source (binary merger)
+    // Rearranged for time stepping:
+    // ψ(t+dt) ≈ ψ(t) + dt * [∂²ₓψ - ₀D^α_t ψ - V(δΦ)ψ + S]
+    //
+    // Components:
+    // - ∂²ₓψ = Laplacian (spatial part)
+    // - ₀D^α_t ψ = fractional_derivatives (from FractionalSolver)
+    // - V(δΦ)ψ = potential term
+    // - S = source_terms (binary merger)
 
+    int total = getTotalPoints();
+    std::vector<std::complex<double>> new_field(total);
+
+    // Evolve each grid point
+    for (int i = 1; i < config_.nx - 1; i++) {
+        for (int j = 1; j < config_.ny - 1; j++) {
+            for (int k = 1; k < config_.nz - 1; k++) {
+                int idx = toFlatIndex(i, j, k);
+
+                // Get current field value
+                std::complex<double> psi = getDeltaPhi(i, j, k);
+
+                // Compute spatial derivatives (Laplacian)
+                std::complex<double> laplacian = computeLaplacian(i, j, k);
+
+                // Get fractional time derivative
+                std::complex<double> frac_deriv = fractional_derivatives[idx];
+
+                // Get potential
+                double V = getPotential(i, j, k);
+
+                // Get source term
+                std::complex<double> source = source_terms[idx];
+
+                // Fractional wave equation right-hand side:
+                // RHS = ∂²ₓψ - ₀D^α_t ψ - V·ψ + S
+                std::complex<double> rhs = laplacian - frac_deriv - V * psi + source;
+
+                // Forward Euler step (simple first-order time integration)
+                // For production, use RK4 or other higher-order method
+                new_field[idx] = psi + config_.dt * rhs;
+            }
+        }
+    }
+
+    // Update field with new values (interior points only)
+    for (int i = 1; i < config_.nx - 1; i++) {
+        for (int j = 1; j < config_.ny - 1; j++) {
+            for (int k = 1; k < config_.nz - 1; k++) {
+                int idx = toFlatIndex(i, j, k);
+                delta_phi_[idx] = new_field[idx];
+            }
+        }
+    }
+
+    // Boundary conditions: maintain current values at boundaries
+    // (Zero-gradient boundary condition implicit)
+
+    // Update gradient and potential caches
+    updateGradientCache();
+    updatePotentialCache();
+
+    // Advance time
     current_time_ += config_.dt;
 }
 

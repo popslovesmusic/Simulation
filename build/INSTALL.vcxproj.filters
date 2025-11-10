@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\igsoa-sim\build\CMakeFiles\0c209a5f470a50603d09c3072be1fee4\INSTALL_force.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{C281DC2E-56A6-35A6-9164-24FDEEA5F0F1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

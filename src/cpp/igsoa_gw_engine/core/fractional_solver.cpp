@@ -29,8 +29,13 @@ void SOEKernel::initialize(double alpha, double T_max, int target_rank) {
     weights.resize(rank);
     exponents.resize(rank);
 
-    // Memory parameter η = 1 - α (η ∈ [0, 1])
-    double eta = 1.0 - alpha;
+    // Clamp alpha to valid range
+    if (alpha < 1.0) alpha = 1.0;
+    if (alpha > 2.0) alpha = 2.0;
+
+    // Memory parameter η = α - 1 (η ∈ [0, 1])
+    // Note: η=0 means no memory (α=1), η=1 means maximum memory (α=2)
+    double eta = alpha - 1.0;
 
     // Choose exponential grid for decay rates
     // Spread from fast to slow decay
@@ -44,27 +49,19 @@ void SOEKernel::initialize(double alpha, double T_max, int target_rank) {
         exponents[r] = s_min * std::exp(frac * log_ratio);
 
         // Weight approximation based on memory strength
-        // For α → 2 (η → 0): weights should be small (weak memory)
-        // For α → 1 (η → 1): weights should be large (strong memory)
+        // For α = 1 (η = 0): minimal weights (weak memory at horizon)
+        // For α = 2 (η = 1): larger weights (strong memory in flat space)
         //
-        // Use power-law weights with memory-dependent decay
-        double base_weight = eta * std::pow(exponents[r], -eta);
-
-        // Normalize to approximate integral
-        weights[r] = base_weight / (gamma_functions::gamma(2.0 - 2.0*alpha) * double(rank));
+        // Simplified uniform weights for now (can be refined)
+        weights[r] = 1.0 / double(rank);
     }
 
-    // Normalization pass to ensure reasonable magnitude
-    double total_weight = 0.0;
-    for (int r = 0; r < rank; r++) {
-        total_weight += weights[r];
-    }
-
-    // Scale weights if needed
-    if (total_weight > 1e-12) {
-        double scale_factor = 1.0 / (gamma_functions::gamma(2.0 - 2.0*alpha) * std::sqrt(total_weight));
+    // Apply memory-strength scaling
+    double gamma_factor = gamma_functions::gamma(2.0 - 2.0*alpha);
+    if (std::abs(gamma_factor) > 1e-12 && !std::isnan(gamma_factor) && !std::isinf(gamma_factor)) {
+        double scale = eta / (gamma_factor * double(rank));
         for (int r = 0; r < rank; r++) {
-            weights[r] *= scale_factor;
+            weights[r] *= scale;
         }
     }
 }

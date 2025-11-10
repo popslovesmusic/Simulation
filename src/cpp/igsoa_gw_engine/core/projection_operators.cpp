@@ -4,6 +4,7 @@
 
 #include "projection_operators.h"
 #include <cmath>
+#include <algorithm>
 
 namespace dase {
 namespace igsoa {
@@ -27,16 +28,74 @@ double ProjectionOperators::compute_phi_mode(std::complex<double> delta_phi) con
 }
 
 std::vector<double> ProjectionOperators::compute_phi_mode_field(const SymmetryField& field) const {
-    // TODO: Implement for all grid points
-    std::vector<double> phi_field;
+    int total = field.getTotalPoints();
+    std::vector<double> phi_field(total);
+
+    for (int i = 0; i < field.getNx(); i++) {
+        for (int j = 0; j < field.getNy(); j++) {
+            for (int k = 0; k < field.getNz(); k++) {
+                int idx = field.toFlatIndex(i, j, k);
+                std::complex<double> phi = field.getDeltaPhi(i, j, k);
+                phi_field[idx] = compute_phi_mode(phi);
+            }
+        }
+    }
+
     return phi_field;
 }
 
 Tensor4x4 ProjectionOperators::compute_stress_energy_tensor(
     const SymmetryField& field, int i, int j, int k) const
 {
-    // TODO: Implement O_μν ~ ∇_μ δΦ ∇_ν δΦ - g_μν L(δΦ)
     Tensor4x4 O_tensor;
+
+    // Get field value and gradients
+    std::complex<double> phi = field.getDeltaPhi(i, j, k);
+    Vector3D grad_phi = field.computeGradient(i, j, k);
+
+    // Compute Lagrangian density
+    // L(δΦ) = |∇δΦ|² - V(δΦ)
+    double grad_sq = grad_phi.dot(grad_phi);
+    double potential = field.getPotential(i, j, k);
+    double lagrangian = grad_sq - potential;
+
+    // Stress-energy tensor in IGSOA:
+    // O_μν = ∂_μ δΦ* ∂_ν δΦ + ∂_μ δΦ ∂_ν δΦ* - g_μν L(δΦ)
+    //
+    // Simplified heuristic (spatial part dominates for GW):
+    // O_ij ≈ ∂_i |δΦ| ∂_j |δΦ| - δ_ij L(δΦ)
+
+    // Spatial components (i,j = 1,2,3)
+    for (int mu = 1; mu <= 3; mu++) {
+        for (int nu = 1; nu <= 3; nu++) {
+            double grad_mu = 0.0, grad_nu = 0.0;
+
+            if (mu == 1) grad_mu = grad_phi.x;
+            else if (mu == 2) grad_mu = grad_phi.y;
+            else if (mu == 3) grad_mu = grad_phi.z;
+
+            if (nu == 1) grad_nu = grad_phi.x;
+            else if (nu == 2) grad_nu = grad_phi.y;
+            else if (nu == 3) grad_nu = grad_phi.z;
+
+            O_tensor(mu, nu) = grad_mu * grad_nu;
+
+            // Subtract trace part
+            if (mu == nu) {
+                O_tensor(mu, nu) -= lagrangian / 3.0;
+            }
+        }
+    }
+
+    // Time components (simplified: O_00 = energy density)
+    O_tensor(0, 0) = std::norm(phi) + grad_sq + potential;
+
+    // Mixed time-space (O_0i = momentum flux)
+    for (int idx = 1; idx <= 3; idx++) {
+        O_tensor(0, idx) = 0.0;  // Simplified: no momentum flux
+        O_tensor(idx, 0) = 0.0;
+    }
+
     return O_tensor;
 }
 
@@ -55,19 +114,63 @@ ProjectionOperators::StrainComponents ProjectionOperators::compute_strain(
 ProjectionOperators::StrainComponents ProjectionOperators::compute_strain_at_observer(
     const SymmetryField& field) const
 {
-    // TODO: Compute O_μν at observer location and extract strain
-    StrainComponents strain;
-    return strain;
+    // Get observer position
+    Vector3D obs_pos = config_.observer_position;
+
+    // Find nearest grid point (or interpolate in future)
+    int i, j, k;
+    field.toIndices(obs_pos, i, j, k);
+
+    // Clamp to valid range
+    i = std::max(0, std::min(i, field.getNx() - 1));
+    j = std::max(0, std::min(j, field.getNy() - 1));
+    k = std::max(0, std::min(k, field.getNz() - 1));
+
+    // Compute stress tensor at observer
+    Tensor4x4 O_tensor = compute_stress_energy_tensor(field, i, j, k);
+
+    // Extract strain
+    return compute_strain(O_tensor, config_.detector_normal);
 }
 
 ProjectionOperators::CausalFlowVector ProjectionOperators::compute_causal_flow(
     const SymmetryField& field, int i, int j, int k) const
 {
-    // TODO: Implement B_μ computation
-    CausalFlowVector B;
-    B.B0 = B.B1 = B.B2 = B.B3 = 0.0;
-    B.magnitude = 0.0;
-    return B;
+    CausalFlowVector B_vec;
+
+    // Causal exchange vector B_μ represents direction of information flow
+    // In IGSOA, this is related to phase gradients of δΦ
+    //
+    // B_i ~ Im(δΦ* ∂_i δΦ) / |δΦ|²
+    //
+    // Simplified implementation: use phase gradient
+
+    std::complex<double> phi = field.getDeltaPhi(i, j, k);
+    Vector3D grad_phi = field.computeGradient(i, j, k);
+
+    double phi_norm_sq = std::norm(phi);
+
+    if (phi_norm_sq > 1e-20) {
+        // Spatial components
+        B_vec.B1 = grad_phi.x / std::sqrt(phi_norm_sq);
+        B_vec.B2 = grad_phi.y / std::sqrt(phi_norm_sq);
+        B_vec.B3 = grad_phi.z / std::sqrt(phi_norm_sq);
+
+        // Time component (simplified)
+        B_vec.B0 = 1.0;  // Unit time flow
+    } else {
+        B_vec.B0 = 1.0;
+        B_vec.B1 = 0.0;
+        B_vec.B2 = 0.0;
+        B_vec.B3 = 0.0;
+    }
+
+    // Magnitude (3-vector part)
+    B_vec.magnitude = std::sqrt(B_vec.B1*B_vec.B1 +
+                                 B_vec.B2*B_vec.B2 +
+                                 B_vec.B3*B_vec.B3);
+
+    return B_vec;
 }
 
 ProjectionOperators::FullProjection ProjectionOperators::compute_full_projection(
@@ -89,8 +192,37 @@ ProjectionOperators::StrainComponents ProjectionOperators::transform_gauge(
 }
 
 Tensor4x4 ProjectionOperators::apply_TT_projection(const Tensor4x4& tensor) const {
-    // TODO: Apply transverse-traceless projection
-    return tensor;
+    Tensor4x4 TT_tensor;
+
+    // TT projection operator:
+    // h^TT_ij = (P_ik P_jl - 1/2 P_ij P_kl) h_kl
+    //
+    // where P_ij = δ_ij - n_i n_j is the transverse projector
+    // and n is the propagation direction
+
+    // For now, simple traceless-symmetric extraction
+    // (Full TT projection requires Fourier methods)
+
+    // Copy spatial part
+    for (int i = 1; i <= 3; i++) {
+        for (int j = 1; j <= 3; j++) {
+            TT_tensor(i, j) = tensor(i, j);
+        }
+    }
+
+    // Make traceless
+    double trace = TT_tensor(1,1) + TT_tensor(2,2) + TT_tensor(3,3);
+    TT_tensor(1, 1) -= trace / 3.0;
+    TT_tensor(2, 2) -= trace / 3.0;
+    TT_tensor(3, 3) -= trace / 3.0;
+
+    // Zero out time components
+    for (int i = 0; i <= 3; i++) {
+        TT_tensor(0, i) = 0.0;
+        TT_tensor(i, 0) = 0.0;
+    }
+
+    return TT_tensor;
 }
 
 double ProjectionOperators::metric(int mu, int nu) const {
