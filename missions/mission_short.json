@@ -1,0 +1,18 @@
+{
+  "command": "run_mission",
+  "params": {
+    "engine_id": "engine_001",
+    "mission": {
+      "engine_type": "phase4b",
+      "timestep": 0.0005,
+      "num_steps": 2000,
+      "integrator": "rk4",
+      "boundary": "periodic",
+      "damping": 0.001,
+      "timeout_sec": 300,
+      "progress_interval": 50,
+      "output_frequency": 20,
+      "output_file": "mission_short.json"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "commands": [
+    {
+      "command": "check_analysis_tools",
+      "params": {}
+    },
+    {
+      "command": "create_engine",
+      "params": {
+        "engine_type": "igsoa_complex_1d",
+        "num_nodes": 1024,
+        "R_c": 2.0
+      }
+    },
+    {
+      "command": "run_mission",
+      "params": {
+        "engine_id": "engine_001",
+        "num_steps": 1000,
+        "iterations_per_node": 30
+      }
+    },
+    {
+      "command": "engine_fft",
+      "params": {
+        "engine_id": "engine_001",
+        "field": "psi_real"
+      }
+    }
+  ]
+}

@@ -1,0 +1,303 @@
+/**
+ * Grid Component Styles
+ * Spreadsheet-style grid for DASE analog circuit design
+ */
+
+/* Grid Container */
+.grid-container {
+    flex-grow: 1;
+    overflow: auto;
+    padding: var(--spacing-lg);
+    background-color: var(--bg-primary);
+}
+
+/* Grid Workspace */
+.grid-workspace {
+    min-width: 100%;
+    display: inline-block;
+}
+
+/* Grid Title */
+.grid-title {
+    color: var(--text-accent);
+    margin-bottom: var(--spacing-lg);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Grid Table */
+.grid-table {
+    border-collapse: collapse;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-secondary);
+}
+
+/* Grid Header (Column labels A, B, C...) */
+.grid-header {
+    background-color: var(--bg-primary);
+    border-bottom: 2px solid var(--border-primary);
+}
+
+.grid-header-cell {
+    padding: 8px 12px;
+    text-align: center;
+    font-weight: bold;
+    color: var(--text-accent);
+    border-right: 1px solid var(--border-secondary);
+    min-width: 100px;
+    font-size: 11px;
+}
+
+.grid-header-cell:last-child {
+    border-right: none;
+}
+
+/* Grid Row Header (Row numbers 1, 2, 3...) */
+.grid-row-header {
+    background-color: var(--bg-primary);
+    border-right: 2px solid var(--border-primary);
+    padding: 6px 12px;
+    text-align: center;
+    font-weight: bold;
+    color: var(--text-accent);
+    min-width: 50px;
+    font-size: 11px;
+}
+
+/* Grid Cell */
+.grid-cell {
+    padding: 6px 8px;
+    border: 1px solid var(--border-secondary);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+    min-width: 100px;
+    min-height: 28px;
+    cursor: cell;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.grid-cell:hover {
+    background-color: var(--bg-hover);
+}
+
+.grid-cell.selected {
+    background-color: var(--bg-selected);
+    border: 2px solid var(--border-primary);
+    outline: none;
+}
+
+.grid-cell.editing {
+    background-color: var(--bg-primary);
+    border: 2px solid var(--text-accent);
+    outline: none;
+}
+
+.grid-cell.readonly {
+    background-color: var(--bg-primary);
+    color: var(--text-dim);
+    cursor: not-allowed;
+}
+
+/* Grid Cell Input (when editing) */
+.grid-cell-input {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+    font-family: var(--font-family);
+    padding: 0;
+    outline: none;
+}
+
+/* Cell Types */
+.grid-cell-formula {
+    color: var(--text-accent);
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.grid-cell-number {
+    text-align: right;
+    color: var(--success);
+}
+
+.grid-cell-text {
+    text-align: left;
+}
+
+.grid-cell-error {
+    color: var(--error);
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Selection Range */
+.grid-cell.in-range {
+    background-color: rgba(59, 130, 246, 0.2);
+    border-color: var(--border-primary);
+}
+
+.grid-cell.range-start {
+    border-top-left-radius: 4px;
+}
+
+.grid-cell.range-end {
+    border-bottom-right-radius: 4px;
+}
+
+/* Cell Drag Handle */
+.grid-cell-drag-handle {
+    position: absolute;
+    bottom: -3px;
+    right: -3px;
+    width: 6px;
+    height: 6px;
+    background-color: var(--border-primary);
+    cursor: crosshair;
+    border: 1px solid var(--bg-primary);
+    display: none;
+}
+
+.grid-cell.selected .grid-cell-drag-handle {
+    display: block;
+}
+
+/* Formula Bar */
+.formula-bar {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-secondary);
+    gap: var(--spacing-md);
+}
+
+.formula-bar-label {
+    font-weight: bold;
+    color: var(--text-accent);
+    min-width: 60px;
+}
+
+.formula-bar-cell-ref {
+    padding: 4px 8px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 4px;
+    color: var(--text-primary);
+    min-width: 80px;
+    text-align: center;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.formula-bar-input {
+    flex-grow: 1;
+    padding: 4px 8px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.formula-bar-input:focus {
+    border-color: var(--border-primary);
+    outline: none;
+}
+
+/* Grid Controls */
+.grid-controls {
+    display: flex;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-secondary);
+}
+
+.grid-btn {
+    padding: 6px 12px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s;
+}
+
+.grid-btn:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--border-primary);
+}
+
+.grid-btn:active {
+    background-color: var(--bg-selected);
+}
+
+.grid-btn.primary {
+    background-color: var(--border-primary);
+    color: white;
+}
+
+.grid-btn.primary:hover {
+    background-color: #2563eb;
+}
+
+/* Scrollbar Styling for Grid */
+.grid-container::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.grid-container::-webkit-scrollbar-track {
+    background-color: var(--bg-primary);
+}
+
+.grid-container::-webkit-scrollbar-thumb {
+    background-color: var(--border-secondary);
+    border-radius: 6px;
+}
+
+.grid-container::-webkit-scrollbar-thumb:hover {
+    background-color: var(--border-primary);
+}
+
+.grid-container::-webkit-scrollbar-corner {
+    background-color: var(--bg-primary);
+}
+
+/* Context Menu for Grid */
+.grid-context-menu {
+    position: absolute;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    padding: 4px 0;
+    min-width: 150px;
+    z-index: 1000;
+    display: none;
+}
+
+.grid-context-menu.show {
+    display: block;
+}
+
+.grid-context-menu-item {
+    padding: 8px 16px;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.15s;
+}
+
+.grid-context-menu-item:hover {
+    background-color: var(--bg-hover);
+}
+
+.grid-context-menu-separator {
+    height: 1px;
+    background-color: var(--border-secondary);
+    margin: 4px 0;
+}

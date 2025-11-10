@@ -1,0 +1,90 @@
+================================================================================
+                        DASE CLI QUICK START GUIDE
+================================================================================
+
+IMPORTANT: JSON commands must be on a SINGLE LINE (no pretty-printing)!
+
+--------------------------------------------------------------------------------
+WINDOWS COMMAND PROMPT
+--------------------------------------------------------------------------------
+
+  Run from file:
+    type mission_short_corrected.json | dase_cli.exe
+
+  Using batch script:
+    run_mission.bat mission_short_corrected.json
+
+--------------------------------------------------------------------------------
+POWERSHELL
+--------------------------------------------------------------------------------
+
+  Get-Content mission_short_corrected.json | .\dase_cli.exe
+
+--------------------------------------------------------------------------------
+GIT BASH / LINUX
+--------------------------------------------------------------------------------
+
+  cat mission_short_corrected.json | ./dase_cli.exe
+
+--------------------------------------------------------------------------------
+EXAMPLE COMMANDS (single line JSON)
+--------------------------------------------------------------------------------
+
+Create Engine:
+{"command":"create_engine","params":{"engine_type":"phase4b","num_nodes":2048}}
+
+Run Mission:
+{"command":"run_mission","params":{"engine_id":"engine_001","num_steps":2000,"iterations_per_node":20}}
+
+Get Metrics:
+{"command":"get_metrics","params":{"engine_id":"engine_001"}}
+
+List All Engines:
+{"command":"list_engines","params":{}}
+
+Destroy Engine:
+{"command":"destroy_engine","params":{"engine_id":"engine_001"}}
+
+--------------------------------------------------------------------------------
+EXAMPLE FILES PROVIDED
+--------------------------------------------------------------------------------
+
+  mission_short_corrected.json  - Phase 4B engine example (AVX2 optimized)
+  mission_igsoa_complex.json    - IGSOA Complex engine example
+  examples.json                 - All commands demonstrated
+
+--------------------------------------------------------------------------------
+CONVERTING PRETTY-PRINTED JSON
+--------------------------------------------------------------------------------
+
+  python minify_json.py input.json output.json
+
+--------------------------------------------------------------------------------
+COMMON ISSUES
+--------------------------------------------------------------------------------
+
+  ❌ "JSON parse error"
+     → File is pretty-printed (multi-line). Must be single-line!
+     → Use minify_json.py to convert
+
+  ❌ "Missing 'command' field"
+     → Windows echo adds extra quotes
+     → Use 'type' command instead
+
+  ❌ "The system cannot find the file"
+     → Check you're in dase_cli directory: cd dase_cli
+     → Use .\dase_cli.exe (with dot-slash)
+
+  ⚠️  Segfault on exit
+     → Known issue - happens AFTER all commands complete
+     → Doesn't affect results - all data is correct
+     → Hide with: 2>nul (cmd) or 2>/dev/null (bash)
+
+--------------------------------------------------------------------------------
+PERFORMANCE EXPECTATIONS
+--------------------------------------------------------------------------------
+
+  Phase 4B Engine:    0.17-0.33 ns/op, 3-5 billion ops/sec, 50,000-85,000x
+  IGSOA Complex:      ~25 ns/op, 39 million ops/sec
+
+================================================================================

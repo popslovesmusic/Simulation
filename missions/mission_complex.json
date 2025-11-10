@@ -1,0 +1,18 @@
+{
+  "command": "run_mission",
+  "params": {
+    "engine_id": "engine_complex_001",
+    "mission": {
+      "engine_type": "igsoa_complex",
+      "timestep": 0.00025,
+      "num_steps": 200,
+      "integrator": "rk4",
+      "boundary": "periodic",
+      "damping": 0.001,
+      "timeout_sec": 120,
+      "progress_interval": 25,
+      "output_frequency": 10,
+      "output_file": "mission_complex_output.json"
+    }
+  }
+}

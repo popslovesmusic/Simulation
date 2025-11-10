@@ -1,0 +1,23 @@
+{
+  "protocol_version": "SATP_v2",
+  "engine_mode": "igsoa_complex",
+  "N": 4096,
+  "R_c": 1.0,
+  "profile_type": "gaussian",
+  "amplitude_A": 100.0,
+  "width_sigma": 256,
+  "translation_cycles": 10,
+  "translation_per_cycle": 100,
+  "field_mode": "BLEND_MODE",
+  "blend_weight_function": {
+    "type": "linear",
+    "start": 0.3,
+    "end": 0.6,
+    "cycles": 10
+  },
+  "results": {
+    "final_measured_shift": null,
+    "final_drift": null,
+    "integrated_exotic_cost": null
+  }
+}

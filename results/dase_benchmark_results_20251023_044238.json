@@ -1,0 +1,68 @@
+{
+  "metadata": {
+    "platform": "Windows-10-10.0.26100-SP0",
+    "system": "Windows-10",
+    "python": "3.11.9",
+    "cpu": "Intel64 Family 6 Model 151 Stepping 5, GenuineIntel",
+    "ram_gb": 23.696025848388672,
+    "logical_cpus": 12
+  },
+  "engine_available": true,
+  "cpu_caps": {
+    "avx2": true,
+    "fma": true
+  },
+  "basic_ops": {
+    "amplifier": {
+      "status": "passed",
+      "time_ms": 0.0036999990697950125
+    },
+    "integrator": {
+      "status": "passed",
+      "time_ms": 0.0028999929782003164
+    },
+    "oscillator": {
+      "status": "passed",
+      "time_ms": 0.11290001566521823
+    },
+    "filter": {
+      "status": "passed",
+      "time_ms": 60.21880000480451
+    },
+    "feedback": {
+      "status": "passed",
+      "time_ms": 0.0050000089686363935
+    }
+  },
+  "performance": {
+    "mode": "native",
+    "elapsed_s": 7.196184999978868,
+    "current_ops_per_second": 11109764.582569582,
+    "speedup_factor": 172.20135102982852,
+    "total_operations": 92160000
+  },
+  "accuracy": {
+    "dc_gain": {
+      "error": 0.0,
+      "status": "passed"
+    },
+    "sine_wave": {
+      "error": 0.0,
+      "status": "passed"
+    },
+    "step_response": {
+      "error": 1.0,
+      "status": "failed"
+    },
+    "frequency_response": {
+      "error": 0.0,
+      "status": "passed"
+    }
+  },
+  "summary": {
+    "engine_status": "native",
+    "basic_ops_passed": "5/5",
+    "accuracy_passed": "3/4",
+    "performance_mode": "native"
+  }
+}

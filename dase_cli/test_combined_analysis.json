@@ -1,0 +1,5 @@
+{"command":"create_engine","params":{"engine_type":"igsoa_complex_2d","num_nodes":4096,"N_x":64,"N_y":64,"R_c":2.0}}
+{"command":"set_igsoa_state","params":{"engine_id":"engine_001","profile_type":"circular_gaussian","params":{"amplitude":2.0,"sigma":5.0}}}
+{"command":"run_mission","params":{"engine_id":"engine_001","num_steps":100}}
+{"command":"analyze_fields","params":{"engine_id":"engine_001","analysis_type":"engine","config":{"engine":{"enabled":true,"compute_fft":true,"fields_to_analyze":["psi_real","psi_imag","phi"]}}}}
+{"command":"destroy_engine","params":{"engine_id":"engine_001"}}

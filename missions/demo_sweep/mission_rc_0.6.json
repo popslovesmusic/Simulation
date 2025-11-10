@@ -1,0 +1,5 @@
+{"command":"create_engine","params":{"engine_type":"igsoa_complex","num_nodes":1024,"R_c":0.55,"include_psi":true}}
+{"command":"set_igsoa_state","params":{"engine_id":"engine_001","profile_type":"gaussian","params":{"amplitude":1.5,"center_node":512,"width":256}}}
+{"command":"run_mission","params":{"engine_id":"engine_001","num_steps":20,"iterations_per_node":30}}
+{"command":"get_state","params":{"engine_id":"engine_001"}}
+{"command":"destroy_engine","params":{"engine_id":"engine_001"}}

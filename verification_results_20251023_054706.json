@@ -1,0 +1,96 @@
+{
+  "timestamp": "2025-10-23T05:46:58.854485",
+  "tests": {
+    "oscillator_440.0hz": {
+      "frequency_hz": 440.0,
+      "duration_s": 0.05,
+      "samples": 2400,
+      "range": [
+        -1.0,
+        1.0
+      ],
+      "time_ms": 0.09079999290406704,
+      "status": "PASS"
+    },
+    "oscillator_1000.0hz": {
+      "frequency_hz": 1000.0,
+      "duration_s": 0.1,
+      "samples": 4800,
+      "range": [
+        -1.0,
+        1.0
+      ],
+      "time_ms": 0.16029999824240804,
+      "status": "PASS"
+    },
+    "oscillator_100.0hz": {
+      "frequency_hz": 100.0,
+      "duration_s": 0.2,
+      "samples": 9600,
+      "range": [
+        -1.0,
+        1.0
+      ],
+      "time_ms": 0.26359999901615083,
+      "status": "PASS"
+    },
+    "filter_64samples": {
+      "samples": 64,
+      "input_energy": 10.880000000000013,
+      "output_energy": 2.8799996566772568,
+      "energy_ratio": 0.26470585079754166,
+      "time_ms": 0.8671999967191368,
+      "status": "PASS"
+    },
+    "filter_128samples": {
+      "samples": 128,
+      "input_energy": 21.760000000000016,
+      "output_energy": 5.7599993133545135,
+      "energy_ratio": 0.2647058507975418,
+      "time_ms": 0.06439999560825527,
+      "status": "PASS"
+    },
+    "filter_256samples": {
+      "samples": 256,
+      "input_energy": 43.51999999999998,
+      "output_energy": 11.519998626708993,
+      "energy_ratio": 0.26470585079754133,
+      "time_ms": 0.0686999992467463,
+      "status": "PASS"
+    },
+    "filter_512samples": {
+      "samples": 512,
+      "input_energy": 87.0399999999999,
+      "output_energy": 23.039997253417905,
+      "energy_ratio": 0.26470585079754055,
+      "time_ms": 0.058200006606057286,
+      "status": "PASS"
+    },
+    "filter_1024samples": {
+      "samples": 1024,
+      "input_energy": 174.07999999999996,
+      "output_energy": 46.07999450683573,
+      "energy_ratio": 0.2647058507975399,
+      "time_ms": 0.0667999847792089,
+      "status": "PASS"
+    },
+    "engine_integration": {
+      "nodes": 1024,
+      "steps": 3000,
+      "elapsed_s": 7.794289999990724,
+      "total_operations": 92160000,
+      "avx2_operations": 92160000,
+      "avx2_percentage": 100.0,
+      "ns_per_op": 97.08463650173611,
+      "speedup": 159.6545092870881,
+      "ops_per_second": 10300290.92174762,
+      "target_achieved": true,
+      "status": "PASS"
+    }
+  },
+  "summary": {
+    "passed": 9,
+    "total": 9,
+    "all_passed": true
+  }
+}

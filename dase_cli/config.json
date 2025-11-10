@@ -1,0 +1,12 @@
+{
+  "default_engine": "phase4b",
+  "allow_execution": true,
+  "mission_defaults": {
+    "timestep": 0.001,
+    "num_steps": 5000,
+    "integrator": "rk4",
+    "output_frequency": 100,
+    "boundary": "periodic",
+    "damping": 0.001
+  }
+}

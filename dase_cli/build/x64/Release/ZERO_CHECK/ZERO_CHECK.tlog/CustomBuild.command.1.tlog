@@ -1,0 +1,10 @@
+^D:\IGSOA-SIM\DASE_CLI\BUILD\CMAKEFILES\24E5287AB5D84081B956E0B828F5D6CD\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/igsoa-sim/dase_cli -BD:/igsoa-sim/dase_cli/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/igsoa-sim/dase_cli/build/dase_cli.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

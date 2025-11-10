@@ -1,0 +1,68 @@
+{
+  "metadata": {
+    "platform": "Windows-10-10.0.26100-SP0",
+    "system": "Windows-10",
+    "python": "3.11.9",
+    "cpu": "Intel64 Family 6 Model 151 Stepping 5, GenuineIntel",
+    "ram_gb": 23.696025848388672,
+    "logical_cpus": 12
+  },
+  "engine_available": true,
+  "cpu_caps": {
+    "avx2": true,
+    "fma": true
+  },
+  "basic_ops": {
+    "amplifier": {
+      "status": "passed",
+      "time_ms": 0.0035999983083456755
+    },
+    "integrator": {
+      "status": "passed",
+      "time_ms": 0.002800021320581436
+    },
+    "oscillator": {
+      "status": "passed",
+      "time_ms": 0.11559997801668942
+    },
+    "filter": {
+      "status": "error",
+      "error": "process_block_frequency_domain(): incompatible function arguments. The following argument types are supported:\n    1. (self: dase_engine.AnalogCellularEngineAVX2, arg0: collections.abc.Sequence[typing.SupportsFloat]) -> None\n\nInvoked with: <dase_engine.AnalogCellularEngineAVX2 object at 0x0000026F93DAC2B0>"
+    },
+    "feedback": {
+      "status": "error",
+      "error": "apply_feedback(): incompatible function arguments. The following argument types are supported:\n    1. (self: dase_engine.AnalogUniversalNodeAVX2, arg0: typing.SupportsFloat, arg1: typing.SupportsFloat) -> float\n\nInvoked with: <dase_engine.AnalogUniversalNodeAVX2 object at 0x0000026F93CF59F0>, 0.1"
+    }
+  },
+  "performance": {
+    "mode": "native",
+    "elapsed_s": 7.217654600011883,
+    "current_ops_per_second": 11087372.525743524,
+    "speedup_factor": 171.85427414902463,
+    "total_operations": 92160000
+  },
+  "accuracy": {
+    "dc_gain": {
+      "status": "passed",
+      "max_error": 0.0
+    },
+    "sine_wave": {
+      "status": "passed",
+      "max_error": 1.1102230246251565e-16
+    },
+    "step_response": {
+      "status": "failed",
+      "max_error": 0.000999
+    },
+    "frequency_response": {
+      "status": "passed",
+      "max_error": 0.008415
+    }
+  },
+  "summary": {
+    "engine_status": "native",
+    "basic_ops_passed": "3/5",
+    "accuracy_passed": "3/4",
+    "performance_mode": "native"
+  }
+}

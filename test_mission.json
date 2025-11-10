@@ -1,0 +1,5 @@
+[
+  {"command":"create_engine","params":{"engine_type":"phase4b","num_nodes":1024}},
+  {"command":"run_mission","params":{"engine_id":"engine_001","num_steps":50,"iterations_per_node":10}},
+  {"command":"get_metrics","params":{"engine_id":"engine_001"}}
+]

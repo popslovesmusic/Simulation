@@ -1,0 +1,249 @@
+/**
+ * IGSOA Physics Implementation
+ *
+ * Implements the evolution equations for the IGSOA (Informational Ground State -
+ * Ontological Asymmetry) framework with complex-valued quantum states.
+ *
+ * Core Equations:
+ * 1. Schrödinger-like evolution: iℏ ∂|Ψ⟩/∂t = Ĥ_eff|Ψ⟩
+ * 2. Causal field evolution: ∂Φ/∂t = -κ(Φ - Re[Ψ]) - γΦ
+ * 3. Informational density: F = |Ψ|²
+ * 4. Entropy production: Ṡ = R_c(Φ - Re[Ψ])²
+ *
+ * Theoretical Foundation:
+ * - IGS: Maximally symmetric Hilbert space substrate H_I
+ * - OA: Non-Hermitian operator Ĥ_eff generating structure
+ * - Φ: Realized causal energy (observable)
+ * - Ψ: Latent quantum potential (complex)
+ * - R_c: Causal resistance mediating dissipation
+ */
+
+#pragma once
+
+#include "igsoa_complex_node.h"
+#include <vector>
+#include <cmath>
+
+namespace dase {
+namespace igsoa {
+
+/**
+ * IGSOA Physics Engine
+ *
+ * Implements time evolution of the IGSOA system
+ */
+class IGSOAPhysics {
+public:
+    /**
+     * Evolve quantum state: iℏ ∂|Ψ⟩/∂t = Ĥ_eff|Ψ⟩
+     *
+     * Simplified effective Hamiltonian:
+     * Ĥ_eff = -∇² + V_eff(Φ) + iΓ
+     *
+     * Where:
+     * - ∇² is Laplacian (spatial coupling)
+     * - V_eff(Φ) = κΦ is coupling to realized field
+     * - iΓ is non-Hermitian term (dissipation)
+     *
+     * Discrete form (RK4 integrator):
+     * ∂Ψ/∂t = -i/ℏ [Ĥ_eff Ψ]
+     */
+    static void evolveQuantumState(
+        std::vector<IGSOAComplexNode>& nodes,
+        double dt,
+        double hbar = 1.0
+    ) {
+        const size_t N = nodes.size();
+
+        // RK4 integration for quantum state
+        for (size_t i = 0; i < N; i++) {
+            auto& node = nodes[i];
+
+            // Compute effective potential from realized field
+            std::complex<double> V_eff = node.kappa * node.phi;
+
+            // Spatial coupling (Laplacian approximation)
+            std::complex<double> laplacian(0.0, 0.0);
+            if (N > 1) {
+                size_t left = (i == 0) ? N - 1 : i - 1;
+                size_t right = (i == N - 1) ? 0 : i + 1;
+                laplacian = nodes[left].psi + nodes[right].psi - 2.0 * node.psi;
+            }
+
+            // Non-Hermitian dissipation term
+            std::complex<double> i_gamma(0.0, node.gamma);
+
+            // Hamiltonian action: Ĥ Ψ = -∇²Ψ + V_eff Ψ + iΓ Ψ
+            std::complex<double> H_psi = -laplacian + V_eff * node.psi + i_gamma * node.psi;
+
+            // Schrödinger evolution: ∂Ψ/∂t = -i/ℏ Ĥ Ψ
+            std::complex<double> i_unit(0.0, 1.0);
+            node.psi_dot = (-i_unit / hbar) * H_psi;
+
+            // Update Ψ using simple Euler integration
+            // (Could upgrade to RK4 for better accuracy)
+            node.psi += node.psi_dot * dt;
+        }
+    }
+
+    /**
+     * Evolve realized causal field: ∂Φ/∂t = -κ(Φ - Re[Ψ]) - γΦ
+     *
+     * This couples the realized field Φ to the quantum state Ψ with:
+     * - κ: Coupling strength (how strongly Φ follows Ψ)
+     * - γ: Dissipation (how quickly Φ decays)
+     *
+     * Physical interpretation:
+     * - Φ is pulled toward Re[Ψ] (the "classical projection" of quantum state)
+     * - γ provides energy dissipation
+     */
+    static void evolveCausalField(
+        std::vector<IGSOAComplexNode>& nodes,
+        double dt
+    ) {
+        for (auto& node : nodes) {
+            // Coupling difference: Φ - Re[Ψ]
+            double coupling_diff = node.phi - node.psi.real();
+
+            // ∂Φ/∂t = -κ(Φ - Re[Ψ]) - γΦ
+            node.phi_dot = -node.kappa * coupling_diff - node.gamma * node.phi;
+
+            // Update Φ
+            node.phi += node.phi_dot * dt;
+        }
+    }
+
+    /**
+     * Update derived quantities:
+     * - F = |Ψ|² (informational density)
+     * - T_IGS = F (informational temperature)
+     * - phase = arg(Ψ)
+     * - Ṡ = R_c(Φ - Re[Ψ])² (entropy production)
+     */
+    static void updateDerivedQuantities(
+        std::vector<IGSOAComplexNode>& nodes
+    ) {
+        for (auto& node : nodes) {
+            node.updateInformationalDensity();  // F = |Ψ|²
+            node.updatePhase();                  // phase = arg(Ψ)
+            node.updateEntropyRate();            // Ṡ = R_c(Φ - Re[Ψ])²
+        }
+    }
+
+    /**
+     * Compute spatial gradients of F (informational density)
+     * ∇F approximated as finite difference
+     */
+    static void computeGradients(
+        std::vector<IGSOAComplexNode>& nodes
+    ) {
+        const size_t N = nodes.size();
+
+        for (size_t i = 0; i < N; i++) {
+            if (N > 1) {
+                size_t right = (i == N - 1) ? 0 : i + 1;
+                // Simple forward difference: ∇F ≈ (F[i+1] - F[i])
+                nodes[i].F_gradient = nodes[right].F - nodes[i].F;
+            } else {
+                nodes[i].F_gradient = 0.0;
+            }
+        }
+    }
+
+    /**
+     * Normalize all quantum states (unitary evolution)
+     * |Ψ⟩ → |Ψ⟩ / ||Ψ||
+     */
+    static void normalizeStates(
+        std::vector<IGSOAComplexNode>& nodes
+    ) {
+        for (auto& node : nodes) {
+            node.normalize();
+        }
+    }
+
+    /**
+     * Full time step evolution
+     *
+     * Performs one complete integration step:
+     * 1. Evolve quantum state Ψ
+     * 2. Evolve causal field Φ
+     * 3. Update derived quantities (F, T_IGS, phase, Ṡ)
+     * 4. Compute gradients
+     * 5. Optionally normalize states
+     */
+    static void timeStep(
+        std::vector<IGSOAComplexNode>& nodes,
+        const IGSOAComplexConfig& config
+    ) {
+        // 1. Evolve quantum state
+        evolveQuantumState(nodes, config.dt);
+
+        // 2. Evolve causal field
+        evolveCausalField(nodes, config.dt);
+
+        // 3. Update derived quantities
+        updateDerivedQuantities(nodes);
+
+        // 4. Compute gradients
+        computeGradients(nodes);
+
+        // 5. Normalize if requested
+        if (config.normalize_psi) {
+            normalizeStates(nodes);
+        }
+    }
+
+    /**
+     * Apply external driving signal to nodes
+     *
+     * This allows injecting energy into the system through:
+     * - Direct Φ excitation (classical)
+     * - Complex Ψ excitation (quantum)
+     */
+    static void applyDriving(
+        std::vector<IGSOAComplexNode>& nodes,
+        double signal_real,
+        double signal_imag = 0.0
+    ) {
+        for (auto& node : nodes) {
+            // Drive realized field
+            node.phi += signal_real;
+
+            // Drive quantum state
+            node.psi += std::complex<double>(signal_real, signal_imag);
+        }
+    }
+
+    /**
+     * Compute total system energy
+     * E = ∑_i [|Ψ_i|² + Φ_i²]
+     */
+    static double computeTotalEnergy(
+        const std::vector<IGSOAComplexNode>& nodes
+    ) {
+        double energy = 0.0;
+        for (const auto& node : nodes) {
+            energy += node.F;           // Quantum energy: |Ψ|²
+            energy += node.phi * node.phi;  // Classical energy: Φ²
+        }
+        return energy;
+    }
+
+    /**
+     * Compute total entropy production rate
+     * Ṡ_total = ∑_i Ṡ_i
+     */
+    static double computeTotalEntropyRate(
+        const std::vector<IGSOAComplexNode>& nodes
+    ) {
+        double total_entropy = 0.0;
+        for (const auto& node : nodes) {
+            total_entropy += node.entropy_rate;
+        }
+        return total_entropy;
+    }
+};
+
+} // namespace igsoa
+} // namespace dase

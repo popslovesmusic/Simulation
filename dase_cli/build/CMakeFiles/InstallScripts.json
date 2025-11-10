@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"D:/igsoa-sim/dase_cli/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

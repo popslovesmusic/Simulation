@@ -1,0 +1,4 @@
+{"command":"create_engine","params":{"engine_type":"igsoa_complex","num_nodes":1024,"R_c":1.0}}
+{"command":"run_mission","params":{"engine_id":"engine_001","num_steps":500,"iterations_per_node":30}}
+{"command":"get_metrics","params":{"engine_id":"engine_001"}}
+{"command":"destroy_engine","params":{"engine_id":"engine_001"}}

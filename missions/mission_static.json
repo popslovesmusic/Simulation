@@ -1,0 +1,5 @@
+{"command":"create_engine","params":{"engine_type":"igsoa_complex","num_nodes":4096,"R_c":1.0}}
+{"command":"set_igsoa_state","params":{"engine_id":"engine_001","profile_type":"gaussian","mode":"overwrite","params":{"amplitude":100.0,"center_node":2048,"width":256,"baseline_phi":0.0}}}
+{"command":"run_mission","params":{"engine_id":"engine_001","num_steps":500,"iterations_per_node":30}}
+{"command":"get_state","params":{"engine_id":"engine_001","output_file":"E:/satp/igsoa-sim/analysis/raw_translation_log.txt"}}
+{"command":"destroy_engine","params":{"engine_id":"engine_001"}}

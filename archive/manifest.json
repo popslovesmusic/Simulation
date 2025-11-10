@@ -1,0 +1,31 @@
+[
+  {
+    "run_name": "satp_translation_run_v2",
+    "folder": "20251102_satp_translation_run_v2",
+    "datestamp": "20251102",
+    "files": [
+      "clean_state.json",
+      "igsoa_analysis",
+      "output_r2.json",
+      "output_r4.json",
+      "raw_output.txt",
+      "raw_output_max.txt",
+      "raw_translation_log.txt",
+      "raw_translation_log1.txt",
+      "raw_translation_log_v2.txt",
+      "satp_analysis",
+      "satp_exotic_cost_profile.png",
+      "satp_t500_state.json",
+      "satp_translation_track.png",
+      "spectral_output.json"
+    ]
+  },
+  {
+    "run_name": "satp_v2_blend",
+    "folder": "20251102_satp_v2_blend",
+    "datestamp": "20251102",
+    "files": [
+      "raw_translation_log_v2_blend.txt"
+    ]
+  }
+]

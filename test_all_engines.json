@@ -1,0 +1,7 @@
+{
+  "command": "create_engine",
+  "params": {
+    "engine_type": "phase4b",
+    "num_nodes": 512
+  }
+}

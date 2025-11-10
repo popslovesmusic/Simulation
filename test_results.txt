@@ -1,0 +1,29 @@
+DASE Analog Engine Comprehensive Benchmark
+==================================================
+System: Windows-10 (10.0.26100)
+Python: 3.11.9
+CPU Features: AVX2=True, FMA=True
+Engine initialization failed: 'charmap' codec can't encode character '\u2705' in position 0: character maps to <undefined>
+
+=== Basic Operations Benchmark ===
+Traceback (most recent call last):
+  File "D:\isoG\New-folder\sase amp fixed\dase_benchmark.py", line 105, in test_basic_ops
+    print("\u2705 AnalogUniversalNodeAVX2 initialized.")
+  File "C:\Users\jim\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2705' in position 0: character maps to <undefined>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\isoG\New-folder\sase amp fixed\dase_benchmark.py", line 371, in <module>
+    main()
+  File "D:\isoG\New-folder\sase amp fixed\dase_benchmark.py", line 364, in main
+    bench.test_basic_ops()
+  File "D:\isoG\New-folder\sase amp fixed\dase_benchmark.py", line 109, in test_basic_ops
+    print(f"\u26a0\ufe0f  Node init failed: {e}")
+  File "C:\Users\jim\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-1: character maps to <undefined>

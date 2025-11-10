@@ -1,0 +1,4 @@
+{"command":"create_engine","params":{"engine_type":"igsoa_complex","num_nodes":256,"R_c_default":2.0,"kappa":1.0,"gamma":0.1}}
+{"command":"run_mission","params":{"engine_id":"engine_001","num_steps":100,"iterations_per_node":10}}
+{"command":"get_state","params":{"engine_id":"engine_001"}}
+{"command":"get_metrics","params":{"engine_id":"engine_001"}}

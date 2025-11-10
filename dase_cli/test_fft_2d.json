@@ -1,0 +1,6 @@
+{"command":"create_engine","params":{"engine_type":"satp_higgs_2d","num_nodes":1024,"N_x":32,"N_y":32,"R_c":1.0}}
+{"command":"set_satp_state","params":{"engine_id":"engine_001","profile_type":"phi_circular_gaussian","params":{"amplitude":2.0,"sigma":1.5}}}
+{"command":"run_mission","params":{"engine_id":"engine_001","num_steps":500}}
+{"command":"engine_fft","params":{"engine_id":"engine_001","field":"phi"}}
+{"command":"check_analysis_tools","params":{}}
+{"command":"destroy_engine","params":{"engine_id":"engine_001"}}

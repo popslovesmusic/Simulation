@@ -1,0 +1,11 @@
+{"command":"get_capabilities","params":{}}
+{"command":"create_engine","params":{"engine_type":"phase4b","num_nodes":2048}}
+{"command":"create_engine","params":{"engine_type":"igsoa_complex","num_nodes":1024,"R_c":2.5}}
+{"command":"list_engines","params":{}}
+{"command":"run_mission","params":{"engine_id":"engine_001","num_steps":100,"iterations_per_node":10}}
+{"command":"run_mission","params":{"engine_id":"engine_002","num_steps":50,"iterations_per_node":5}}
+{"command":"get_metrics","params":{"engine_id":"engine_001"}}
+{"command":"get_metrics","params":{"engine_id":"engine_002"}}
+{"command":"destroy_engine","params":{"engine_id":"engine_001"}}
+{"command":"destroy_engine","params":{"engine_id":"engine_002"}}
+{"command":"list_engines","params":{}}

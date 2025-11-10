@@ -1,0 +1,65 @@
+[
+  {"command":"create_engine","params":{"engine_type":"igsoa_complex","num_nodes":4096}},
+
+  {"command":"set_igsoa_state",
+   "params":{
+     "mode":"BLEND",
+     "blend_weight":0.45,
+     "phi_profile":{"type":"gaussian","center":2048,"amplitude":100.0,"sigma":256},
+     "psi_profile":{"type":"gaussian","center":2048,"amplitude":100.0,"sigma":256}
+   }
+  },
+
+  {"command":"run_steps","params":{"num_steps":500}},
+
+  {"command":"log_state"},
+  {"command":"get_state"},
+  {"command":"save_state","params":{"path":"satp_v2_blend_t500_state.json"}},
+
+  {"command":"translate_gaussian","params":{"shift_amount":100}},
+  {"command":"run_steps","params":{"num_steps":500}},
+  {"command":"log_state"},
+  {"command":"get_state"},
+
+  {"command":"translate_gaussian","params":{"shift_amount":100}},
+  {"command":"run_steps","params":{"num_steps":500}},
+  {"command":"log_state"},
+  {"command":"get_state"},
+
+  {"command":"translate_gaussian","params":{"shift_amount":100}},
+  {"command":"run_steps","params":{"num_steps":500}},
+  {"command":"log_state"},
+  {"command":"get_state"},
+
+  {"command":"translate_gaussian","params":{"shift_amount":100}},
+  {"command":"run_steps","params":{"num_steps":500}},
+  {"command":"log_state"},
+  {"command":"get_state"},
+
+  {"command":"translate_gaussian","params":{"shift_amount":100}},
+  {"command":"run_steps","params":{"num_steps":500}},
+  {"command":"log_state"},
+  {"command":"get_state"},
+
+  {"command":"translate_gaussian","params":{"shift_amount":100}},
+  {"command":"run_steps","params":{"num_steps":500}},
+  {"command":"log_state"},
+  {"command":"get_state"},
+
+  {"command":"translate_gaussian","params":{"shift_amount":100}},
+  {"command":"run_steps","params":{"num_steps":500}},
+  {"command":"log_state"},
+  {"command":"get_state"},
+
+  {"command":"translate_gaussian","params":{"shift_amount":100}},
+  {"command":"run_steps","params":{"num_steps":500}},
+  {"command":"log_state"},
+  {"command":"get_state"},
+
+  {"command":"translate_gaussian","params":{"shift_amount":100}},
+  {"command":"run_steps","params":{"num_steps":500}},
+  {"command":"log_state"},
+  {"command":"get_state"},
+
+  {"command":"shutdown"}
+]

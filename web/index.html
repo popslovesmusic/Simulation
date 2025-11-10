@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DASE Analog Excel - Engine Connected</title>
+
+    <!-- CSS Modules -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/grid.css">
+    <link rel="stylesheet" href="css/terminal.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>DASE Analog Excel</h1>
+        <div class="menu-container">
+            <!-- File Menu -->
+            <div class="menu-item">
+                <button class="menu-button" id="file-menu-btn">File</button>
+                <div class="menu-dropdown" id="file-menu">
+                    <a href="#" id="menu-new">New</a>
+                    <a href="#" id="menu-save">Save</a>
+                    <a href="#" id="menu-load">Load</a>
+                    <hr>
+                    <a href="#" id="menu-export">Export</a>
+                </div>
+            </div>
+
+            <!-- Engine Menu -->
+            <div class="menu-item">
+                <button class="menu-button" id="engine-menu-btn">Engine</button>
+                <div class="menu-dropdown" id="engine-menu">
+                    <a href="#" id="menu-benchmark-quick">Quick Benchmark</a>
+                    <a href="#" id="menu-benchmark-endurance">Endurance Test</a>
+                    <hr>
+                    <a href="#" id="menu-engine-status">Engine Status</a>
+                    <a href="#" id="menu-engine-metrics">Get Metrics</a>
+                </div>
+            </div>
+
+            <!-- Connection Status -->
+            <div style="margin-left: auto; padding: 0 16px;">
+                <span id="connection-status" class="status-disconnected">🔴 Disconnected</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Panel - Component Library (TODO: Extract to component) -->
+        <div class="flyout-container" id="flyout">
+            <div class="flyout-trigger" onclick="toggleFlyout()"></div>
+            <div class="flyout-panel">
+                <div class="panel-tabs">
+                    <button class="panel-tab active">Components</button>
+                    <button class="panel-tab">Properties</button>
+                </div>
+                <div class="panel-content">
+                    <p style="color: #9ca3af;">Component library will be loaded here...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center - Grid Area -->
+        <div style="flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;">
+            <div id="grid-container" class="grid-container">
+                <h2 class="grid-title">Grid Workspace</h2>
+                <p style="color: #9ca3af;">Spreadsheet grid will be loaded here...</p>
+                <p style="color: #9ca3af; margin-top: 8px;">Use the Engine menu above to run benchmarks.</p>
+            </div>
+
+            <!-- Bottom - Terminal Output -->
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <span class="terminal-title">Terminal Output</span>
+                    <div class="terminal-controls">
+                        <button class="terminal-btn" onclick="window.DASEApp.terminal?.clear()">Clear</button>
+                        <button class="terminal-btn" onclick="window.DASEApp.terminal?.saveToFile()">Export</button>
+                    </div>
+                </div>
+                <div id="terminal-output"></div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Metrics Display -->
+        <div style="width: 300px; border-left: 1px solid #374151; background-color: #1f2937; padding: 16px; overflow-y: auto;">
+            <h3 style="font-size: 14px; font-weight: bold; color: #93c5fd; margin-bottom: 12px;">Engine Metrics</h3>
+            <pre id="metrics-display" style="font-family: 'Consolas', 'Monaco', monospace; font-size: 11px; color: #e5e7eb; white-space: pre-wrap;">
+No metrics available yet.
+Run a benchmark to see performance data.
+            </pre>
+
+            <h3 style="font-size: 14px; font-weight: bold; color: #93c5fd; margin: 24px 0 12px;">Quick Actions</h3>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button onclick="window.DASEApp.runQuickBenchmark()" style="padding: 8px; background-color: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                    ▶ Run Quick Benchmark
+                </button>
+                <button onclick="window.DASEApp.getEngineStatus()" style="padding: 8px; background-color: #6366f1; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                    📊 Get Engine Status
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inline JavaScript for menu toggles (TODO: Extract to Menu module) -->
+    <script>
+        // Simple menu toggle functionality
+        const fileMenuBtn = document.getElementById('file-menu-btn');
+        const fileMenu = document.getElementById('file-menu');
+        const engineMenuBtn = document.getElementById('engine-menu-btn');
+        const engineMenu = document.getElementById('engine-menu');
+
+        fileMenuBtn?.addEventListener('click', () => {
+            fileMenu.classList.toggle('show');
+            engineMenu.classList.remove('show');
+        });
+
+        engineMenuBtn?.addEventListener('click', () => {
+            engineMenu.classList.toggle('show');
+            fileMenu.classList.remove('show');
+        });
+
+        // Close menus on click outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.menu-item')) {
+                fileMenu.classList.remove('show');
+                engineMenu.classList.remove('show');
+            }
+        });
+
+        // Flyout toggle
+        function toggleFlyout() {
+            document.getElementById('flyout').classList.toggle('open');
+        }
+
+        // Prevent menu links from navigating
+        document.querySelectorAll('.menu-dropdown a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                fileMenu.classList.remove('show');
+                engineMenu.classList.remove('show');
+            });
+        });
+    </script>
+
+    <!-- Load main application (ES6 Module) -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

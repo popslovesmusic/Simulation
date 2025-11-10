@@ -1,0 +1,50 @@
+{
+  "commands": [
+    {
+      "command": "create_engine",
+      "params": {
+        "engine_type": "igsoa_complex",
+        "num_nodes": 4096,
+        "R_c": 0.5
+      }
+    },
+    {
+      "command": "set_igsoa_state",
+      "params": {
+        "engine_id": "engine_001",
+        "profile_type": "gaussian",
+        "params": {
+          "amplitude": 1.5,
+          "center_node": 2048,
+          "width": 256
+        }
+      }
+    },
+    {
+      "command": "run_mission",
+      "params": {
+        "engine_id": "engine_001",
+        "num_steps": 50,
+        "iterations_per_node": 30
+      }
+    },
+    {
+      "command": "python_analyze",
+      "params": {
+        "engine_id": "engine_001",
+        "script": "analyze_igsoa_state.py",
+        "args": {
+          "positional": "0.5",
+          "output-dir": "../results/analysis_rc_0.5",
+          "verbose": ""
+        }
+      }
+    },
+    {
+      "command": "destroy_engine",
+      "params": {
+        "engine_id": "engine_001"
+      }
+    }
+  ]
+}
