@@ -3,10 +3,12 @@
  */
 
 #include "symmetry_field.h"
+#include "utils/logger.h"
 #include <cmath>
 #include <algorithm>
 #include <stdexcept>
 #include <fstream>
+#include <sstream>
 
 namespace dase {
 namespace igsoa {
@@ -108,17 +110,126 @@ SymmetryField::SymmetryField(const SymmetryFieldConfig& config)
     : config_(config)
     , current_time_(0.0)
 {
-    int total = config_.nx * config_.ny * config_.nz;
+    // Validate configuration before allocation
+    validateConfig();
 
-    // Allocate 3D grids (flattened)
-    delta_phi_.resize(total, std::complex<double>(0.0, 0.0));
-    alpha_.resize(total, config_.alpha_max);  // Start with no memory
-    gradient_magnitude_.resize(total, 0.0);
-    potential_.resize(total, 0.0);
+    int total = config_.nx * config_.ny * config_.nz;
+    size_t required_mb = (total * sizeof(std::complex<double>) * 4) / (1024 * 1024);
+
+    LOG_DEBUG("Allocating memory for SymmetryField: " + std::to_string(required_mb) + " MB");
+
+    try {
+        // Allocate 3D grids (flattened)
+        delta_phi_.resize(total, std::complex<double>(0.0, 0.0));
+        alpha_.resize(total, config_.alpha_max);  // Start with no memory
+        gradient_magnitude_.resize(total, 0.0);
+        potential_.resize(total, 0.0);
+
+    } catch (const std::bad_alloc& e) {
+        std::string error_msg = "Failed to allocate memory for SymmetryField: " +
+                               std::to_string(required_mb) + " MB required for " +
+                               std::to_string(config_.nx) + "×" +
+                               std::to_string(config_.ny) + "×" +
+                               std::to_string(config_.nz) + " grid. " +
+                               "Reduce grid size or increase available memory.";
+        LOG_ERROR(error_msg);
+        throw std::runtime_error(error_msg);
+    }
+
+    LOG_INFO("SymmetryField created: " + std::to_string(config_.nx) + "×" +
+             std::to_string(config_.ny) + "×" + std::to_string(config_.nz) +
+             " grid (" + std::to_string(total) + " points, " +
+             std::to_string(required_mb) + " MB)");
 }
 
 SymmetryField::~SymmetryField() {
     // Vectors handle their own cleanup
+}
+
+// === Configuration Validation ===
+
+void SymmetryField::validateConfig() const {
+    // Validate grid dimensions
+    if (config_.nx <= 0 || config_.ny <= 0 || config_.nz <= 0) {
+        std::string error_msg = "Grid dimensions must be positive, got: nx=" +
+                               std::to_string(config_.nx) + ", ny=" +
+                               std::to_string(config_.ny) + ", nz=" +
+                               std::to_string(config_.nz);
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Validate grid spacing
+    if (config_.dx <= 0.0 || config_.dy <= 0.0 || config_.dz <= 0.0) {
+        std::string error_msg = "Grid spacing must be positive, got: dx=" +
+                               std::to_string(config_.dx) + ", dy=" +
+                               std::to_string(config_.dy) + ", dz=" +
+                               std::to_string(config_.dz) + " meters";
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Validate timestep
+    if (config_.dt <= 0.0) {
+        std::string error_msg = "Timestep must be positive, got: dt=" +
+                               std::to_string(config_.dt) + " seconds";
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // CFL condition check (stability for wave equation)
+    double min_dx = std::min({config_.dx, config_.dy, config_.dz});
+    double cfl_limit = 0.5 * min_dx;  // Speed of light assumed = 1 in natural units
+    if (config_.dt > cfl_limit) {
+        std::ostringstream oss;
+        oss << "CFL condition violated: dt=" << config_.dt
+            << " > 0.5*min(dx)=" << cfl_limit
+            << ". Reduce dt or increase grid spacing for numerical stability.";
+        std::string error_msg = oss.str();
+        LOG_ERROR(error_msg);
+        throw std::runtime_error(error_msg);
+    }
+
+    // Validate alpha range
+    if (config_.alpha_min <= 0.0 || config_.alpha_min > 2.0) {
+        std::string error_msg = "alpha_min must be in (0, 2], got: " +
+                               std::to_string(config_.alpha_min);
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    if (config_.alpha_max <= 0.0 || config_.alpha_max > 2.0) {
+        std::string error_msg = "alpha_max must be in (0, 2], got: " +
+                               std::to_string(config_.alpha_max);
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    if (config_.alpha_min > config_.alpha_max) {
+        std::string error_msg = "alpha_min must be <= alpha_max, got: " +
+                               std::to_string(config_.alpha_min) + " > " +
+                               std::to_string(config_.alpha_max);
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Validate physical parameters
+    if (config_.R_c_default < 0.0) {
+        std::string error_msg = "R_c_default must be non-negative, got: " +
+                               std::to_string(config_.R_c_default);
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Memory usage warning
+    size_t total_points = static_cast<size_t>(config_.nx) * config_.ny * config_.nz;
+    size_t required_mb = (total_points * sizeof(std::complex<double>) * 4) / (1024 * 1024);  // 4 arrays
+    if (required_mb > 1024) {  // > 1 GB
+        LOG_WARNING("Large memory allocation requested: " + std::to_string(required_mb) +
+                   " MB for " + std::to_string(total_points) + " grid points");
+    }
+
+    LOG_DEBUG("SymmetryField configuration validated successfully");
 }
 
 // === Grid Access ===

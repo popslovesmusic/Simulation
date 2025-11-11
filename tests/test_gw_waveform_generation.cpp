@@ -17,6 +17,7 @@
 #include "../src/cpp/igsoa_gw_engine/core/source_manager.h"
 #include "../src/cpp/igsoa_gw_engine/core/projection_operators.h"
 #include "../src/cpp/igsoa_gw_engine/core/echo_generator.h"
+#include "../src/cpp/utils/logger.h"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -37,28 +38,89 @@ void exportWaveformCSV(
     const std::vector<double>& h_cross,
     const std::vector<double>& amplitude)
 {
-    std::ofstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "Failed to open file: " << filename << std::endl;
-        return;
+    // Validate inputs
+    if (filename.empty()) {
+        LOG_ERROR("Export failed: filename cannot be empty");
+        throw std::invalid_argument("filename cannot be empty");
     }
 
-    file << std::scientific << std::setprecision(12);
-    file << "time,h_plus,h_cross,amplitude\n";
-
-    for (size_t i = 0; i < time.size(); i++) {
-        file << time[i] << ","
-             << h_plus[i] << ","
-             << h_cross[i] << ","
-             << amplitude[i] << "\n";
+    if (time.size() != h_plus.size() || time.size() != h_cross.size() ||
+        time.size() != amplitude.size()) {
+        LOG_ERROR("Export failed: data vector size mismatch");
+        throw std::invalid_argument("All data vectors must have the same size");
     }
 
-    file.close();
-    std::cout << "Exported waveform to: " << filename << std::endl;
+    try {
+        // Open file
+        std::ofstream file(filename);
+        if (!file.is_open()) {
+            std::string error_msg = "Failed to open file for writing: " + filename +
+                                   " (check permissions and disk space)";
+            LOG_ERROR(error_msg);
+            throw std::runtime_error(error_msg);
+        }
+
+        // Set formatting
+        file << std::scientific << std::setprecision(12);
+
+        // Write header
+        file << "time,h_plus,h_cross,amplitude\n";
+        if (!file.good()) {
+            std::string error_msg = "Write error while writing header to: " + filename;
+            LOG_ERROR(error_msg);
+            throw std::runtime_error(error_msg);
+        }
+
+        // Write data
+        for (size_t i = 0; i < time.size(); i++) {
+            file << time[i] << ","
+                 << h_plus[i] << ","
+                 << h_cross[i] << ","
+                 << amplitude[i] << "\n";
+
+            // Check write status periodically
+            if (i % 100 == 0 && !file.good()) {
+                std::string error_msg = "Write error at row " + std::to_string(i) +
+                                       " while exporting to: " + filename +
+                                       " (possible disk full)";
+                LOG_ERROR(error_msg);
+                throw std::runtime_error(error_msg);
+            }
+        }
+
+        // Final write check
+        if (!file.good()) {
+            std::string error_msg = "Write error occurred while exporting to: " + filename;
+            LOG_ERROR(error_msg);
+            throw std::runtime_error(error_msg);
+        }
+
+        file.close();
+
+        // Verify close succeeded
+        if (file.fail()) {
+            LOG_WARNING("Failed to close file properly: " + filename);
+        }
+
+        LOG_INFO("Waveform exported successfully: " + filename +
+                 " (" + std::to_string(time.size()) + " data points)");
+        std::cout << "Exported waveform to: " + filename << std::endl;
+
+    } catch (const std::exception& e) {
+        LOG_ERROR("Exception during waveform export: " + std::string(e.what()));
+        throw;  // Re-throw for caller to handle
+    }
 }
 
 // Main integration test
 int main(int argc, char** argv) {
+    // Initialize logger
+    ::igsoa::Logger::getInstance().initialize(
+        "gw_waveform_test.log",
+        ::igsoa::Logger::Level::INFO,    // Console: INFO and above
+        ::igsoa::Logger::Level::DEBUG    // File: DEBUG and above
+    );
+
     std::cout << "========================================" << std::endl;
     std::cout << "IGSOA GW Waveform Generation Test" << std::endl;
     std::cout << "========================================\n" << std::endl;

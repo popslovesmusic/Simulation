@@ -286,6 +286,12 @@ private:
     void initialize();
 
     /**
+     * Validate configuration parameters
+     * Throws std::invalid_argument if any parameter is invalid
+     */
+    void validateConfig() const;
+
+    /**
      * Generate single echo event
      * @param echo_number Echo index (1-based)
      * @param cumulative_time Accumulated time from all previous gaps

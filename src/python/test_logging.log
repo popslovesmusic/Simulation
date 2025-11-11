@@ -1,0 +1,16 @@
+2025-11-11 05:06:58 - root - INFO - ==================================================
+2025-11-11 05:06:58 - root - INFO - IGSOA-SIM Logging initialized
+2025-11-11 05:06:58 - root - INFO - Log file: test_logging.log
+2025-11-11 05:06:58 - root - INFO - File level: DEBUG
+2025-11-11 05:06:58 - root - INFO - Console level: INFO
+2025-11-11 05:06:58 - root - INFO - ==================================================
+2025-11-11 05:06:58 - __main__ - DEBUG - This is a debug message (file only)
+2025-11-11 05:06:58 - __main__ - INFO - This is an info message
+2025-11-11 05:06:58 - __main__ - WARNING - This is a warning
+2025-11-11 05:06:58 - __main__ - ERROR - This is an error
+2025-11-11 05:06:58 - __main__ - ERROR - Math error occurred: division by zero
+Traceback (most recent call last):
+  File "D:\igsoa-sim\src\python\igsoa_logging.py", line 182, in <module>
+    result = 1 / 0
+             ~~^~~
+ZeroDivisionError: division by zero

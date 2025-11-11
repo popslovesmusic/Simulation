@@ -3,6 +3,7 @@
  */
 
 #include "fractional_solver.h"
+#include "utils/logger.h"
 #include <cmath>
 #include <algorithm>
 #include <stdexcept>
@@ -132,8 +133,31 @@ FractionalSolver::FractionalSolver(const FractionalSolverConfig& config, int num
     : config_(config)
     , num_points_(num_points)
 {
-    // Allocate history states for each grid point
-    history_states_.resize(num_points, HistoryState(config.soe_rank));
+    // Calculate memory requirements
+    size_t history_size_per_point = config.soe_rank * sizeof(std::complex<double>);
+    size_t total_history_mb = (num_points * history_size_per_point) / (1024 * 1024);
+
+    LOG_DEBUG("Allocating FractionalSolver memory: " + std::to_string(total_history_mb) +
+              " MB for " + std::to_string(num_points) + " points (SOE rank " +
+              std::to_string(config.soe_rank) + ")");
+
+    try {
+        // Allocate history states for each grid point
+        history_states_.resize(num_points, HistoryState(config.soe_rank));
+
+        LOG_INFO("FractionalSolver created: " + std::to_string(num_points) +
+                 " points, SOE rank " + std::to_string(config.soe_rank) +
+                 " (memory usage: " + std::to_string(total_history_mb) + " MB)");
+
+    } catch (const std::bad_alloc& e) {
+        std::string error_msg = "Failed to allocate memory for FractionalSolver: " +
+                               std::to_string(total_history_mb) + " MB required for " +
+                               std::to_string(num_points) + " points with SOE rank " +
+                               std::to_string(config.soe_rank) + ". " +
+                               "Reduce grid size or SOE rank.";
+        LOG_ERROR(error_msg);
+        throw std::runtime_error(error_msg);
+    }
 }
 
 FractionalSolver::~FractionalSolver() {

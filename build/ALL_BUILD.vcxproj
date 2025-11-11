@@ -178,29 +178,13 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{2B7D85DF-F5BB-3167-B64C-53613ED28F78}</Project>
       <Name>dase_core</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\igsoa-sim\build\dase_engine.vcxproj">
-      <Project>{16C8DBE0-90B3-35BB-BEF2-58C7E3807851}</Project>
-      <Name>dase_engine</Name>
-    </ProjectReference>
-    <ProjectReference Include="D:\igsoa-sim\build\dase_engine_phase3.vcxproj">
-      <Project>{D8F6539E-E16B-3CCB-9D7E-950F17AECCD3}</Project>
-      <Name>dase_engine_phase3</Name>
-    </ProjectReference>
-    <ProjectReference Include="D:\igsoa-sim\build\dase_engine_phase4a.vcxproj">
-      <Project>{E5BBAFCA-8021-322F-A1D7-F95152D584B5}</Project>
-      <Name>dase_engine_phase4a</Name>
-    </ProjectReference>
-    <ProjectReference Include="D:\igsoa-sim\build\dase_engine_phase4b.vcxproj">
-      <Project>{640A653F-AA7E-3D37-8E8F-9DDC3EA71A37}</Project>
-      <Name>dase_engine_phase4b</Name>
-    </ProjectReference>
-    <ProjectReference Include="D:\igsoa-sim\build\dase_engine_phase4c.vcxproj">
-      <Project>{64161B0C-6518-3124-9A24-41AE8290AD6C}</Project>
-      <Name>dase_engine_phase4c</Name>
-    </ProjectReference>
     <ProjectReference Include="D:\igsoa-sim\build\igsoa_gw_core.vcxproj">
       <Project>{62608097-9DB6-37EB-BDA0-C778EEC63B9B}</Project>
       <Name>igsoa_gw_core</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\igsoa-sim\build\igsoa_utils.vcxproj">
+      <Project>{6DB474ED-452E-3F08-85A0-7C7E71E8E359}</Project>
+      <Name>igsoa_utils</Name>
     </ProjectReference>
     <ProjectReference Include="D:\igsoa-sim\build\test_echo_detection.vcxproj">
       <Project>{5786BA1B-7FB2-37D1-854D-B29E47F45962}</Project>
@@ -213,6 +197,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ProjectReference Include="D:\igsoa-sim\build\test_gw_waveform_generation.vcxproj">
       <Project>{C19382F7-1334-3A43-A2BB-264BB9D06440}</Project>
       <Name>test_gw_waveform_generation</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\igsoa-sim\build\test_logger.vcxproj">
+      <Project>{FCE29CF4-4FCF-39FE-ACB7-E354A2E03560}</Project>
+      <Name>test_logger</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

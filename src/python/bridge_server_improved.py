@@ -18,16 +18,19 @@ from flask_sock import Sock
 import json
 import threading
 import time
-import logging
 from datetime import datetime
 from pathlib import Path
 
+# Use IGSOA logging system
+from igsoa_logging import setup_logging, get_logger
+
 # Setup logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+setup_logging(
+    log_file='bridge_server.log',
+    level=10,  # DEBUG
+    console_level=20  # INFO
 )
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Import your compiled engine module
 try:

@@ -116,7 +116,11 @@
       "Bash(./test_gw_waveform_generation.exe:*)",
       "Bash(timeout 120 ./test_gw_waveform_generation.exe:*)",
       "Bash(./test_echo_detection.exe:*)",
-      "Bash(timeout 180:*)"
+      "Bash(timeout 180:*)",
+      "Bash(if not exist \"src\\cpp\\utils\" mkdir \"src\\cpp\\utils\")",
+      "Bash(./test_logger.exe:*)",
+      "Bash(timeout 30:*)",
+      "Bash(timeout:*)"
     ],
     "deny": [],
     "ask": []

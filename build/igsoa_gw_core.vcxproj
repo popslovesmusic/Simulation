@@ -338,6 +338,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
+    <ProjectReference Include="D:\igsoa-sim\build\igsoa_utils.vcxproj">
+      <Project>{6DB474ED-452E-3F08-85A0-7C7E71E8E359}</Project>
+      <Name>igsoa_utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

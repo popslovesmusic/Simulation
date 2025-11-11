@@ -4,11 +4,13 @@
 
 #define _USE_MATH_DEFINES
 #include "echo_generator.h"
+#include "utils/logger.h"
 #include <cmath>
 #include <iostream>
 #include <fstream>
 #include <iomanip>
 #include <algorithm>
+#include <sstream>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -27,7 +29,102 @@ EchoGenerator::EchoGenerator(const EchoConfig& config)
     , merger_detected_(false)
     , last_field_energy_(0.0)
 {
+    // Validate configuration before initialization
+    validateConfig();
     initialize();
+}
+
+// ============================================================================
+// Configuration Validation
+// ============================================================================
+
+void EchoGenerator::validateConfig() const {
+    // Validate fundamental_timescale
+    if (config_.fundamental_timescale <= 0.0) {
+        std::string error_msg = "fundamental_timescale must be positive, got: " +
+                               std::to_string(config_.fundamental_timescale) +
+                               ". Typical range: 0.0001 to 0.01 seconds.";
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Validate max_primes
+    if (config_.max_primes < 1) {
+        std::string error_msg = "max_primes must be >= 1, got: " +
+                               std::to_string(config_.max_primes);
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Validate prime_start_index
+    if (config_.prime_start_index < 0) {
+        std::string error_msg = "prime_start_index must be >= 0, got: " +
+                               std::to_string(config_.prime_start_index);
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Validate max_prime_value
+    if (config_.max_prime_value < 2) {
+        std::string error_msg = "max_prime_value must be >= 2 (smallest prime), got: " +
+                               std::to_string(config_.max_prime_value);
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Validate echo_amplitude_base
+    if (config_.echo_amplitude_base < 0.0) {
+        std::string error_msg = "echo_amplitude_base must be non-negative, got: " +
+                               std::to_string(config_.echo_amplitude_base);
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Validate echo_amplitude_decay
+    if (config_.echo_amplitude_decay <= 0.0) {
+        std::string error_msg = "echo_amplitude_decay must be positive, got: " +
+                               std::to_string(config_.echo_amplitude_decay) +
+                               ". Typical range: 5.0 to 20.0.";
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Validate echo_frequency_shift
+    if (config_.echo_frequency_shift < 0.0) {
+        std::string error_msg = "echo_frequency_shift must be non-negative, got: " +
+                               std::to_string(config_.echo_frequency_shift);
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Validate echo_gaussian_width
+    if (config_.echo_gaussian_width <= 0.0) {
+        std::string error_msg = "echo_gaussian_width must be positive, got: " +
+                               std::to_string(config_.echo_gaussian_width) +
+                               " meters. Typical range: 1000 to 10000 meters.";
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Validate merger_detection_threshold
+    if (config_.merger_detection_threshold <= 0.0) {
+        std::string error_msg = "merger_detection_threshold must be positive, got: " +
+                               std::to_string(config_.merger_detection_threshold);
+        LOG_ERROR(error_msg);
+        throw std::invalid_argument(error_msg);
+    }
+
+    // Consistency check: prime_start_index + max_primes should be reasonable
+    if (config_.prime_start_index + config_.max_primes > 1000) {
+        std::string warning_msg = "Large prime range requested: start=" +
+                                 std::to_string(config_.prime_start_index) +
+                                 " + count=" + std::to_string(config_.max_primes) +
+                                 " = " + std::to_string(config_.prime_start_index + config_.max_primes) +
+                                 " (may need to increase max_prime_value)";
+        LOG_WARNING(warning_msg);
+    }
+
+    LOG_DEBUG("Configuration validated successfully");
 }
 
 // ============================================================================
@@ -44,10 +141,9 @@ void EchoGenerator::initialize() {
     // Generate echo schedule
     echo_schedule_ = generateEchoSchedule();
 
-    std::cout << "EchoGenerator initialized:" << std::endl;
-    std::cout << "  Primes generated: " << primes_.size() << std::endl;
-    std::cout << "  Prime gaps computed: " << prime_gaps_.size() << std::endl;
-    std::cout << "  Echoes scheduled: " << echo_schedule_.size() << std::endl;
+    LOG_INFO("EchoGenerator initialized: " + std::to_string(primes_.size()) +
+             " primes, " + std::to_string(prime_gaps_.size()) + " gaps, " +
+             std::to_string(echo_schedule_.size()) + " echoes scheduled");
 }
 
 // ============================================================================
@@ -182,8 +278,8 @@ void EchoGenerator::setMergerTime(double t) {
     // Regenerate schedule with new merger time
     echo_schedule_ = generateEchoSchedule();
 
-    std::cout << "Merger time set to " << t << " s, "
-              << echo_schedule_.size() << " echoes scheduled" << std::endl;
+    LOG_INFO("Merger time set to " + std::to_string(t) + " s, " +
+             std::to_string(echo_schedule_.size()) + " echoes scheduled");
 }
 
 // ============================================================================
@@ -264,9 +360,12 @@ bool EchoGenerator::detectMerger(const SymmetryField& field, double current_time
     if (energy_threshold_reached && last_field_energy_ < config_.merger_detection_threshold) {
         // Threshold crossed - merger detected!
         setMergerTime(current_time);
-        std::cout << "\n*** MERGER DETECTED at t = " << current_time << " s ***" << std::endl;
-        std::cout << "Field energy: " << current_energy << std::endl;
-        std::cout << "Scheduling " << echo_schedule_.size() << " echoes" << std::endl;
+        std::ostringstream oss;
+        oss << std::scientific << std::setprecision(2);
+        oss << "\n*** MERGER DETECTED at t = " << current_time << " s ***\n";
+        oss << "Field energy: " << current_energy << "\n";
+        oss << "Scheduling " << echo_schedule_.size() << " echoes";
+        LOG_INFO(oss.str());
         return true;
     }
 
@@ -343,32 +442,81 @@ void EchoGenerator::printEchoSchedule() const {
 }
 
 void EchoGenerator::exportEchoSchedule(const std::string& filename) const {
-    std::ofstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "Failed to open file: " << filename << std::endl;
-        return;
+    // Validate input
+    if (filename.empty()) {
+        LOG_ERROR("Export failed: filename cannot be empty");
+        throw std::invalid_argument("filename cannot be empty");
     }
 
-    file << std::scientific << std::setprecision(12);
-    file << "echo_number,time,dt_from_previous,amplitude,frequency,prime_gap,prime_index\n";
+    try {
+        // Open file
+        std::ofstream file(filename);
+        if (!file.is_open()) {
+            std::string error_msg = "Failed to open file for writing: " + filename +
+                                   " (check permissions and disk space)";
+            LOG_ERROR(error_msg);
+            throw std::runtime_error(error_msg);
+        }
 
-    for (size_t i = 0; i < echo_schedule_.size(); i++) {
-        const auto& echo = echo_schedule_[i];
-        double dt_from_prev = (i == 0) ?
-            (echo.time - config_.merger_time) :
-            (echo.time - echo_schedule_[i-1].time);
+        // Set formatting
+        file << std::scientific << std::setprecision(12);
 
-        file << echo.echo_number << ","
-             << echo.time << ","
-             << dt_from_prev << ","
-             << echo.amplitude << ","
-             << echo.frequency << ","
-             << echo.prime_gap << ","
-             << echo.prime_index << "\n";
+        // Write header
+        file << "echo_number,time,dt_from_previous,amplitude,frequency,prime_gap,prime_index\n";
+        if (!file.good()) {
+            std::string error_msg = "Write error while writing header to: " + filename;
+            LOG_ERROR(error_msg);
+            throw std::runtime_error(error_msg);
+        }
+
+        // Write data
+        for (size_t i = 0; i < echo_schedule_.size(); i++) {
+            const auto& echo = echo_schedule_[i];
+            double dt_from_prev = (i == 0) ?
+                (echo.time - config_.merger_time) :
+                (echo.time - echo_schedule_[i-1].time);
+
+            file << echo.echo_number << ","
+                 << echo.time << ","
+                 << dt_from_prev << ","
+                 << echo.amplitude << ","
+                 << echo.frequency << ","
+                 << echo.prime_gap << ","
+                 << echo.prime_index << "\n";
+
+            // Check write status periodically (every 100 rows)
+            if (i % 100 == 0 && !file.good()) {
+                std::string error_msg = "Write error at row " + std::to_string(i) +
+                                       " while exporting to: " + filename +
+                                       " (possible disk full)";
+                LOG_ERROR(error_msg);
+                throw std::runtime_error(error_msg);
+            }
+        }
+
+        // Final write check
+        if (!file.good()) {
+            std::string error_msg = "Write error occurred while exporting to: " + filename;
+            LOG_ERROR(error_msg);
+            throw std::runtime_error(error_msg);
+        }
+
+        file.close();
+
+        // Verify close succeeded
+        if (file.fail()) {
+            std::string error_msg = "Failed to close file properly: " + filename;
+            LOG_WARNING(error_msg);
+            // Don't throw - data is written, just close failed
+        }
+
+        LOG_INFO("Echo schedule exported successfully: " + filename +
+                 " (" + std::to_string(echo_schedule_.size()) + " echoes)");
+
+    } catch (const std::exception& e) {
+        LOG_ERROR("Exception during echo schedule export: " + std::string(e.what()));
+        throw;  // Re-throw for caller to handle
     }
-
-    file.close();
-    std::cout << "Echo schedule exported to: " << filename << std::endl;
 }
 
 EchoGenerator::PrimeStats EchoGenerator::getPrimeStatistics() const {

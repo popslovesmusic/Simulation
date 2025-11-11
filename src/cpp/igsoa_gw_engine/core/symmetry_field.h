@@ -294,6 +294,9 @@ private:
     // Helper: trilinear interpolation for field values
     std::complex<double> interpolateDeltaPhi(const Vector3D& pos) const;
     double interpolateAlpha(const Vector3D& pos) const;
+
+    // Helper: validate configuration parameters
+    void validateConfig() const;
 };
 
 } // namespace gw

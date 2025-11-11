@@ -109,6 +109,22 @@ target_link_libraries(dase_core PUBLIC ${FFTW3_LIBRARY})
 target_compile_options(dase_core PRIVATE ${DASE_COMPILE_FLAGS})
 
 # ============================================================================
+# UTILITY LIBRARY (Logger and common utilities)
+# ============================================================================
+
+add_library(igsoa_utils STATIC
+    src/cpp/utils/logger.cpp
+)
+
+target_include_directories(igsoa_utils PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# Apply compiler optimizations
+target_compile_options(igsoa_utils PRIVATE ${DASE_COMPILE_FLAGS})
+
+# ============================================================================
 # IGSOA GRAVITATIONAL WAVE ENGINE (Static Library)
 # ============================================================================
 
@@ -126,7 +142,7 @@ target_include_directories(igsoa_gw_core PUBLIC
     ${FFTW3_INCLUDE_DIR}
 )
 
-target_link_libraries(igsoa_gw_core PUBLIC ${FFTW3_LIBRARY})
+target_link_libraries(igsoa_gw_core PUBLIC ${FFTW3_LIBRARY} igsoa_utils)
 
 # Apply compiler optimizations
 target_compile_options(igsoa_gw_core PRIVATE ${DASE_COMPILE_FLAGS})
@@ -212,9 +228,17 @@ if(DASE_BUILD_TESTS)
     target_link_libraries(test_echo_detection PRIVATE igsoa_gw_core)
     target_compile_options(test_echo_detection PRIVATE ${DASE_COMPILE_FLAGS})
 
+    # Logger Test
+    add_executable(test_logger
+        tests/test_logger.cpp
+    )
+    target_link_libraries(test_logger PRIVATE igsoa_utils)
+    target_compile_options(test_logger PRIVATE ${DASE_COMPILE_FLAGS})
+
     message(STATUS "Configured test: test_gw_engine_basic")
     message(STATUS "Configured test: test_gw_waveform_generation")
     message(STATUS "Configured test: test_echo_detection")
+    message(STATUS "Configured test: test_logger")
 endif()
 
 # ============================================================================
