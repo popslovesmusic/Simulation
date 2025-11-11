@@ -5,6 +5,31 @@
 
 ---
 
+## 🧭 Roadmap & Review Cadence (New)
+
+The Command Center initiative now follows a **phase-gated roadmap**. Every
+deliverable should align with the current phase and pause for review before
+moving forward.
+
+1. **Phase 0 – Mobilization & Baseline Validation** → Confirm repository
+   layout, CI coverage, and physics benchmarks.
+2. **Phase 1 – Engine Refinement & Mission Hardening** → Expand mission schema
+   validation, logging, and profiling assets.
+3. **Phase 2 – Playground Foundation (Stage 1 UI)** → Ship core waveform UI and
+   mission management, gather user feedback.
+4. **Phase 3 – Advanced Playground (Stage 2 UI)** → Layer in symbolic tools,
+   tutorials, and collaboration features.
+5. **Phase 4 – Acceleration & ML Surrogates** → Curate datasets, train
+   surrogates, and integrate accelerated inference paths.
+6. **Phase 5 – Exploratory Science & Governance** → Launch research tracks and
+   formalize contributor onboarding.
+
+📌 **Before starting work:** Review `AGENTS.md` and capture phase artifacts in
+`docs/reviews/`, `results/`, or `analysis/` as appropriate. Schedule a review
+gate once the current phase objectives are met to unlock the next stage.
+
+---
+
 ## 🚀 Quick Start
 
 ### Available Engine Types
