@@ -24,6 +24,7 @@ CommandRouter::CommandRouter()
 
     // Register command handlers
     command_handlers["get_capabilities"] = [this](const json& p) { return handleGetCapabilities(p); };
+    command_handlers["describe_engine"] = [this](const json& p) { return handleDescribeEngine(p); };
     command_handlers["list_engines"] = [this](const json& p) { return handleListEngines(p); };
     command_handlers["create_engine"] = [this](const json& p) { return handleCreateEngine(p); };
     command_handlers["destroy_engine"] = [this](const json& p) { return handleDestroyEngine(p); };
@@ -90,7 +91,7 @@ json CommandRouter::handleGetCapabilities(const json& params) {
     json result = {
         {"version", "1.0.0"},
         {"status", "prototype"},
-        {"engines", json::array({"phase4b", "igsoa_complex", "igsoa_complex_2d", "igsoa_complex_3d", "satp_higgs_1d", "satp_higgs_2d", "satp_higgs_3d"})},
+        {"engines", json::array({"phase4b", "igsoa_complex", "igsoa_complex_2d", "igsoa_complex_3d", "satp_higgs_1d", "satp_higgs_2d", "satp_higgs_3d", "igsoa_gw"})},
         {"cpu_features", {
             {"avx2", true},
             {"avx512", false},
@@ -100,6 +101,204 @@ json CommandRouter::handleGetCapabilities(const json& params) {
     };
 
     return createSuccessResponse("get_capabilities", result, 0);
+}
+
+json CommandRouter::handleDescribeEngine(const json& params) {
+    // Extract engine name
+    if (!params.contains("engine_name")) {
+        return createErrorResponse("describe_engine", "Missing 'engine_name' parameter", "MISSING_PARAMETER");
+    }
+
+    std::string engine_name = params["engine_name"].get<std::string>();
+
+    // IGSOA Gravitational Wave Engine
+    if (engine_name == "igsoa_gw") {
+        json description = {
+            {"engine", "igsoa_gw"},
+            {"display_name", "IGSOA Gravitational Wave Engine"},
+            {"description", "Fractional-order wave equation solver for gravitational wave propagation in asymmetric spacetime"},
+            {"version", "1.0.0"},
+            {"parameters", {
+                {"grid_nx", {
+                    {"type", "integer"},
+                    {"default", 32},
+                    {"range", json::array({16, 128})},
+                    {"description", "Grid points in X dimension"}
+                }},
+                {"grid_ny", {
+                    {"type", "integer"},
+                    {"default", 32},
+                    {"range", json::array({16, 128})},
+                    {"description", "Grid points in Y dimension"}
+                }},
+                {"grid_nz", {
+                    {"type", "integer"},
+                    {"default", 32},
+                    {"range", json::array({16, 128})},
+                    {"description", "Grid points in Z dimension"}
+                }},
+                {"dx", {
+                    {"type", "float"},
+                    {"default", 0.1},
+                    {"range", json::array({0.01, 1.0})},
+                    {"units", "meters"},
+                    {"description", "Grid spacing in X dimension"}
+                }},
+                {"dy", {
+                    {"type", "float"},
+                    {"default", 0.1},
+                    {"range", json::array({0.01, 1.0})},
+                    {"units", "meters"},
+                    {"description", "Grid spacing in Y dimension"}
+                }},
+                {"dz", {
+                    {"type", "float"},
+                    {"default", 0.1},
+                    {"range", json::array({0.01, 1.0})},
+                    {"units", "meters"},
+                    {"description", "Grid spacing in Z dimension"}
+                }},
+                {"dt", {
+                    {"type", "float"},
+                    {"default", 0.001},
+                    {"range", json::array({0.0001, 0.01})},
+                    {"units", "seconds"},
+                    {"description", "Time step (must satisfy CFL condition)"}
+                }},
+                {"alpha_min", {
+                    {"type", "float"},
+                    {"default", 1.0},
+                    {"range", json::array({1.0, 2.0})},
+                    {"description", "Minimum fractional memory order (near horizon)"}
+                }},
+                {"alpha_max", {
+                    {"type", "float"},
+                    {"default", 2.0},
+                    {"range", json::array({1.0, 2.0})},
+                    {"description", "Maximum fractional memory order (flat spacetime)"}
+                }},
+                {"R_c_default", {
+                    {"type", "float"},
+                    {"default", 1.0},
+                    {"range", json::array({0.1, 10.0})},
+                    {"description", "Default coupling constant"}
+                }},
+                {"kappa", {
+                    {"type", "float"},
+                    {"default", 1.0},
+                    {"range", json::array({0.0, 10.0})},
+                    {"description", "Asymmetry potential scale"}
+                }},
+                {"lambda", {
+                    {"type", "float"},
+                    {"default", 0.1},
+                    {"range", json::array({0.0, 1.0})},
+                    {"description", "Self-interaction strength"}
+                }},
+                {"soe_rank", {
+                    {"type", "integer"},
+                    {"default", 12},
+                    {"range", json::array({4, 32})},
+                    {"description", "Sum-of-exponentials approximation rank"}
+                }}
+            }},
+            {"equations", json::array({
+                {
+                    {"name", "fractional_wave"},
+                    {"latex", "\\partial^2_t \\psi - D^\\alpha_t \\psi - \\nabla^2 \\psi - V(\\delta\\Phi) \\psi = S"},
+                    {"description", "Fractional wave equation for symmetry field"},
+                    {"editable_terms", json::array({"V", "S"})}
+                },
+                {
+                    {"name", "field_evolution"},
+                    {"latex", "\\partial_t \\delta\\Phi = \\dot{\\Phi}"},
+                    {"description", "Field time evolution"}
+                }
+            })},
+            {"boundary_conditions", {
+                {"types", json::array({"periodic", "dirichlet", "neumann"})},
+                {"default", "periodic"},
+                {"description", "Boundary condition types for field edges"}
+            }},
+            {"initial_conditions", {
+                {"types", json::array({"gaussian", "plane_wave", "custom"})},
+                {"default", "gaussian"},
+                {"description", "Initial field configuration"}
+            }},
+            {"output_metrics", json::array({
+                "simulation_time",
+                "total_energy",
+                "max_amplitude",
+                "mean_amplitude",
+                "max_gradient",
+                "h_plus",
+                "h_cross"
+            })}
+        };
+
+        return createSuccessResponse("describe_engine", description, 0);
+    }
+
+    // IGSOA Complex Engine (existing engines)
+    if (engine_name == "igsoa_complex") {
+        json description = {
+            {"engine", "igsoa_complex"},
+            {"display_name", "IGSOA Complex 1D"},
+            {"description", "1D complex-valued IGSOA dynamics engine"},
+            {"version", "1.0.0"},
+            {"parameters", {
+                {"num_nodes", {
+                    {"type", "integer"},
+                    {"default", 2048},
+                    {"range", json::array({64, 1048576})},
+                    {"description", "Number of nodes in 1D lattice"}
+                }},
+                {"R_c", {
+                    {"type", "float"},
+                    {"default", 1.0},
+                    {"range", json::array({0.1, 10.0})},
+                    {"description", "Coupling constant"}
+                }},
+                {"kappa", {
+                    {"type", "float"},
+                    {"default", 1.0},
+                    {"range", json::array({0.0, 10.0})},
+                    {"description", "Field coupling strength"}
+                }},
+                {"gamma", {
+                    {"type", "float"},
+                    {"default", 0.1},
+                    {"range", json::array({0.0, 1.0})},
+                    {"description", "Damping coefficient"}
+                }},
+                {"dt", {
+                    {"type", "float"},
+                    {"default", 0.01},
+                    {"range", json::array({0.001, 0.1})},
+                    {"units", "arbitrary"},
+                    {"description", "Time step"}
+                }}
+            }},
+            {"equations", json::array({
+                {
+                    {"name", "igsoa_evolution"},
+                    {"latex", "\\partial_t \\psi = -i H \\psi"},
+                    {"description", "IGSOA field evolution"}
+                }
+            })},
+            {"boundary_conditions", {
+                {"types", json::array({"periodic"})},
+                {"default", "periodic"}
+            }}
+        };
+
+        return createSuccessResponse("describe_engine", description, 0);
+    }
+
+    // Unknown engine
+    return createErrorResponse("describe_engine",
+                              "Unknown engine: " + engine_name + ". Available: igsoa_gw, igsoa_complex, igsoa_complex_2d, igsoa_complex_3d, phase4b, satp_higgs_1d, satp_higgs_2d, satp_higgs_3d",
+                              "UNKNOWN_ENGINE");
 }
 
 json CommandRouter::handleListEngines(const json& params) {

@@ -18,6 +18,19 @@ using json = nlohmann::json;
 
 int main(int argc, char** argv) {
     try {
+        // Handle --describe flag for engine introspection
+        if (argc == 3 && std::string(argv[1]) == "--describe") {
+            std::string engine_name = argv[2];
+            CommandRouter router;
+            json describe_cmd = {
+                {"command", "describe_engine"},
+                {"params", {{"engine_name", engine_name}}}
+            };
+            json response = router.execute(describe_cmd);
+            std::cout << response.dump(2) << std::endl;
+            return response["status"] == "success" ? 0 : 1;
+        }
+
         // Set binary mode for stdin/stdout on Windows (prevents line-ending issues)
         #ifdef _WIN32
         _setmode(_fileno(stdin), _O_BINARY);

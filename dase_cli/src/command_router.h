@@ -26,6 +26,7 @@ public:
 private:
     // Command handlers
     json handleGetCapabilities(const json& params);
+    json handleDescribeEngine(const json& params);
     json handleListEngines(const json& params);
     json handleCreateEngine(const json& params);
     json handleDestroyEngine(const json& params);

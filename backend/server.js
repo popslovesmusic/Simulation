@@ -31,8 +31,288 @@ console.log('Valid API tokens:', Array.from(validTokens));
 // Track active process count (Fix C7.1)
 let activeProcessCount = 0;
 
+// Track running simulations
+const runningSimulations = new Map();
+
+// Add JSON body parser middleware
+app.use(express.json());
+
 // Serve static files from web directory
 app.use(express.static(path.join(__dirname, '../web')));
+
+// ============================================================================
+// REST API ENDPOINTS
+// ============================================================================
+
+// GET /api/engines - List all available engine types
+app.get('/api/engines', (req, res) => {
+    const engines = [
+        'igsoa_gw',
+        'igsoa_complex',
+        'igsoa_complex_2d',
+        'igsoa_complex_3d',
+        'phase4b',
+        'satp_higgs_1d',
+        'satp_higgs_2d',
+        'satp_higgs_3d'
+    ];
+    res.json({ engines });
+});
+
+// GET /api/engines/:name - Get detailed description of an engine
+app.get('/api/engines/:name', (req, res) => {
+    const engineName = req.params.name;
+    const cliPath = path.join(__dirname, '../dase_cli/dase_cli.exe');
+
+    if (!fs.existsSync(cliPath)) {
+        return res.status(500).json({
+            error: 'DASE CLI executable not found',
+            path: cliPath
+        });
+    }
+
+    // Call CLI with --describe flag
+    const proc = spawn(cliPath, ['--describe', engineName]);
+
+    let output = '';
+    let errorOutput = '';
+
+    proc.stdout.on('data', (data) => {
+        output += data.toString();
+    });
+
+    proc.stderr.on('data', (data) => {
+        errorOutput += data.toString();
+    });
+
+    proc.on('close', (code) => {
+        if (code === 0 && output) {
+            try {
+                const description = JSON.parse(output);
+                // Extract the result from success response
+                if (description.status === 'success' && description.result) {
+                    res.json(description.result);
+                } else {
+                    res.json(description);
+                }
+            } catch (err) {
+                res.status(500).json({
+                    error: 'Failed to parse engine description',
+                    details: err.message,
+                    output: output
+                });
+            }
+        } else {
+            res.status(404).json({
+                error: 'Engine not found or description failed',
+                engine: engineName,
+                stderr: errorOutput
+            });
+        }
+    });
+});
+
+// POST /api/simulations - Start a new simulation
+app.post('/api/simulations', (req, res) => {
+    const missionConfig = req.body;
+    const simId = `sim_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    // TODO: Validate mission config
+    if (!missionConfig.engine || !missionConfig.parameters) {
+        return res.status(400).json({
+            error: 'Invalid mission configuration',
+            required: ['engine', 'parameters']
+        });
+    }
+
+    // Store simulation metadata
+    runningSimulations.set(simId, {
+        id: simId,
+        engine: missionConfig.engine,
+        status: 'pending',
+        startTime: new Date().toISOString(),
+        config: missionConfig
+    });
+
+    // TODO: Actually start the simulation (integrate with dase_cli)
+    // For now, just acknowledge the request
+
+    res.json({
+        simulation_id: simId,
+        status: 'pending',
+        message: 'Simulation queued (not yet implemented)'
+    });
+});
+
+// GET /api/simulations/:id - Get simulation status
+app.get('/api/simulations/:id', (req, res) => {
+    const simId = req.params.id;
+    const sim = runningSimulations.get(simId);
+
+    if (!sim) {
+        return res.status(404).json({
+            error: 'Simulation not found',
+            simulation_id: simId
+        });
+    }
+
+    res.json(sim);
+});
+
+// DELETE /api/simulations/:id - Stop a running simulation
+app.delete('/api/simulations/:id', (req, res) => {
+    const simId = req.params.id;
+    const sim = runningSimulations.get(simId);
+
+    if (!sim) {
+        return res.status(404).json({
+            error: 'Simulation not found',
+            simulation_id: simId
+        });
+    }
+
+    // TODO: Actually kill the process
+    sim.status = 'terminated';
+    runningSimulations.delete(simId);
+
+    res.json({
+        simulation_id: simId,
+        status: 'terminated',
+        message: 'Simulation stopped'
+    });
+});
+
+// GET /api/fs - File system browser
+app.get('/api/fs', (req, res) => {
+    const requestedPath = req.query.path || '/missions';
+    const basePath = path.join(__dirname, '..');
+    const fullPath = path.join(basePath, requestedPath);
+
+    // Security check: prevent directory traversal
+    if (!fullPath.startsWith(basePath)) {
+        return res.status(403).json({
+            error: 'Access denied',
+            reason: 'Path traversal attempt blocked'
+        });
+    }
+
+    // Check if path exists
+    if (!fs.existsSync(fullPath)) {
+        return res.status(404).json({
+            error: 'Path not found',
+            path: requestedPath
+        });
+    }
+
+    // Read directory
+    fs.readdir(fullPath, (err, files) => {
+        if (err) {
+            return res.status(500).json({
+                error: 'Failed to read directory',
+                details: err.message
+            });
+        }
+
+        // Get file stats
+        const fileList = files.map(file => {
+            try {
+                const stats = fs.statSync(path.join(fullPath, file));
+                return {
+                    name: file,
+                    type: stats.isDirectory() ? 'directory' : 'file',
+                    size: stats.size,
+                    modified: stats.mtime.toISOString()
+                };
+            } catch (err) {
+                return {
+                    name: file,
+                    type: 'unknown',
+                    error: err.message
+                };
+            }
+        });
+
+        res.json({
+            path: requestedPath,
+            files: fileList
+        });
+    });
+});
+
+// POST /api/analysis - Run Python analysis script
+app.post('/api/analysis', (req, res) => {
+    const { script, target_file, args } = req.body;
+
+    if (!script || !target_file) {
+        return res.status(400).json({
+            error: 'Missing required parameters',
+            required: ['script', 'target_file']
+        });
+    }
+
+    const scriptPath = path.join(__dirname, '../analysis', script);
+    const targetPath = path.join(__dirname, '../results', target_file);
+
+    // Security checks
+    if (!fs.existsSync(scriptPath)) {
+        return res.status(404).json({
+            error: 'Analysis script not found',
+            script: script
+        });
+    }
+
+    if (!fs.existsSync(targetPath)) {
+        return res.status(404).json({
+            error: 'Target file not found',
+            file: target_file
+        });
+    }
+
+    // Build Python command
+    const pythonArgs = [scriptPath, targetPath];
+    if (args && typeof args === 'object') {
+        for (const [key, value] of Object.entries(args)) {
+            pythonArgs.push(`--${key}`);
+            pythonArgs.push(value.toString());
+        }
+    }
+
+    // Spawn Python process
+    const proc = spawn('python', pythonArgs);
+
+    let output = '';
+    let errorOutput = '';
+
+    proc.stdout.on('data', (data) => {
+        output += data.toString();
+    });
+
+    proc.stderr.on('data', (data) => {
+        errorOutput += data.toString();
+    });
+
+    proc.on('close', (code) => {
+        res.json({
+            exit_code: code,
+            stdout: output,
+            stderr: errorOutput,
+            success: code === 0
+        });
+    });
+
+    // Timeout after 5 minutes
+    setTimeout(() => {
+        proc.kill('SIGTERM');
+        res.status(408).json({
+            error: 'Analysis timeout (5 minutes)',
+            partial_output: output
+        });
+    }, 5 * 60 * 1000);
+});
+
+// ============================================================================
+// HTTP Server Start
+// ============================================================================
 
 app.listen(PORT, () => {
     console.log(`HTTP server running on http://localhost:${PORT}`);
@@ -143,6 +423,27 @@ wss.on('connection', (ws, req) => {
             line = line.trim();
             if (!line) return;
 
+            // Check for METRIC output
+            if (line.startsWith('METRIC:')) {
+                const metricJson = line.substring(7); // Remove "METRIC:" prefix
+                try {
+                    const metric = JSON.parse(metricJson);
+                    console.log('Metric received:', metric);
+
+                    // Push metric to client via WebSocket with special type
+                    if (ws.readyState === WebSocket.OPEN) {
+                        ws.send(JSON.stringify({
+                            type: 'metrics:update',
+                            data: metric
+                        }));
+                    }
+                } catch (err) {
+                    console.error('Failed to parse metric:', metricJson, err.message);
+                }
+                return; // Don't process as regular JSON
+            }
+
+            // Regular JSON response
             try {
                 const response = JSON.parse(line);
                 console.log('CLI Response:', response);

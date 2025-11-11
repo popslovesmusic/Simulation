@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functional Grid Interface - Blank Slate</title>
+    <style>
+        /* Base Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark background */
+            color: #e5e7eb;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background-color: #1f2937;
+            color: white;
+            padding: 8px 16px;
+            border-bottom: 1px solid #3b82f6; /* Blue accent */
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            z-index: 50;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 24px;
+        }
+
+        /* Menus */
+        .menu-container, .right-menus {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-item {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-button {
+            padding: 4px 12px;
+            border-radius: 4px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            border-radius: 6px;
+            margin-top: 8px;
+            width: 192px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+        }
+
+        .menu-dropdown.show {
+            display: block;
+        }
+
+        .menu-dropdown a {
+            display: block;
+            padding: 8px 16px;
+            font-size: 12px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+
+        .menu-dropdown a:hover {
+            background-color: #3b82f6;
+        }
+
+        .menu-dropdown hr {
+            margin: 4px 0;
+            border: none;
+            border-top: 1px solid #4b5563;
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        /* Flyout Panel (Left Sidebar) */
+        .flyout-container {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .flyout-trigger {
+            width: 20px;
+            height: 100%;
+            background-color: #1f2937;
+            border-right: 1px solid #374151;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .flyout-trigger:hover {
+            background-color: #1e40af;
+        }
+
+        .flyout-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 288px;
+            background-color: #1f2937;
+            border-right: 1px solid #374151;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flyout-container.open .flyout-panel {
+            transform: translateX(0);
+        }
+        
+        /* Right Flyout Panel Styles */
+        .flyout-container-right {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .flyout-trigger-right {
+            width: 20px;
+            height: 100%;
+            background-color: #1f2937;
+            border-left: 1px solid #374151; /* Border on the left */
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .flyout-trigger-right:hover {
+            background-color: #1e40af;
+        }
+
+        .flyout-panel-right {
+            position: absolute;
+            top: 0;
+            right: 0; /* Positioned on the right */
+            height: 100%;
+            width: 288px;
+            background-color: #1f2937;
+            border-left: 1px solid #374151; /* Border on the left */
+            transform: translateX(100%); /* Hides it to the right */
+            transition: transform 0.3s ease-in-out;
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flyout-container-right.open .flyout-panel-right {
+            transform: translateX(0); /* Shows it */
+        }
+        /* End Right Flyout Panel Styles */
+        
+        /* Panel Tabs */
+        .panel-tabs {
+            display: flex;
+            border-bottom: 1px solid #374151;
+            flex-shrink: 0;
+        }
+
+        .panel-tab {
+            flex: 1;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .panel-tab.active {
+            background-color: #111827;
+            color: #93c5fd;
+            border-bottom-color: #3b82f6;
+        }
+
+        .panel-tab:hover:not(.active) {
+            background-color: #374151;
+        }
+
+        .panel-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 12px;
+            color: #9ca3af; /* Default content color */
+            font-size: 12px;
+        }
+
+        .panel-content.hidden {
+            display: none;
+        }
+        
+        /* Symbol/Preset Styling - Kept for future population */
+        .symbol-section h4 {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #d1d5db;
+        }
+
+        .symbol-item {
+            padding: 8px;
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.2s;
+        }
+
+        .symbol-item:hover {
+            background-color: #4b5563;
+        }
+
+        /* Center Grid Area */
+        .main-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        /* Formula Bar */
+        .formula-bar {
+            background-color: #1f2937;
+            border-bottom: 1px solid #374151;
+            display: flex;
+            align-items: center;
+            padding: 4px 12px;
+            flex-shrink: 0;
+        }
+
+        .cell-ref {
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            padding: 4px 12px;
+            width: 64px;
+            text-align: center;
+            font-weight: bold;
+            color: #93c5fd;
+            border-radius: 4px 0 0 4px;
+            font-size: 12px;
+        }
+
+        .formula-input {
+            flex-grow: 1;
+            background-color: #111827;
+            border: 1px solid #4b5563;
+            border-left: none;
+            padding: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            border-radius: 0 4px 4px 0;
+            color: #e5e7eb;
+            outline: none;
+        }
+
+        .formula-input:focus {
+            outline: 1px solid #3b82f6;
+        }
+
+        /* Grid Structure */
+        .grid-container {
+            flex-grow: 1;
+            background-color: #111827;
+            overflow-y: auto; /* Only allow vertical scroll here */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        .grid-table {
+            table-layout: fixed; 
+            width: 100%; /* Forces table to fill container, enabling fixed layout */
+            border-collapse: collapse;
+        }
+
+        .grid-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            font-weight: 600;
+            padding: 4px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .row-header {
+            position: sticky;
+            left: 0;
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            font-weight: 600;
+            padding: 4px;
+            font-size: 12px;
+            text-align: center;
+            width: 48px; /* Fixed width for the row number column */
+        }
+
+        .grid-cell {
+            border: 1px solid #374151;
+            padding: 4px;
+            height: 28px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .grid-cell:hover {
+            background-color: #374151;
+        }
+
+        .grid-cell.selected {
+            outline: 2px solid #3b82f6;
+            outline-offset: -2px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .spacer {
+            flex-grow: 1;
+        }
+
+        /* Terminal Styling */
+        .terminal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .terminal-window {
+            width: 80%;
+            max-width: 900px;
+            height: 70%;
+            background-color: #000;
+            border: 2px solid #333;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            font-family: monospace;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background-color: #333;
+            color: #fff;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .terminal-button.close { background-color: #ff5f56; }
+        .terminal-button.minimize { background-color: #ffbd2e; }
+        .terminal-button.maximize { background-color: #27ca3f; }
+
+        .terminal-content {
+            flex-grow: 1;
+            background-color: #000;
+            color: #00ff00;
+            padding: 12px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .terminal-prompt { color: #00ff00; }
+        .terminal-success { color: #51cf66; }
+        .terminal-error { color: #ff6b6b; }
+        .terminal-info { color: #74c0fc; }
+
+        .terminal-input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .terminal-input {
+            background: none;
+            border: none;
+            color: #00ff00;
+            font-family: monospace;
+            font-size: 14px;
+            flex-grow: 1;
+            outline: none;
+            margin-left: 4px;
+        }
+
+        .terminal-cursor {
+            animation: blink 1s infinite;
+            background-color: #00ff00;
+            width: 8px;
+            height: 16px;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Properties Panel Elements (Simplified structure kept) */
+        .properties-section {
+            background-color: #374151;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .properties-label {
+            font-size: 10px;
+            color: #9ca3af;
+            margin-bottom: 4px;
+        }
+
+        .properties-value {
+            font-weight: bold;
+            color: #93c5fd;
+        }
+        
+        .action-button {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 8px;
+            transition: background-color 0.2s;
+        }
+        
+        .action-button.run {
+            background-color: #2563eb;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>[Project Title Here]</h1>
+        <div class="menu-container">
+            <div class="menu-item">
+                <button class="menu-button" onclick="toggleMenu(this)">File</button>
+                <div class="menu-dropdown">
+                    <a href="#" onclick="newProject(); closeMenus();">New Project</a>
+                    <a href="#" onclick="saveProject(); closeMenus();">Save Project</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <button class="menu-button" onclick="toggleMenu(this)">Edit</button>
+                <div class="menu-dropdown">
+                    <a href="#" onclick="copyCell()">Copy (Ctrl+C)</a>
+                    <a href="#" onclick="pasteCell()">Paste (Ctrl+V)</a>
+                    <hr>
+                    <a href="#" onclick="clearCell()">Clear (Delete)</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <button class="menu-button" onclick="toggleTerminal()">Terminal</button>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="right-menus">
+            <div class="menu-item">
+                <button class="menu-button" onclick="toggleMenu(this)">Help</button>
+                <div class="menu-dropdown">
+                    <a href="#">Documentation</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Left Flyout Panel -->
+        <div class="flyout-container" id="flyoutContainer">
+            <div class="flyout-trigger"></div>
+            <aside class="flyout-panel">
+                <div class="panel-tabs">
+                    <button onclick="switchPanelTab(event, 'symbolsPanel')" class="panel-tab active">Symbols</button>
+                    <button onclick="switchPanelTab(event, 'presetsPanel')" class="panel-tab">Presets</button>
+                    <button onclick="switchPanelTab(event, 'propertiesPanel')" class="panel-tab">Properties</button>
+                    <button onclick="switchPanelTab(event, 'simulationPanel')" class="panel-tab">Simulation</button>
+                </div>
+                <div class="panel-content" id="symbolsPanel">
+                    <div class="symbol-section">
+                        <h4>Analog Operations</h4>
+                        <div class="symbol-item">Placeholder 1</div>
+                        <div class="symbol-item">Placeholder 2</div>
+                    </div>
+                </div>
+                <div class="panel-content hidden" id="presetsPanel">
+                    <div class="symbol-section">
+                        <h4>Formula Templates</h4>
+                        <div class="symbol-item">Template 1</div>
+                        <div class="symbol-item">Template 2</div>
+                    </div>
+                </div>
+                <div class="panel-content hidden" id="propertiesPanel">
+                    <div id="noSelectionMessage" class="properties-label">
+                        Select a cell to view properties
+                    </div>
+                    <div id="cellProperties" class="hidden">
+                        <h3 style="font-weight: bold; font-size: 14px; margin-bottom: 12px; color: #d1d5db;">Cell Properties</h3>
+                        
+                        <div class="properties-section">
+                            <div class="properties-label">Cell Reference</div>
+                            <div id="propCellRef" class="properties-value">A1</div>
+                            <div class="properties-label" style="margin-top: 8px;">Cell Type</div>
+                            <div id="propCellType" class="properties-value">Empty</div>
+                        </div>
+
+                        <div style="margin-top: 16px;">
+                            <button onclick="clearSelectedCell()" class="action-button clear">Clear Cell</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-content hidden" id="simulationPanel">
+                    <h3 style="font-weight: bold; font-size: 14px; margin-bottom: 12px; color: #d1d5db;">Simulation Control</h3>
+                    
+                    <div class="properties-section">
+                        <div class="properties-label">Simulation State</div>
+                        <div id="simStatus" class="properties-value" style="margin-bottom: 8px;">Stopped</div>
+                        <button id="runBtn" onclick="startSimulation()" class="action-button run">▶ Run</button>
+                    </div>
+                    
+                    <div class="properties-section">
+                        <div class="properties-label">Performance Metrics</div>
+                        <div style="font-size: 10px;">
+                            <p>Metrics will appear here.</p>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Center Area: Grid -->
+        <main id="mainContent" class="main-content">
+            <div class="formula-bar">
+                <div id="cellRef" class="cell-ref">A1</div>
+                <input type="text" id="formulaInput" class="formula-input" placeholder="= [Expression or Value]">
+            </div>
+            
+            <div id="gridContainer" class="grid-container">
+                <!-- Grid will be generated here by JS -->
+            </div>
+        </main>
+        
+        <!-- Right Flyout Panel (RE-ADDED) -->
+        <div class="flyout-container-right" id="flyoutContainerRight">
+            <div class="flyout-trigger-right"></div>
+            <aside class="flyout-panel-right">
+                <div class="panel-tabs">
+                    <button onclick="switchRightPanelTab(event, 'outputTab')" class="panel-tab active" style="flex: none; width: 100%;">Output/Results</button>
+                </div>
+                <div class="panel-content" id="outputTab">
+                    <p>This panel is for generic output and results.</p>
+                </div>
+            </aside>
+        </div>
+        <!-- End Right Flyout Panel -->
+        
+    </div>
+
+    <!-- Terminal Overlay -->
+    <div id="terminalOverlay" class="terminal-overlay hidden">
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <span>Integrated Terminal</span>
+                <div class="terminal-controls">
+                    <button class="terminal-button close" onclick="toggleTerminal()"></button>
+                </div>
+            </div>
+            <div class="terminal-content" id="terminalContent">
+                <div class="terminal-line">Terminal Initialized.</div>
+                <div class="terminal-input-line">
+                    <span class="terminal-prompt">user$</span>
+                    <input type="text" class="terminal-input" id="terminalInput" placeholder="Enter command..." autocomplete="off">
+                    <div class="terminal-cursor"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        const ROWS = 50;
+        const COLS = 26;
+
+        // --- State Management ---
+        let selectedCellId = null;
+        let cellData = {};
+        
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeGrid(ROWS, COLS);
+            setupListeners();
+            selectCell('A1');
+            updateWindowTitle();
+            initializeTerminal();
+        });
+
+        // --- Grid Functions ---
+        function initializeGrid(rows, cols) {
+            const container = document.getElementById('gridContainer');
+            const table = document.createElement('table');
+            table.className = 'grid-table';
+
+            const thead = table.createTHead();
+            const headerRow = thead.insertRow();
+            headerRow.insertCell().className = 'grid-header';
+            for (let c = 0; c < cols; c++) {
+                const th = document.createElement('th');
+                th.className = 'grid-header';
+                th.textContent = String.fromCharCode(65 + c);
+                headerRow.appendChild(th);
+            }
+
+            const tbody = table.createTBody();
+            for (let r = 1; r <= rows; r++) {
+                const row = tbody.insertRow();
+                const rowHeader = row.insertCell();
+                rowHeader.className = 'row-header';
+                rowHeader.textContent = r;
+
+                for (let c = 0; c < cols; c++) {
+                    const cellId = String.fromCharCode(65 + c) + r;
+                    const cell = row.insertCell();
+                    cell.id = cellId;
+                    cell.className = 'grid-cell';
+                    cellData[cellId] = { content: '' };
+
+                    cell.addEventListener('click', () => selectCell(cellId));
+                }
+            }
+            container.appendChild(table);
+        }
+        
+        function selectCell(cellId) {
+            if (selectedCellId) {
+                document.getElementById(selectedCellId)?.classList.remove('selected');
+            }
+            
+            selectedCellId = cellId;
+            document.getElementById(cellId)?.classList.add('selected');
+            document.getElementById('cellRef').textContent = cellId;
+            
+            const content = cellData[cellId].content;
+            document.getElementById('formulaInput').value = content;
+            updatePropertiesPanel(cellId);
+        }
+
+        function updateCellContent(cellId, content) {
+            cellData[cellId].content = content;
+            const cell = document.getElementById(cellId);
+            cell.textContent = content.startsWith('=') ? '[Formula]' : content;
+            // Simplified visual update
+        }
+
+        function clearCell() {
+            if (!selectedCellId) return;
+            updateCellContent(selectedCellId, '');
+            document.getElementById('formulaInput').value = '';
+            updatePropertiesPanel(selectedCellId);
+        }
+
+        // --- UI Listeners and Helpers ---
+        function setupListeners() {
+            const formulaInput = document.getElementById('formulaInput');
+            formulaInput.addEventListener('change', (e) => {
+                if (selectedCellId) {
+                    updateCellContent(selectedCellId, e.target.value);
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') toggleTerminal(false);
+                if ((e.key === 'Delete' || e.key === 'Backspace') && document.activeElement !== formulaInput) {
+                    clearCell();
+                    e.preventDefault();
+                }
+            });
+
+            // Left Flyout Listener
+            const flyoutContainer = document.getElementById('flyoutContainer');
+            flyoutContainer.addEventListener('mouseenter', () => flyoutContainer.classList.add('open'));
+            flyoutContainer.addEventListener('mouseleave', () => flyoutContainer.classList.remove('open'));
+            
+            // Right Flyout Listener (RE-ADDED)
+            const flyoutContainerRight = document.getElementById('flyoutContainerRight');
+            if (flyoutContainerRight) {
+                flyoutContainerRight.addEventListener('mouseenter', () => flyoutContainerRight.classList.add('open'));
+                flyoutContainerRight.addEventListener('mouseleave', () => flyoutContainerRight.classList.remove('open'));
+            }
+        }
+        
+        function toggleMenu(button) {
+            const dropdown = button.parentElement.querySelector('.menu-dropdown');
+            
+            document.querySelectorAll('.menu-dropdown').forEach(menu => {
+                if (menu !== dropdown) menu.classList.remove('show');
+            });
+            
+            dropdown.classList.toggle('show');
+        }
+
+        function closeMenus() {
+            document.querySelectorAll('.menu-dropdown').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        }
+
+        function switchPanelTab(event, panelId) {
+            document.querySelectorAll('#flyoutContainer .panel-content').forEach(panel => panel.classList.add('hidden'));
+            document.querySelectorAll('#flyoutContainer .panel-tab').forEach(button => button.classList.remove('active'));
+            document.getElementById(panelId).classList.remove('hidden');
+            event.currentTarget.classList.add('active');
+        }
+        
+        // Right Panel Tab Switch (RE-ADDED)
+        function switchRightPanelTab(event, panelId) {
+            document.querySelectorAll('#flyoutContainerRight .panel-content').forEach(panel => panel.classList.add('hidden'));
+            document.querySelectorAll('#flyoutContainerRight .panel-tab').forEach(button => button.classList.remove('active'));
+            document.getElementById(panelId).classList.remove('hidden');
+            event.currentTarget.classList.add('active');
+        }
+        
+        function updatePropertiesPanel(cellId) {
+            const data = cellData[cellId];
+            const noSelectionMsg = document.getElementById('noSelectionMessage');
+            const cellProperties = document.getElementById('cellProperties');
+            
+            noSelectionMsg.classList.add('hidden');
+            cellProperties.classList.remove('hidden');
+            
+            document.getElementById('propCellRef').textContent = cellId;
+            document.getElementById('propCellType').textContent = data.content.startsWith('=') ? 'Formula' : (data.content ? 'Value' : 'Empty');
+        }
+        
+        function updateWindowTitle() {
+            document.title = `Untitled Project - Functional Grid Interface`;
+        }
+
+        function newProject() {
+            if (!confirm('Start a new project? All unsaved changes will be lost.')) return;
+            // Simplified reset
+            cellData = {};
+            initializeGrid(ROWS, COLS);
+            selectCell('A1');
+            document.querySelector('.header h1').textContent = '[Project Title Here]';
+            addTerminalLine('New blank project initialized.', 'terminal-success');
+        }
+        
+        function saveProject() {
+            // Using placeholder alert instead of window.alert() as per rules.
+            const message = 'Save function triggered (Placeholder)';
+            console.log(message);
+            addTerminalLine(message, 'terminal-info');
+        }
+
+        function startSimulation() {
+            const message = 'Simulation started (Placeholder)';
+            console.log(message);
+            document.getElementById('simStatus').textContent = 'Running (Placeholder)';
+            addTerminalLine('Simulation: RUNNING', 'terminal-success');
+        }
+        
+        function copyCell() {
+            const message = 'Copy function triggered (Placeholder)';
+            console.log(message);
+            addTerminalLine(message, 'terminal-info');
+        }
+        
+        function pasteCell() {
+            const message = 'Paste function triggered (Placeholder)';
+            console.log(message);
+            addTerminalLine(message, 'terminal-info');
+        }
+        
+        function clearSelectedCell() {
+            // Placeholder for the button click
+            clearCell();
+            updatePropertiesPanel(selectedCellId);
+        }
+        
+        // --- Terminal System ---
+        function initializeTerminal() {
+            const terminalInput = document.getElementById('terminalInput');
+            terminalInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const command = terminalInput.value.trim();
+                    if (command) {
+                        processTerminalCommand(command);
+                        terminalInput.value = '';
+                    }
+                }
+            });
+            document.getElementById('terminalInput').focus();
+        }
+
+        function addTerminalLine(text, className = '') {
+            const terminalContent = document.getElementById('terminalContent');
+            const line = document.createElement('div');
+            line.className = `terminal-line ${className}`;
+            line.textContent = text;
+            
+            const inputLine = terminalContent.querySelector('.terminal-input-line');
+            if (inputLine) {
+                terminalContent.insertBefore(line, inputLine);
+            } else {
+                terminalContent.appendChild(line);
+            }
+            terminalContent.scrollTop = terminalContent.scrollHeight;
+        }
+
+        function processTerminalCommand(command) {
+            addTerminalLine(`user$ ${command}`, 'terminal-prompt');
+            const cmd = command.toLowerCase();
+            
+            if (cmd === 'clear') {
+                const terminalContent = document.getElementById('terminalContent');
+                const inputLine = terminalContent.querySelector('.terminal-input-line');
+                terminalContent.innerHTML = '';
+                if (inputLine) {
+                    terminalContent.appendChild(inputLine);
+                }
+                addTerminalLine('Terminal cleared.', 'terminal-info');
+            } else if (cmd === 'help') {
+                addTerminalLine('Available commands: help, clear, status', 'terminal-info');
+            } else if (cmd === 'status') {
+                addTerminalLine(`Status: Ready. Selected cell: ${selectedCellId}`, 'terminal-info');
+            } else {
+                addTerminalLine(`Command not found: ${command}`, 'terminal-error');
+            }
+        }
+
+        function toggleTerminal() {
+            const overlay = document.getElementById('terminalOverlay');
+            overlay.classList.toggle('hidden');
+            if (!overlay.classList.contains('hidden')) {
+                document.getElementById('terminalInput').focus();
+            }
+        }
+    </script>
+</body>
+</html>
