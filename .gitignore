@@ -1,0 +1,10 @@
+node_modules/
+.DS_Store
+sessions.json
+backend/sessions.json
+backend/services/sessions.json
+**/*.tmp
+
+# Python cache
+__pycache__/
+*.pyc

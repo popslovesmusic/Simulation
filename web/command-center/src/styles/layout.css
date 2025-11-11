@@ -35,6 +35,226 @@
   gap: 1.5rem;
 }
 
+.app-column--playground {
+  max-height: 100%;
+}
+
+.playground-panel {
+  background: rgba(20, 26, 40, 0.92);
+  border-radius: 16px;
+  padding: 1.25rem;
+  border: 1px solid rgba(64, 115, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.panel-header p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.symbolics-expression textarea,
+.collaboration-editor textarea,
+.collaboration-editor input,
+.symbolics-add-variable input {
+  width: 100%;
+  background: rgba(12, 16, 28, 0.9);
+  border: 1px solid rgba(64, 115, 255, 0.25);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  color: inherit;
+}
+
+.symbolics-controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.symbolics-variables ul,
+.tutorial-list ul,
+.collaboration-notes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.symbolics-variables li,
+.collaboration-notes li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+}
+
+.symbolics-variables button,
+.symbolics-actions button,
+.collaboration-editor button,
+.note-form button,
+.tutorial-list button {
+  background: linear-gradient(135deg, #3d6cff, #5a8bff);
+  border: none;
+  color: white;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.symbolics-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.symbolics-result {
+  background: rgba(10, 14, 24, 0.8);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(64, 115, 255, 0.2);
+}
+
+.symbolics-result dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.35rem 1rem;
+  margin: 0;
+}
+
+.symbolics-hints ul {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.symbolics-error,
+.tutorial-error,
+.collaboration-error {
+  color: #ff9f7f;
+  margin: 0;
+}
+
+.tutorials-body {
+  gap: 1.25rem;
+}
+
+.tutorial-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+}
+
+.tutorial-list button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  font-weight: 600;
+  background: rgba(20, 28, 48, 0.85);
+}
+
+.tutorial-list button.active {
+  border: 1px solid rgba(93, 134, 255, 0.8);
+}
+
+.tutorial-list .badge {
+  background: rgba(76, 201, 240, 0.2);
+  color: #4cc9f0;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
+}
+
+.tutorial-content pre {
+  white-space: pre-wrap;
+  background: rgba(12, 16, 28, 0.85);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(64, 115, 255, 0.15);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.tutorial-glossary dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+.collaboration-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+}
+
+.collaboration-editor form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.collaboration-editor label,
+.symbolics-expression,
+.symbolics-variables,
+.collaboration-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.collaboration-editor label span,
+.symbolics-expression span {
+  font-weight: 600;
+}
+
+.collaboration-notes ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.collaboration-notes li {
+  background: rgba(12, 16, 28, 0.75);
+  border-radius: 10px;
+  padding: 0.75rem;
+  border: 1px solid rgba(64, 115, 255, 0.15);
+  align-items: flex-start;
+}
+
+.collaboration-notes time {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .tutorial-layout,
+  .collaboration-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
 .panel {
   background: rgba(20, 26, 40, 0.9);
   border-radius: 16px;

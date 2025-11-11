@@ -4,6 +4,9 @@ import { RunControlPanel } from './components/RunControlPanel';
 import { WaveformPlot } from './components/WaveformPlot';
 import { MissionBrief } from './components/MissionBrief';
 import { useTranslation } from 'react-i18next';
+import { SymbolicsPanel } from './playground/symbolics';
+import { TutorialNavigator } from './modules/tutorials/TutorialNavigator';
+import { SessionPanel } from './modules/collaboration/SessionPanel';
 
 export default function App() {
   const { t } = useTranslation();
@@ -36,6 +39,11 @@ export default function App() {
             onMissionUpdate={setSelectedMissionId}
           />
           <WaveformPlot missionId={selectedMissionId} />
+        </section>
+        <section className="app-column app-column--playground">
+          <SymbolicsPanel />
+          <TutorialNavigator />
+          <SessionPanel />
         </section>
       </main>
     </div>
