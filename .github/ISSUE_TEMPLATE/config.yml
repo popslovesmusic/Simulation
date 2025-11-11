@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Phase governance questions
+    url: https://intranet.example.com/igsoa/governance
+    about: Review the phase playbook before opening new issues.

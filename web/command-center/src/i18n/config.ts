@@ -37,6 +37,48 @@ const resources = {
         empty: 'Telemetry stream not available until a mission is running.',
         ariaLabel: 'Waveform visualization canvas',
         legend: 'Strain amplitude'
+      },
+      feedback: {
+        title: 'User Feedback & Telemetry',
+        description: 'Collect surveys and operational metrics to steer the research roadmap.',
+        surveys: {
+          title: 'Surveys',
+          meta: 'Cadence: {{cadence}}, Audience: {{audience}}',
+          targetResponse: 'Target response rate',
+          targetSatisfaction: 'Target satisfaction score',
+          responses: 'Responses submitted',
+          averageScore: 'Rolling average score',
+          ratingPrompt: 'Average score (1-5)',
+          ratingAria: 'Average satisfaction score',
+          notesPrompt: 'Supporting notes',
+          submit: 'Record response',
+          cadence: {
+            weekly: 'Weekly',
+            biweekly: 'Bi-weekly',
+            monthly: 'Monthly'
+          },
+          audience: {
+            'mission-ops': 'Mission operations',
+            science: 'Science council',
+            platform: 'Platform engineering'
+          }
+        },
+        telemetry: {
+          title: 'Telemetry Dashboards',
+          meta: 'Review cadence: {{cadence}}, Owner: {{owner}}',
+          target: '{{direction}} {{value}} {{unit}}',
+          directionBelow: '≤',
+          directionAbove: '≥',
+          recordLabel: 'Latest sample',
+          record: 'Log metric',
+          noData: 'No samples yet'
+        },
+        channels: {
+          title: 'Feedback Channels',
+          surveys: 'Surveys',
+          telemetry: 'Telemetry dashboards',
+          thresholds: 'Success thresholds'
+        }
       }
     }
   }

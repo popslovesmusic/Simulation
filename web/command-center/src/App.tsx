@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { SymbolicsPanel } from './playground/symbolics';
 import { TutorialNavigator } from './modules/tutorials/TutorialNavigator';
 import { SessionPanel } from './modules/collaboration/SessionPanel';
+import { FeedbackDashboard } from './components/FeedbackDashboard';
 
 export default function App() {
   const { t } = useTranslation();
@@ -44,6 +45,7 @@ export default function App() {
           <SymbolicsPanel />
           <TutorialNavigator />
           <SessionPanel />
+          <FeedbackDashboard />
         </section>
       </main>
     </div>
