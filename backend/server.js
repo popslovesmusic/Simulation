@@ -8,7 +8,8 @@ const WebSocket = require('ws');
 const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
-const crypto = require('crypto');
+const { configureApi } = require('./api');
+const { authenticateRequest } = require('./api/auth');
 
 const app = express();
 const PORT = 3000;
@@ -20,19 +21,26 @@ const MAX_BUFFER_SIZE = 10 * 1024 * 1024;  // 10MB max buffer per client
 const IDLE_TIMEOUT_MS = 60 * 60 * 1000;  // 1 hour idle timeout
 const COMMAND_TIMEOUT_MS = 60 * 1000;  // 1 minute command timeout
 
-// Authentication tokens (Fix C7.2)
-const validTokens = new Set([
-    process.env.DASE_API_TOKEN || crypto.randomBytes(32).toString('hex')
-]);
-
-// Log valid tokens on startup (for development - remove in production)
-console.log('Valid API tokens:', Array.from(validTokens));
-
 // Track active process count (Fix C7.1)
 let activeProcessCount = 0;
 
 // Track running simulations
 const runningSimulations = new Map();
+
+async function launchSimulation(mission) {
+    if (mission.status !== 'running') {
+        mission.status = 'running';
+    }
+    return mission;
+}
+
+function stopSimulation(missionId) {
+    const mission = runningSimulations.get(missionId);
+    if (mission) {
+        mission.status = 'terminated';
+    }
+    return mission;
+}
 
 // Add JSON body parser middleware
 app.use(express.json());
@@ -40,12 +48,20 @@ app.use(express.json());
 // Serve static files from web directory
 app.use(express.static(path.join(__dirname, '../web')));
 
+const { tokens: apiTokens } = configureApi(app, {
+    runningSimulations,
+    launchSimulation,
+    stopSimulation
+});
+
+console.log('Valid API tokens:', apiTokens);
+
 // ============================================================================
 // REST API ENDPOINTS
 // ============================================================================
 
 // GET /api/engines - List all available engine types
-app.get('/api/engines', (req, res) => {
+app.get('/api/engines', authenticateRequest, (req, res) => {
     const engines = [
         'igsoa_gw',
         'igsoa_complex',
@@ -60,7 +76,7 @@ app.get('/api/engines', (req, res) => {
 });
 
 // GET /api/engines/:name - Get detailed description of an engine
-app.get('/api/engines/:name', (req, res) => {
+app.get('/api/engines/:name', authenticateRequest, (req, res) => {
     const engineName = req.params.name;
     const cliPath = path.join(__dirname, '../dase_cli/dase_cli.exe');
 
@@ -112,78 +128,9 @@ app.get('/api/engines/:name', (req, res) => {
     });
 });
 
-// POST /api/simulations - Start a new simulation
-app.post('/api/simulations', (req, res) => {
-    const missionConfig = req.body;
-    const simId = `sim_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-    // TODO: Validate mission config
-    if (!missionConfig.engine || !missionConfig.parameters) {
-        return res.status(400).json({
-            error: 'Invalid mission configuration',
-            required: ['engine', 'parameters']
-        });
-    }
-
-    // Store simulation metadata
-    runningSimulations.set(simId, {
-        id: simId,
-        engine: missionConfig.engine,
-        status: 'pending',
-        startTime: new Date().toISOString(),
-        config: missionConfig
-    });
-
-    // TODO: Actually start the simulation (integrate with dase_cli)
-    // For now, just acknowledge the request
-
-    res.json({
-        simulation_id: simId,
-        status: 'pending',
-        message: 'Simulation queued (not yet implemented)'
-    });
-});
-
-// GET /api/simulations/:id - Get simulation status
-app.get('/api/simulations/:id', (req, res) => {
-    const simId = req.params.id;
-    const sim = runningSimulations.get(simId);
-
-    if (!sim) {
-        return res.status(404).json({
-            error: 'Simulation not found',
-            simulation_id: simId
-        });
-    }
-
-    res.json(sim);
-});
-
-// DELETE /api/simulations/:id - Stop a running simulation
-app.delete('/api/simulations/:id', (req, res) => {
-    const simId = req.params.id;
-    const sim = runningSimulations.get(simId);
-
-    if (!sim) {
-        return res.status(404).json({
-            error: 'Simulation not found',
-            simulation_id: simId
-        });
-    }
-
-    // TODO: Actually kill the process
-    sim.status = 'terminated';
-    runningSimulations.delete(simId);
-
-    res.json({
-        simulation_id: simId,
-        status: 'terminated',
-        message: 'Simulation stopped'
-    });
-});
 
 // GET /api/fs - File system browser
-app.get('/api/fs', (req, res) => {
+app.get('/api/fs', authenticateRequest, (req, res) => {
     const requestedPath = req.query.path || '/missions';
     const basePath = path.join(__dirname, '..');
     const fullPath = path.join(basePath, requestedPath);
@@ -240,7 +187,7 @@ app.get('/api/fs', (req, res) => {
 });
 
 // POST /api/analysis - Run Python analysis script
-app.post('/api/analysis', (req, res) => {
+app.post('/api/analysis', authenticateRequest, (req, res) => {
     const { script, target_file, args } = req.body;
 
     if (!script || !target_file) {
