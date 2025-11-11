@@ -36,13 +36,16 @@ function createMissionRouter({ runningSimulations, launchSimulation, stopSimulat
 
     runningSimulations.set(id, mission);
 
+    // Return 202 Accepted immediately - launch happens asynchronously
+    res.status(202).json(mission);
+
+    // Launch asynchronously and update status
     launchSimulation(mission)
-      .then(() => {
-        res.status(201).json(mission);
-      })
       .catch((error) => {
-        runningSimulations.delete(id);
-        res.status(502).json({ error: 'Failed to launch mission', details: error.message });
+        console.error(`Failed to launch mission ${id}:`, error);
+        mission.status = 'failed';
+        mission.error = error.message;
+        runningSimulations.set(id, mission);
       });
   });
 

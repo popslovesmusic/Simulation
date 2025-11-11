@@ -17,8 +17,9 @@ export default defineConfig({
         secure: false
       },
       '/ws': {
-        target: 'ws://localhost:8080',
-        ws: true
+        target: 'ws://localhost:8080',  // Backend WebSocket is on port 8080
+        ws: true,
+        changeOrigin: true
       }
     }
   }

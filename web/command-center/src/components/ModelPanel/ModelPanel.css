@@ -1,0 +1,255 @@
+.model-panel {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  max-height: 800px;
+}
+
+.model-panel .panel-header {
+  padding: 16px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.model-panel .panel-header h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.model-description {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.model-panel .panel-body {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.model-section {
+  margin-bottom: 32px;
+}
+
+.model-section h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1976d2;
+  border-bottom: 2px solid #e3f2fd;
+  padding-bottom: 8px;
+}
+
+.model-params-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.model-param {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.model-param label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.model-param-label {
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.model-param-units {
+  font-weight: 400;
+  color: #666;
+  font-size: 13px;
+}
+
+.model-param input[type='number'],
+.model-param input[type='text'],
+.model-param select {
+  padding: 8px 12px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.model-param input[type='number']:focus,
+.model-param input[type='text']:focus,
+.model-param select:focus {
+  outline: none;
+  border-color: #2196f3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+}
+
+.model-param input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.model-param-description {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.model-param-range {
+  font-size: 12px;
+  color: #888;
+  font-family: 'Courier New', monospace;
+}
+
+.model-param-cell-ref {
+  font-size: 12px;
+  color: #1976d2;
+  font-weight: 500;
+  font-family: 'Courier New', monospace;
+}
+
+.model-equations {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.model-equation {
+  padding: 12px;
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.model-equation strong {
+  color: #333;
+  font-size: 14px;
+}
+
+.model-equation-latex {
+  padding: 8px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  overflow-x: auto;
+}
+
+.model-equation-latex code {
+  color: #d32f2f;
+}
+
+.model-equation-editable {
+  font-size: 12px;
+  color: #666;
+}
+
+.model-metrics ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+.model-metrics li {
+  padding: 8px 12px;
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  font-size: 14px;
+}
+
+.model-metrics code {
+  font-family: 'Courier New', monospace;
+  color: #388e3c;
+}
+
+.model-metrics-hint {
+  font-size: 13px;
+  color: #666;
+  background: #e8f5e9;
+  padding: 12px;
+  border-left: 3px solid #388e3c;
+  border-radius: 4px;
+  margin: 0;
+}
+
+.model-metrics-hint code {
+  background: #ffffff;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.model-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 20px;
+}
+
+.model-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.model-actions button.primary {
+  background: #2196f3;
+  color: #ffffff;
+}
+
+.model-actions button.primary:hover {
+  background: #1976d2;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+.model-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Scrollbar styling */
+.model-panel .panel-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.model-panel .panel-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.model-panel .panel-body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.model-panel .panel-body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

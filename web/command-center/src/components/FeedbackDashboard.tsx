@@ -12,7 +12,7 @@ interface MetricFormStateMap {
 
 export function FeedbackDashboard() {
   const { t } = useTranslation();
-  const { surveys, surveyStats, dashboards, channels, submitSurvey, simulateMetric } = useFeedbackLoop();
+  const { surveys, surveyStats, metricStats, dashboards, channels, submitSurvey, simulateMetric } = useFeedbackLoop();
   const [surveyForms, setSurveyForms] = useState<SurveyFormStateMap>({});
   const [metricForms, setMetricForms] = useState<MetricFormStateMap>({});
 

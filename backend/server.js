@@ -54,6 +54,9 @@ const { tokens: apiTokens } = configureApi(app, {
     stopSimulation
 });
 
+// Create Set for WebSocket authentication
+const validTokens = new Set(apiTokens);
+
 console.log('Valid API tokens:', apiTokens);
 
 // ============================================================================
@@ -274,13 +277,18 @@ console.log(`WebSocket server running on ws://localhost:${WS_PORT}`);
 // Track DASE CLI processes per connection
 const clients = new Map();
 
+// Track Grid metric clients (for LIVE() function)
+const gridClients = new Set();
+
 wss.on('connection', (ws, req) => {
-    // FIX C7.2: Authentication check
+    // Parse URL and check which endpoint this is
     const url = new URL(req.url, 'ws://localhost');
+    const pathname = url.pathname;
     const token = url.searchParams.get('token') || req.headers['authorization'];
 
+    // Authentication check
     if (!validTokens.has(token)) {
-        console.log('Unauthorized connection attempt');
+        console.log('Unauthorized connection attempt to', pathname);
         ws.send(JSON.stringify({
             status: 'error',
             error: 'Invalid or missing authentication token. Please provide a valid token via ?token=YOUR_TOKEN or Authorization header.',
@@ -289,6 +297,32 @@ wss.on('connection', (ws, req) => {
         ws.close(1008, 'Unauthorized');
         return;
     }
+
+    // Handle /metrics endpoint for Grid LIVE() functions
+    if (pathname === '/metrics' || pathname === '/ws/metrics') {
+        console.log('[WebSocket] Grid metrics client connected');
+        gridClients.add(ws);
+
+        ws.on('close', () => {
+            gridClients.delete(ws);
+            console.log(`[WebSocket] Grid metrics client disconnected (${gridClients.size} remaining)`);
+        });
+
+        ws.on('error', (error) => {
+            console.error('[WebSocket] Grid client error:', error);
+            gridClients.delete(ws);
+        });
+
+        // Send welcome message
+        ws.send(JSON.stringify({
+            type: 'connected',
+            message: 'Grid metrics stream connected'
+        }));
+
+        return; // Don't spawn CLI process for Grid clients
+    }
+
+    // Default: Handle CLI communication (existing code below)
 
     // FIX C7.1: Check process limit
     if (activeProcessCount >= MAX_PROCESSES) {
@@ -377,13 +411,22 @@ wss.on('connection', (ws, req) => {
                     const metric = JSON.parse(metricJson);
                     console.log('Metric received:', metric);
 
-                    // Push metric to client via WebSocket with special type
+                    const metricMessage = JSON.stringify({
+                        type: 'metrics:update',
+                        data: metric
+                    });
+
+                    // Push metric to CLI client
                     if (ws.readyState === WebSocket.OPEN) {
-                        ws.send(JSON.stringify({
-                            type: 'metrics:update',
-                            data: metric
-                        }));
+                        ws.send(metricMessage);
                     }
+
+                    // Broadcast to all Grid clients (for LIVE() functions)
+                    gridClients.forEach((gridWs) => {
+                        if (gridWs.readyState === WebSocket.OPEN) {
+                            gridWs.send(metricMessage);
+                        }
+                    });
                 } catch (err) {
                     console.error('Failed to parse metric:', metricJson, err.message);
                 }
