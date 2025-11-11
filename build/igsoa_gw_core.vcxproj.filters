@@ -10,6 +10,9 @@
     <ClCompile Include="D:\igsoa-sim\src\cpp\igsoa_gw_engine\core\projection_operators.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\igsoa-sim\src\cpp\igsoa_gw_engine\core\source_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="D:\igsoa-sim\CMakeLists.txt" />

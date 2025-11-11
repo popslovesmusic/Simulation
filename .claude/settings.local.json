@@ -110,7 +110,10 @@
       "Bash(nul)",
       "Bash(dase_cli\\dase_cli.exe:*)",
       "Bash(cmake:*)",
-      "Bash(./test_gw_engine_basic.exe)"
+      "Bash(./test_gw_engine_basic.exe)",
+      "Bash(buildReleasetest_gw_waveform_generation.exe)",
+      "Bash(./build/Release/test_gw_waveform_generation.exe:*)",
+      "Bash(./test_gw_waveform_generation.exe:*)"
     ],
     "deny": [],
     "ask": []

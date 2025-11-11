@@ -6,6 +6,7 @@ D:/igsoa-sim/build/CMakeFiles/dase_engine_phase4a.dir
 D:/igsoa-sim/build/CMakeFiles/dase_engine_phase4b.dir
 D:/igsoa-sim/build/CMakeFiles/dase_engine_phase4c.dir
 D:/igsoa-sim/build/CMakeFiles/test_gw_engine_basic.dir
+D:/igsoa-sim/build/CMakeFiles/test_gw_waveform_generation.dir
 D:/igsoa-sim/build/CMakeFiles/INSTALL.dir
 D:/igsoa-sim/build/CMakeFiles/ALL_BUILD.dir
 D:/igsoa-sim/build/CMakeFiles/ZERO_CHECK.dir

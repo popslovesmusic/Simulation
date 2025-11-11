@@ -116,6 +116,7 @@ add_library(igsoa_gw_core STATIC
     src/cpp/igsoa_gw_engine/core/symmetry_field.cpp
     src/cpp/igsoa_gw_engine/core/fractional_solver.cpp
     src/cpp/igsoa_gw_engine/core/projection_operators.cpp
+    src/cpp/igsoa_gw_engine/core/source_manager.cpp
 )
 
 target_include_directories(igsoa_gw_core PUBLIC
@@ -196,7 +197,15 @@ if(DASE_BUILD_TESTS)
     target_link_libraries(test_gw_engine_basic PRIVATE igsoa_gw_core)
     target_compile_options(test_gw_engine_basic PRIVATE ${DASE_COMPILE_FLAGS})
 
+    # GW Waveform Generation Test
+    add_executable(test_gw_waveform_generation
+        tests/test_gw_waveform_generation.cpp
+    )
+    target_link_libraries(test_gw_waveform_generation PRIVATE igsoa_gw_core)
+    target_compile_options(test_gw_waveform_generation PRIVATE ${DASE_COMPILE_FLAGS})
+
     message(STATUS "Configured test: test_gw_engine_basic")
+    message(STATUS "Configured test: test_gw_waveform_generation")
 endif()
 
 # ============================================================================

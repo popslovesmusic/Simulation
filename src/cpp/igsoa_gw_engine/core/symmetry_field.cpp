@@ -166,6 +166,14 @@ double SymmetryField::getAlphaAt(const Vector3D& position) const {
     return interpolateAlpha(position);
 }
 
+const std::vector<std::complex<double>>& SymmetryField::getDeltaPhiFlat() const {
+    return delta_phi_;
+}
+
+std::vector<double> SymmetryField::getAlphaValues() const {
+    return alpha_;
+}
+
 // === Spatial Derivatives ===
 
 Vector3D SymmetryField::computeGradient(int i, int j, int k) const {

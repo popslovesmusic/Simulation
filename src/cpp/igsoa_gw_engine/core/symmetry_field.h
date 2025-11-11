@@ -131,6 +131,18 @@ public:
      */
     double getAlphaAt(const Vector3D& position) const;
 
+    /**
+     * Get flat array of all δΦ values (for FractionalSolver)
+     * @return Reference to internal storage
+     */
+    const std::vector<std::complex<double>>& getDeltaPhiFlat() const;
+
+    /**
+     * Get flat array of all α values (for FractionalSolver)
+     * @return Vector of alpha values at each grid point
+     */
+    std::vector<double> getAlphaValues() const;
+
     // === Spatial Derivatives ===
 
     /**
@@ -207,6 +219,7 @@ public:
 
     // === Grid Info ===
 
+    const SymmetryFieldConfig& getConfig() const { return config_; }
     int getNx() const { return config_.nx; }
     int getNy() const { return config_.ny; }
     int getNz() const { return config_.nz; }
