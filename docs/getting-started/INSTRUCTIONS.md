@@ -1,7 +1,7 @@
 # DASE/IGSOA Simulation Framework - Instructions
 
-**Last Updated:** November 10, 2025
-**Version:** 2.4 (Gravitational Wave Engine + Prime-Structured Echoes)
+**Last Updated:** November 11, 2025
+**Version:** 2.5 (Command Center Integration + GW Engine)
 
 ---
 
@@ -90,6 +90,436 @@ python tools/mission_generator.py \
 ```
 
 **Documentation:** See `tools/MISSION_GENERATOR_GUIDE.md` for complete reference.
+
+---
+
+## 🖥️ Command Center Web Interface (NEW!)
+
+**🆕 Professional web-based UI for mission control, real-time monitoring, and analysis**
+
+The Command Center provides a modern React-based interface for managing simulations, configuring engines, and visualizing results in real-time.
+
+### Features
+
+✅ **Grid Component** - Excel-like spreadsheet with formula evaluation
+- 26 columns × 100 rows
+- Cell formulas: `=A1+B2`, `=sin(PI/4)`, etc.
+- **LIVE() function**: `=LIVE("total_energy")` for real-time metrics
+- Automatic dependency tracking and recalculation
+
+✅ **Model Panel** - Dynamic engine configuration UI
+- Automatically generates forms from engine descriptions
+- Parameter validation with ranges and units
+- Equation display with LaTeX
+- One-click mission creation
+
+✅ **Mission Management** - Full lifecycle control
+- Create, start, pause, resume, abort missions
+- Real-time status monitoring
+- Mission briefs with markdown and LaTeX
+
+✅ **Real-Time Visualization**
+- Waveform plots (gravitational wave strain)
+- Live metrics streaming via WebSocket
+- Interactive data grids
+
+✅ **Advanced Tools**
+- Symbolic mathematics sandbox (SymPy backend)
+- Tutorial system with progress tracking
+- Collaborative sessions with shared notes
+- User feedback dashboard
+
+### Quick Start
+
+#### 1. Start Backend Server
+
+```bash
+cd backend
+node server.js
+```
+
+**Expected Output:**
+```
+Valid API tokens: [ '...' ]
+[Server] HTTP server running on http://localhost:3000
+WebSocket server running on ws://localhost:8080
+```
+
+**Note the API token** - you'll need it to authenticate.
+
+#### 2. Start Frontend Dev Server
+
+```bash
+cd web/command-center
+npm install  # First time only
+npm run dev
+```
+
+**Expected Output:**
+```
+VITE v5.x.x ready in xxx ms
+
+➜  Local:   http://localhost:5173/
+```
+
+#### 3. Set Authentication Token
+
+Open your browser to `http://localhost:5173` and open the DevTools console (F12):
+
+```javascript
+localStorage.setItem('command-center-token', 'YOUR_TOKEN_FROM_STEP_1');
+location.reload();
+```
+
+Replace `YOUR_TOKEN_FROM_STEP_1` with the actual token from backend startup.
+
+### Using the Command Center
+
+#### Engine Selection and Configuration
+
+1. **Select Engine** - Use the dropdown in the header to select an engine type (e.g., `igsoa_gw`)
+2. **Configure Parameters** - ModelPanel automatically loads engine-specific parameters
+3. **Adjust Values** - Modify parameters like `grid_nx`, `dt`, `alpha`, etc.
+4. **Create Mission** - Click "Create Mission with Configuration"
+
+#### Real-Time Grid Formulas
+
+The Grid component supports Excel-like formulas:
+
+**Basic Arithmetic:**
+```
+=5+3              → 8
+=2*PI             → 6.283...
+=sqrt(16)         → 4.0
+```
+
+**Cell References:**
+```
+# In cell A1: 10
+# In cell A2: =A1*2    → 20
+# In cell A3: =A1+A2   → 30
+```
+
+**Live Metrics (Real-Time WebSocket):**
+```
+=LIVE("total_energy")    → Real-time energy from simulation
+=LIVE("h_plus")          → GW strain h+ polarization
+=LIVE("max_amplitude")   → Peak field amplitude
+```
+
+**Available Metrics** (engine-dependent):
+- `simulation_time` - Current simulation time
+- `total_energy` - System energy
+- `max_amplitude` - Peak field value
+- `h_plus` - GW strain (plus polarization)
+- `h_cross` - GW strain (cross polarization)
+- `center_x`, `center_y` - Center of mass
+
+#### Mission Lifecycle
+
+**Create Mission:**
+1. Select engine in header dropdown
+2. Configure parameters in ModelPanel
+3. Click "Create Mission with Configuration"
+4. Mission appears in Mission Selection list
+
+**Run Mission:**
+1. Select mission from Mission Selection
+2. Click "Start mission" in Run Control Panel
+3. Watch waveform plot and Grid cells update in real-time
+
+**Pause/Resume:**
+- Click "Pause mission" to temporarily stop
+- Click "Resume mission" to continue
+
+**Abort:**
+- Click "Abort mission" to terminate and remove
+
+#### Using the Symbolic Sandbox
+
+Test mathematical expressions before using in Grid formulas:
+
+1. Navigate to Symbolics Panel (right column)
+2. Enter expression: `sin(x)**2 + cos(x)**2`
+3. Add variables: `x = 0`
+4. Select operations: `simplify`, `evalf`
+5. Click "Evaluate"
+6. Result: `1.0` (simplified identity)
+
+Supports: differentiation (`diff`), integration (`integrate`), simplification, numerical evaluation.
+
+### CLI Integration: --describe Flag
+
+The Command Center uses the CLI's `--describe` flag to dynamically generate configuration UIs:
+
+```bash
+# Get engine description (used by ModelPanel)
+./dase_cli/dase_cli.exe --describe igsoa_gw
+```
+
+**Returns JSON with:**
+- Parameter definitions (type, default, range, units, description)
+- Equation definitions (LaTeX, editable terms)
+- Boundary condition options
+- Output metric names
+
+**Example Output:**
+```json
+{
+  "status": "success",
+  "result": {
+    "engine": "igsoa_gw",
+    "display_name": "IGSOA Gravitational Wave Engine",
+    "description": "Fractional-order wave equation solver...",
+    "parameters": {
+      "grid_nx": {
+        "type": "integer",
+        "default": 32,
+        "range": [16, 128],
+        "units": "points",
+        "description": "Grid points in X dimension"
+      },
+      "alpha": {
+        "type": "float",
+        "default": 1.5,
+        "range": [1.0, 2.0],
+        "units": "dimensionless",
+        "description": "Fractional memory parameter"
+      }
+      // ... more parameters
+    },
+    "output_metrics": [
+      "simulation_time",
+      "total_energy",
+      "h_plus",
+      "h_cross"
+    ]
+  }
+}
+```
+
+### Real-Time METRIC Streaming
+
+Simulations emit metrics using the `METRIC:` protocol for real-time monitoring:
+
+**CLI Output Example:**
+```
+METRIC:{"name":"total_energy","value":123.45,"units":"J"}
+METRIC:{"name":"h_plus","value":-2.3e-21,"units":"strain"}
+METRIC:{"name":"simulation_time","value":0.005,"units":"s"}
+```
+
+**Backend Processing:**
+1. CLI stdout monitored for `METRIC:` prefix
+2. JSON parsed from metric line
+3. Broadcast to WebSocket clients: `{type: 'metrics:update', data: {...}}`
+4. Grid cells with `=LIVE()` automatically update
+
+**Using in Code (C++):**
+```cpp
+#include "metric_emitter.h"
+
+// Emit single metric
+dase::emitMetric("total_energy", 123.45, "J");
+
+// Emit multiple metrics
+std::map<std::string, double> metrics = {
+    {"h_plus", -2.3e-21},
+    {"h_cross", 1.8e-21}
+};
+std::map<std::string, std::string> units = {
+    {"h_plus", "strain"},
+    {"h_cross", "strain"}
+};
+dase::emitMetrics(metrics, units);
+```
+
+### WebSocket Endpoints
+
+The backend provides multiple WebSocket endpoints:
+
+| Endpoint | Purpose | Authentication |
+|----------|---------|----------------|
+| `ws://localhost:8080/` | CLI communication | Bearer token |
+| `ws://localhost:8080/metrics` | Grid LIVE() functions | Bearer token |
+| `ws://localhost:8080/telemetry` | Mission-specific data | Bearer token |
+
+**Connection Example:**
+```javascript
+const token = localStorage.getItem('command-center-token');
+const ws = new WebSocket(`ws://localhost:8080/metrics?token=${token}`);
+
+ws.onmessage = (event) => {
+  const message = JSON.parse(event.data);
+  if (message.type === 'metrics:update') {
+    console.log('Metric:', message.data);
+    // { name: 'total_energy', value: 123.45, units: 'J' }
+  }
+};
+```
+
+### REST API Endpoints
+
+The backend provides a REST API for mission management:
+
+**List Available Engines:**
+```bash
+curl -H "Authorization: Bearer YOUR_TOKEN" \
+  http://localhost:3000/api/engines
+```
+
+**Get Engine Description:**
+```bash
+curl -H "Authorization: Bearer YOUR_TOKEN" \
+  http://localhost:3000/api/engines/igsoa_gw
+```
+
+**Create Mission:**
+```bash
+curl -X POST \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test Mission","engine":"igsoa_gw","parameters":{"alpha":1.5}}' \
+  http://localhost:3000/api/missions
+```
+
+**List Missions:**
+```bash
+curl -H "Authorization: Bearer YOUR_TOKEN" \
+  http://localhost:3000/api/missions
+```
+
+**Send Mission Command:**
+```bash
+curl -X POST \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"command":"start"}' \
+  http://localhost:3000/api/missions/MISSION_ID/commands
+```
+
+### Architecture
+
+```
+┌─────────────────────┐
+│   React Frontend    │  ← User Interface
+│  (port 5173)        │
+└──────────┬──────────┘
+           │ Vite Proxy
+           ↓
+┌─────────────────────┐
+│   Backend Server    │  ← Node.js + Express
+│  (port 3000)        │     REST API
+└──────────┬──────────┘
+           │
+           ├─→ WebSocket (port 8080) ← Real-time metrics
+           │
+           ↓
+┌─────────────────────┐
+│   DASE CLI          │  ← C++ Engine
+│  (dase_cli.exe)     │     Simulations
+└─────────────────────┘
+```
+
+### Documentation
+
+**Integration Guides:**
+- `INTEGRATION_STATUS.md` - Complete integration report
+- `INTEGRATION_PLAN.md` - Original integration plan
+- `SESSION_SUMMARY.md` - Session accomplishments
+
+**Command Center Spec:**
+- `docs/COMMAND_CENTER_SPECIFICATION.md` - Requirements and design
+- `COMMAND_CENTER_CHECKPOINT.md` - Development checkpoint
+
+**Component Documentation:**
+- Grid: `web/command-center/src/components/Grid/`
+- ModelPanel: `web/command-center/src/components/ModelPanel/`
+- API Client: `web/command-center/src/services/apiClient.ts`
+
+### Production Deployment
+
+**Build Frontend:**
+```bash
+cd web/command-center
+npm run build
+# Output: dist/ directory
+```
+
+**Configure Nginx:**
+```nginx
+server {
+  listen 80;
+  server_name command-center.example.com;
+
+  # Frontend
+  location / {
+    root /var/www/command-center/dist;
+    try_files $uri $uri/ /index.html;
+  }
+
+  # Backend API
+  location /api/ {
+    proxy_pass http://localhost:3000;
+    proxy_set_header Host $host;
+  }
+
+  # WebSocket
+  location /ws/ {
+    proxy_pass http://localhost:8080;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
+}
+```
+
+**Environment Variables:**
+```bash
+# Backend
+export NODE_ENV=production
+export PORT=3000
+export API_TOKENS="token1,token2,token3"
+export PLAYGROUND_PYTHON=/usr/bin/python3
+```
+
+### Troubleshooting
+
+**Issue: "Invalid API token"**
+- Solution: Check token in localStorage matches backend token
+- Verify: `localStorage.getItem('command-center-token')`
+
+**Issue: Grid LIVE() cells don't update**
+- Check WebSocket connection: DevTools → Network → WS tab
+- Verify `/metrics` endpoint connected
+- Check backend logs for "METRIC:" messages
+
+**Issue: ModelPanel shows "Failed to fetch engine description"**
+- Verify `dase_cli.exe --describe ENGINE_NAME` works
+- Check backend can spawn CLI process
+- Verify CLI executable path in `backend/server.js`
+
+**Issue: WebSocket connection fails**
+- Check backend WebSocket server running on port 8080
+- Verify Vite proxy configuration in `vite.config.ts`
+- Check firewall allows WebSocket connections
+
+### Performance Tips
+
+**Grid:**
+- Limit LIVE() functions to ~10 cells (WebSocket bandwidth)
+- Use complex formulas sparingly (evaluated on every update)
+- Clear unused cells to free memory
+
+**Missions:**
+- Start with small timesteps (dt) for stability
+- Monitor total_energy to check for divergence
+- Use pause/resume for long simulations
+
+**Backend:**
+- Default: Max 50 concurrent processes
+- Increase in `backend/server.js`: `MAX_PROCESSES`
+- Monitor memory usage with large grids
 
 ---
 
