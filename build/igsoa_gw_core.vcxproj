@@ -328,6 +328,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\igsoa-sim\src\cpp\igsoa_gw_engine\core\fractional_solver.cpp" />
     <ClCompile Include="D:\igsoa-sim\src\cpp\igsoa_gw_engine\core\projection_operators.cpp" />
     <ClCompile Include="D:\igsoa-sim\src\cpp\igsoa_gw_engine\core\source_manager.cpp" />
+    <ClCompile Include="D:\igsoa-sim\src\cpp\igsoa_gw_engine\core\echo_generator.cpp" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

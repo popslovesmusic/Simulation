@@ -5,6 +5,7 @@
 #include "projection_operators.h"
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
 namespace dase {
 namespace igsoa {
@@ -130,7 +131,9 @@ ProjectionOperators::StrainComponents ProjectionOperators::compute_strain_at_obs
     Tensor4x4 O_tensor = compute_stress_energy_tensor(field, i, j, k);
 
     // Extract strain
-    return compute_strain(O_tensor, config_.detector_normal);
+    StrainComponents result = compute_strain(O_tensor, config_.detector_normal);
+
+    return result;
 }
 
 ProjectionOperators::CausalFlowVector ProjectionOperators::compute_causal_flow(

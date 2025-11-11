@@ -117,6 +117,7 @@ add_library(igsoa_gw_core STATIC
     src/cpp/igsoa_gw_engine/core/fractional_solver.cpp
     src/cpp/igsoa_gw_engine/core/projection_operators.cpp
     src/cpp/igsoa_gw_engine/core/source_manager.cpp
+    src/cpp/igsoa_gw_engine/core/echo_generator.cpp
 )
 
 target_include_directories(igsoa_gw_core PUBLIC
@@ -204,8 +205,16 @@ if(DASE_BUILD_TESTS)
     target_link_libraries(test_gw_waveform_generation PRIVATE igsoa_gw_core)
     target_compile_options(test_gw_waveform_generation PRIVATE ${DASE_COMPILE_FLAGS})
 
+    # Echo Detection Test
+    add_executable(test_echo_detection
+        tests/test_echo_detection.cpp
+    )
+    target_link_libraries(test_echo_detection PRIVATE igsoa_gw_core)
+    target_compile_options(test_echo_detection PRIVATE ${DASE_COMPILE_FLAGS})
+
     message(STATUS "Configured test: test_gw_engine_basic")
     message(STATUS "Configured test: test_gw_waveform_generation")
+    message(STATUS "Configured test: test_echo_detection")
 endif()
 
 # ============================================================================

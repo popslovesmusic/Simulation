@@ -16,6 +16,7 @@
 #include "../src/cpp/igsoa_gw_engine/core/fractional_solver.h"
 #include "../src/cpp/igsoa_gw_engine/core/source_manager.h"
 #include "../src/cpp/igsoa_gw_engine/core/projection_operators.h"
+#include "../src/cpp/igsoa_gw_engine/core/echo_generator.h"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -109,7 +110,7 @@ int main(int argc, char** argv) {
     merger_config.initial_separation = 150e3;  // 150 km
     merger_config.gaussian_width = 10e3;       // 10 km
     merger_config.source_amplitude = 100.0;    // Much stronger amplitude for detectable signal
-    merger_config.enable_inspiral = false;     // Start with circular orbit
+    merger_config.enable_inspiral = true;      // Enable GW-driven inspiral!
     merger_config.center = Vector3D(
         field_config.nx * field_config.dx / 2,
         field_config.ny * field_config.dy / 2,
@@ -119,8 +120,22 @@ int main(int argc, char** argv) {
     std::cout << "Binary: " << merger_config.mass1 << " + " << merger_config.mass2 << " M☉" << std::endl;
     std::cout << "Separation: " << merger_config.initial_separation / 1e3 << " km" << std::endl;
 
+    // Echo generator configuration
+    EchoConfig echo_config;
+    echo_config.fundamental_timescale = 0.001;  // 1 ms base echo delay
+    echo_config.max_primes = 30;                 // First 30 echoes
+    echo_config.echo_amplitude_base = 0.15;      // 15% of merger amplitude
+    echo_config.echo_amplitude_decay = 10.0;     // Decay rate
+    echo_config.echo_frequency_shift = 10.0;     // 10 Hz per echo
+    echo_config.echo_gaussian_width = 10e3;      // 10 km spatial extent
+    echo_config.auto_detect_merger = true;       // Enable automatic merger detection
+    echo_config.merger_detection_threshold = 10.0; // Energy threshold (field ~14 peak)
+
+    std::cout << "Echo generation: " << echo_config.max_primes << " echoes scheduled" << std::endl;
+    std::cout << "Echo timescale: " << echo_config.fundamental_timescale * 1000 << " ms" << std::endl;
+
     // Simulation parameters
-    int num_steps = 2000;  // Longer simulation for more signal accumulation
+    int num_steps = 5000;  // 5 seconds - enough for merger + echoes!
     int output_interval = 10;  // Output every 10 steps
 
     std::cout << "Total steps: " << num_steps << std::endl;
@@ -148,9 +163,9 @@ int main(int argc, char** argv) {
     // Configure projection (observer at distance)
     ProjectionConfig proj_config;
     proj_config.observer_position = Vector3D(
-        field_config.nx * field_config.dx / 2,
-        field_config.ny * field_config.dy / 2,
-        field_config.nz * field_config.dz * 1.2  // Closer to grid for stronger signal
+        field_config.nx * field_config.dx * 0.75,  // 48 km (off-center X for asymmetry!)
+        field_config.ny * field_config.dy * 0.75,  // 48 km (off-center Y)
+        field_config.nz * field_config.dz * 0.75   // 48 km (3/4 up grid, INSIDE domain)
     );
     proj_config.detector_normal = Vector3D(0, 0, -1);  // Looking down
     proj_config.detector_distance = field_config.nz * field_config.dz;
@@ -158,6 +173,9 @@ int main(int argc, char** argv) {
 
     ProjectionOperators projector(proj_config);
     std::cout << "✓ ProjectionOperators created" << std::endl;
+
+    EchoGenerator echo_generator(echo_config);
+    std::cout << "✓ EchoGenerator created (ready for merger detection)" << std::endl;
 
     // Set uniform alpha field
     for (int i = 0; i < field_config.nx; i++) {
@@ -184,13 +202,42 @@ int main(int argc, char** argv) {
     std::vector<double> h_cross_array;
     std::vector<double> amplitude_array;
 
+    bool merger_detected = false;
+    double merger_time = 0.0;
+
     auto evolution_start = std::chrono::high_resolution_clock::now();
 
     for (int step = 0; step < num_steps; step++) {
         double t = step * field_config.dt;
 
+        // Check for merger detection
+        if (!merger_detected && echo_generator.detectMerger(field, t)) {
+            merger_detected = true;
+            merger_time = t;
+            std::cout << "\n*** MERGER DETECTED at t = " << t << " s ***" << std::endl;
+            std::cout << "*** ECHO GENERATION ACTIVATED ***\n" << std::endl;
+        }
+
         // Get source terms from binary
         auto sources = merger.computeSourceTerms(field, t);
+
+        // Add echo sources if merger has occurred
+        if (merger_detected) {
+            Vector3D merger_center = merger_config.center;
+
+            // Add echo contribution at each grid point
+            for (int i = 0; i < field_config.nx; i++) {
+                for (int j = 0; j < field_config.ny; j++) {
+                    for (int k = 0; k < field_config.nz; k++) {
+                        Vector3D pos = field.toPosition(i, j, k);
+                        int idx = field.toFlatIndex(i, j, k);
+
+                        std::complex<double> echo_source = echo_generator.computeEchoSource(t, pos, merger_center);
+                        sources[idx] += echo_source;
+                    }
+                }
+            }
+        }
 
         // Compute fractional derivatives
         auto alpha_values = field.getAlphaValues();
@@ -223,8 +270,15 @@ int main(int argc, char** argv) {
                           << " | t = " << std::setw(6) << std::fixed << std::setprecision(3) << t << " s"
                           << " | h = " << std::scientific << std::setprecision(2) << strain.amplitude
                           << " | E_field = " << std::setprecision(2) << stats.total_energy
-                          << " | max_amp = " << std::setprecision(2) << stats.max_amplitude
-                          << std::endl;
+                          << " | max_amp = " << std::setprecision(2) << stats.max_amplitude;
+
+                if (merger_detected) {
+                    auto active_echoes = echo_generator.getActiveEchoes(t);
+                    if (!active_echoes.empty()) {
+                        std::cout << " | Echoes: " << active_echoes.size() << " active";
+                    }
+                }
+                std::cout << std::endl;
             }
         }
     }
@@ -244,6 +298,22 @@ int main(int argc, char** argv) {
 
     std::string filename = "gw_waveform_alpha_" + std::to_string(alpha_value) + ".csv";
     exportWaveformCSV(filename, time_array, h_plus_array, h_cross_array, amplitude_array);
+
+    // Export echo schedule if merger was detected
+    if (merger_detected) {
+        std::string echo_filename = "echo_schedule_alpha_" + std::to_string(alpha_value) + ".csv";
+        echo_generator.exportEchoSchedule(echo_filename);
+
+        std::cout << "\nEcho Schedule Summary:" << std::endl;
+        auto schedule = echo_generator.getEchoSchedule();
+        std::cout << "  Total echoes: " << schedule.size() << std::endl;
+        std::cout << "  First echo at: t = " << schedule[0].time << " s" << std::endl;
+        if (schedule.size() > 1) {
+            std::cout << "  Last echo at: t = " << schedule.back().time << " s" << std::endl;
+        }
+    } else {
+        std::cout << "\nWARNING: No merger detected - no echoes generated!" << std::endl;
+    }
 
     // ========================================================================
     // 5. Summary Statistics

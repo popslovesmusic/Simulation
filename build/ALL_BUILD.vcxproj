@@ -202,6 +202,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{62608097-9DB6-37EB-BDA0-C778EEC63B9B}</Project>
       <Name>igsoa_gw_core</Name>
     </ProjectReference>
+    <ProjectReference Include="D:\igsoa-sim\build\test_echo_detection.vcxproj">
+      <Project>{5786BA1B-7FB2-37D1-854D-B29E47F45962}</Project>
+      <Name>test_echo_detection</Name>
+    </ProjectReference>
     <ProjectReference Include="D:\igsoa-sim\build\test_gw_engine_basic.vcxproj">
       <Project>{675C2CC5-1556-33BE-9219-52D63B831F3B}</Project>
       <Name>test_gw_engine_basic</Name>

@@ -113,7 +113,10 @@
       "Bash(./test_gw_engine_basic.exe)",
       "Bash(buildReleasetest_gw_waveform_generation.exe)",
       "Bash(./build/Release/test_gw_waveform_generation.exe:*)",
-      "Bash(./test_gw_waveform_generation.exe:*)"
+      "Bash(./test_gw_waveform_generation.exe:*)",
+      "Bash(timeout 120 ./test_gw_waveform_generation.exe:*)",
+      "Bash(./test_echo_detection.exe:*)",
+      "Bash(timeout 180:*)"
     ],
     "deny": [],
     "ask": []
