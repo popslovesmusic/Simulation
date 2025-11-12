@@ -1,0 +1,112 @@
+{
+  "version": "1.0",
+  "created_at": "2025-11-11T00:00:00Z",
+  "total_entries": 13,
+  "total_size_mb": 0.00025272369384765625,
+  "entries": {
+    "fft_2d_512x512": {
+      "key": "fft_2d_512x512",
+      "created_at": "2025-11-11T23:11:03.527144Z",
+      "size_bytes": 20,
+      "access_count": 1,
+      "last_accessed": "2025-11-11T23:11:03.534173Z",
+      "checksum": "sha256:9f973c0f21b5f49dc6ffb9d1ff275547018659a26710cc47b1f483a374b3dcdd"
+    },
+    "fft_1d_64": {
+      "key": "fft_1d_64",
+      "created_at": "2025-11-11T23:16:32.079657Z",
+      "size_bytes": 17,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:00566a23aa4e01736d76e9546e23b227c87147b79288d47d2b7c479ed9b116f0"
+    },
+    "fft_1d_128": {
+      "key": "fft_1d_128",
+      "created_at": "2025-11-11T23:16:32.095281Z",
+      "size_bytes": 18,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:cfb4cd3aeeca7c4f012ef36dacaf0258e6e865bb00e44efa7bc590df2d07a9a8"
+    },
+    "fft_1d_256": {
+      "key": "fft_1d_256",
+      "created_at": "2025-11-11T23:16:32.126523Z",
+      "size_bytes": 18,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:c31a306cf4202763547077dad4f143d67a86fb2e89d1602d60cc1cd154a21bb8"
+    },
+    "fft_1d_512": {
+      "key": "fft_1d_512",
+      "created_at": "2025-11-11T23:16:32.142150Z",
+      "size_bytes": 18,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:569e1f713cc300319b56665c2dcd965ac2260df83fc08046d5b51c5ae977efbe"
+    },
+    "fft_1d_1024": {
+      "key": "fft_1d_1024",
+      "created_at": "2025-11-11T23:16:32.157775Z",
+      "size_bytes": 19,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:437dcaac1fc64e2dcbe0788d59f2e08579b8e9ad0f36c688bf87e9e44800b1e5"
+    },
+    "fft_1d_2048": {
+      "key": "fft_1d_2048",
+      "created_at": "2025-11-11T23:16:32.173398Z",
+      "size_bytes": 19,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:e1d7159e4eddb58b8d259b958d94c817b832b9a58427e64d6bf08d00b20b7013"
+    },
+    "fft_2d_64x64": {
+      "key": "fft_2d_64x64",
+      "created_at": "2025-11-11T23:16:32.189020Z",
+      "size_bytes": 20,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:eef6db659e312bc1b5d89a0f1957edfc941e18065b2caf315cc39f9a7e388b17"
+    },
+    "fft_2d_128x128": {
+      "key": "fft_2d_128x128",
+      "created_at": "2025-11-11T23:16:32.204644Z",
+      "size_bytes": 22,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:c6bdc9dacf0b940bb4fb5f37bbf3f342227d17db8a0be9dbfed868528d3041b6"
+    },
+    "fft_2d_256x256": {
+      "key": "fft_2d_256x256",
+      "created_at": "2025-11-11T23:16:32.220264Z",
+      "size_bytes": 22,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:23d5ac8355359f8f4bc54c79832a05d1051c9aef670e22640b299b60bbf4007f"
+    },
+    "fft_3d_32x32x32": {
+      "key": "fft_3d_32x32x32",
+      "created_at": "2025-11-11T23:16:32.235890Z",
+      "size_bytes": 23,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:1d664c3fbb05225f779e78f8885635b3774f620484dfb54a9955fbd7bc262b49"
+    },
+    "fft_3d_64x64x64": {
+      "key": "fft_3d_64x64x64",
+      "created_at": "2025-11-11T23:16:32.251513Z",
+      "size_bytes": 23,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:88b46a533ccc893507533b0bf7fd75f51b64b17281b33ed8b15ac0383682fd9f"
+    },
+    "fft_3d_128x128x128": {
+      "key": "fft_3d_128x128x128",
+      "created_at": "2025-11-11T23:16:32.281931Z",
+      "size_bytes": 26,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:8a17083450e08f1be7c64d12553ed73e9ffaa0b79362472df5e6ebcebf13820b"
+    }
+  }
+}

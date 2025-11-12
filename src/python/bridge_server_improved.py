@@ -71,6 +71,9 @@ performance_metrics = {
     "start_time": datetime.now().isoformat()
 }
 
+# Thread-safe lock for performance metrics (Fix: 2025-03 Code Review)
+metrics_lock = threading.Lock()
+
 # -----------------------------------------------------------------------------
 # HTTP Routes
 # -----------------------------------------------------------------------------
@@ -97,11 +100,14 @@ def serve_static(path):
 @app.route("/api/status")
 def api_status():
     """Get server and engine status"""
+    with metrics_lock:
+        perf_snapshot = dict(performance_metrics)
+
     status = {
         "server": "running",
         "engine_available": ENGINE_AVAILABLE,
         "timestamp": datetime.now().isoformat(),
-        "performance": performance_metrics
+        "performance": perf_snapshot
     }
 
     if ENGINE_AVAILABLE:
@@ -164,7 +170,8 @@ def api_benchmark():
             }
         }
 
-        performance_metrics["total_operations"] += metrics.total_operations
+        with metrics_lock:
+            performance_metrics["total_operations"] += metrics.total_operations
 
         logger.info(f"Benchmark completed: {elapsed:.3f}s, {metrics.current_ns_per_op:.2f} ns/op")
 
@@ -243,7 +250,8 @@ def ws_handler(ws):
 
             try:
                 msg = json.loads(raw)
-                performance_metrics["total_requests"] += 1
+                with metrics_lock:
+                    performance_metrics["total_requests"] += 1
             except json.JSONDecodeError:
                 ws.send(json.dumps({
                     "type": "error",
@@ -259,10 +267,12 @@ def ws_handler(ws):
                 ws.send(json.dumps({"type": "pong"}))
 
             elif cmd == "status":
+                with metrics_lock:
+                    active_count = performance_metrics["active_simulations"]
                 ws.send(json.dumps({
                     "type": "status",
                     "engine_available": ENGINE_AVAILABLE,
-                    "active_simulations": performance_metrics["active_simulations"]
+                    "active_simulations": active_count
                 }))
 
             elif cmd == "run":
@@ -279,7 +289,8 @@ def ws_handler(ws):
 
                 # Run in background thread
                 def run_job():
-                    performance_metrics["active_simulations"] += 1
+                    with metrics_lock:
+                        performance_metrics["active_simulations"] += 1
                     try:
                         engine = de.AnalogCellularEngineAVX2(nodes)
                         engine.run_mission(cycles)
@@ -304,7 +315,8 @@ def ws_handler(ws):
                             "timestamp": datetime.now().isoformat()
                         }))
 
-                        performance_metrics["total_operations"] += out["total_operations"] or 0
+                        with metrics_lock:
+                            performance_metrics["total_operations"] += out["total_operations"] or 0
 
                     except Exception as e:
                         logger.error(f"Simulation error: {e}", exc_info=True)
@@ -313,7 +325,8 @@ def ws_handler(ws):
                             "error": f"{type(e).__name__}: {e}"
                         }))
                     finally:
-                        performance_metrics["active_simulations"] -= 1
+                        with metrics_lock:
+                            performance_metrics["active_simulations"] -= 1
 
                 threading.Thread(target=run_job, daemon=True).start()
                 ws.send(json.dumps({

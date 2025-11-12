@@ -1,0 +1,9 @@
+{
+  "type": "laplacian_2d",
+  "grid_size": [
+    64,
+    64
+  ],
+  "boundary": "neumann",
+  "order": 2
+}

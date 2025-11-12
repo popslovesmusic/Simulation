@@ -1,0 +1,26 @@
+{
+  "type": "laplacian_2d",
+  "grid_size": [
+    128,
+    128
+  ],
+  "stencil": [
+    [
+      0,
+      1,
+      0
+    ],
+    [
+      1,
+      -4,
+      1
+    ],
+    [
+      0,
+      1,
+      0
+    ]
+  ],
+  "boundary": "neumann",
+  "order": 2
+}

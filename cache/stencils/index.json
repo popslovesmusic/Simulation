@@ -1,0 +1,72 @@
+{
+  "version": "1.0",
+  "created_at": "2025-11-11T00:00:00Z",
+  "total_entries": 8,
+  "total_size_mb": 0.00157928466796875,
+  "entries": {
+    "laplacian_64x64_meta": {
+      "key": "laplacian_64x64_meta",
+      "created_at": "2025-11-11T23:11:03.408805Z",
+      "size_bytes": 112,
+      "access_count": 1,
+      "last_accessed": "2025-11-11T23:11:03.426376Z",
+      "checksum": "sha256:75de823c692fd3d69d0f528095ab704f5c94b9bc614da188f3f3f33222fbfdfa"
+    },
+    "laplacian_2d_64x64": {
+      "key": "laplacian_2d_64x64",
+      "created_at": "2025-11-11T23:16:31.970292Z",
+      "size_bytes": 266,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:cfd67a0666c07ab73a6648fa4be6ab16fbef845cf1a69e5095ec7da6534f4e44"
+    },
+    "laplacian_2d_128x128": {
+      "key": "laplacian_2d_128x128",
+      "created_at": "2025-11-11T23:16:31.985918Z",
+      "size_bytes": 268,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:c19a3ffb8b5b9bd5269ca207dd6e03e0c2c0bc82c3bd3bec285246ea1d63ac0b"
+    },
+    "laplacian_2d_256x256": {
+      "key": "laplacian_2d_256x256",
+      "created_at": "2025-11-11T23:16:32.001545Z",
+      "size_bytes": 268,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:b47e86be7c7e0562b24b61cec65b16ee6f822da3de1c2ab38fa46d57434d6a93"
+    },
+    "laplacian_2d_512x512": {
+      "key": "laplacian_2d_512x512",
+      "created_at": "2025-11-11T23:16:32.017165Z",
+      "size_bytes": 268,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:8de7533086a65ad377b7ff1b56e124b12382a03f8fe5607592f7515c4f9a9710"
+    },
+    "laplacian_3d_32x32x32": {
+      "key": "laplacian_3d_32x32x32",
+      "created_at": "2025-11-11T23:16:32.032787Z",
+      "size_bytes": 157,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:7482c412240222659c0959763e490fd3dcab3a8b8a96f25974565f9092360bc9"
+    },
+    "laplacian_3d_64x64x64": {
+      "key": "laplacian_3d_64x64x64",
+      "created_at": "2025-11-11T23:16:32.048407Z",
+      "size_bytes": 157,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:beed17eacc5e140a4ce7a9737d2e91a9080fc58d11ff0e1f6d8a70b54dffc594"
+    },
+    "laplacian_3d_128x128x128": {
+      "key": "laplacian_3d_128x128x128",
+      "created_at": "2025-11-11T23:16:32.064034Z",
+      "size_bytes": 160,
+      "access_count": 0,
+      "last_accessed": null,
+      "checksum": "sha256:27a76e03e13aafdedbe3cbabf8822cf13115cbcb3ac61b7e917bcdfacff3d279"
+    }
+  }
+}

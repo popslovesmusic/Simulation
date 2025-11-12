@@ -34,14 +34,20 @@ function readDocumentIndex(directory) {
 
 function readDocument(directory, slug) {
   ensureDirectories();
-  const filePath = path.join(directory, `${slug}.md`);
-  if (!filePath.startsWith(directory)) {
-    throw new Error('Invalid slug');
+
+  // Fix: 2025-03 Code Review - Prevent path traversal with proper normalization
+  const resolvedDir = path.resolve(directory);
+  const resolvedPath = path.resolve(directory, `${slug}.md`);
+
+  // Security: Ensure resolved path is still inside the directory
+  if (!resolvedPath.startsWith(resolvedDir + path.sep)) {
+    throw new Error('Invalid slug: path traversal attempt blocked');
   }
-  if (!fs.existsSync(filePath)) {
+
+  if (!fs.existsSync(resolvedPath)) {
     return null;
   }
-  const content = fs.readFileSync(filePath, 'utf-8');
+  const content = fs.readFileSync(resolvedPath, 'utf-8');
   const [firstLine, ...rest] = content.split('\n');
   const title = firstLine.replace(/^#+\s*/, '').trim() || slug;
   return { title, content: rest.join('\n').trim() };

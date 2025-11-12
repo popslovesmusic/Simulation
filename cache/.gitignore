@@ -1,0 +1,17 @@
+# Cache data - do not commit
+# Only the structure and index files are tracked
+
+# Cached data files
+*.npz
+*.npy
+*.pt
+*.dat
+*.bin
+
+# Except index files
+!index.json
+!README.md
+!.gitignore
+
+# Keep directory structure
+!*/

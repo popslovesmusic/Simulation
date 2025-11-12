@@ -1,0 +1,12 @@
+{
+  "type": "laplacian_3d",
+  "grid_size": [
+    128,
+    128,
+    128
+  ],
+  "center": -6,
+  "neighbors": 1,
+  "boundary": "neumann",
+  "order": 2
+}

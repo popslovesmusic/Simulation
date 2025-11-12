@@ -57,7 +57,8 @@ const { tokens: apiTokens } = configureApi(app, {
 // Create Set for WebSocket authentication
 const validTokens = new Set(apiTokens);
 
-console.log('Valid API tokens:', apiTokens);
+// Security: Don't log actual token values (Fix: 2025-03 Code Review)
+console.log(`Valid API tokens: ${apiTokens.length} token(s) configured`);
 
 // ============================================================================
 // REST API ENDPOINTS
@@ -232,6 +233,7 @@ app.post('/api/analysis', authenticateRequest, (req, res) => {
 
     let output = '';
     let errorOutput = '';
+    let responded = false; // Fix: 2025-03 Code Review - prevent double-response
 
     proc.stdout.on('data', (data) => {
         output += data.toString();
@@ -242,21 +244,28 @@ app.post('/api/analysis', authenticateRequest, (req, res) => {
     });
 
     proc.on('close', (code) => {
-        res.json({
-            exit_code: code,
-            stdout: output,
-            stderr: errorOutput,
-            success: code === 0
-        });
+        if (!responded) {
+            responded = true;
+            clearTimeout(timeoutHandle); // Fix: Clear timeout to prevent double-response
+            res.json({
+                exit_code: code,
+                stdout: output,
+                stderr: errorOutput,
+                success: code === 0
+            });
+        }
     });
 
     // Timeout after 5 minutes
-    setTimeout(() => {
-        proc.kill('SIGTERM');
-        res.status(408).json({
-            error: 'Analysis timeout (5 minutes)',
-            partial_output: output
-        });
+    const timeoutHandle = setTimeout(() => {
+        if (!responded) {
+            responded = true;
+            proc.kill('SIGTERM');
+            res.status(408).json({
+                error: 'Analysis timeout (5 minutes)',
+                partial_output: output
+            });
+        }
     }, 5 * 60 * 1000);
 });
 
