@@ -1,0 +1,8 @@
+{
+  "metrics": {
+    "energy": 1.234,
+    "entropy": 0.567,
+    "complexity": 0.89
+  },
+  "status": "analyzed"
+}

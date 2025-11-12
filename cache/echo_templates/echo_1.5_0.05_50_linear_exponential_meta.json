@@ -1,0 +1,12 @@
+{
+  "alpha": 1.5,
+  "tau0": 0.05,
+  "num_echoes": 50,
+  "scaling": "linear",
+  "decay_type": "exponential",
+  "total_duration": 2.5000000000000004,
+  "mean_gap": 4.62,
+  "std_gap": 2.890605472907017,
+  "mean_amplitude": 0.0210454454291061,
+  "decay_rate": 138.0
+}

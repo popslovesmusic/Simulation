@@ -1,7 +1,16 @@
 {
   "version": "1.0",
   "created_at": "2025-11-11T00:00:00Z",
-  "total_entries": 0,
-  "total_size_mb": 0.0,
-  "entries": {}
+  "total_entries": 1,
+  "total_size_mb": 0.0038480758666992188,
+  "entries": {
+    "source_map_64x64_665fdb9d16c8": {
+      "key": "source_map_64x64_665fdb9d16c8",
+      "created_at": "2025-11-12T03:35:04.885072Z",
+      "size_bytes": 4035,
+      "access_count": 1,
+      "last_accessed": "2025-11-12T03:35:04.900797Z",
+      "checksum": "sha256:3f36a8fc6e38e030222191f299731a3dc2b57bbce02f0044810f1f23e0dbe263"
+    }
+  }
 }

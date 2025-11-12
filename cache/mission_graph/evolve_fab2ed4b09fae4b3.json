@@ -1,0 +1,6 @@
+{
+  "timesteps_completed": 100,
+  "final_time": 1.0,
+  "state_size": 100,
+  "status": "evolved"
+}

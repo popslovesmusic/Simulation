@@ -1,7 +1,40 @@
 {
   "version": "1.0",
   "created_at": "2025-11-11T00:00:00Z",
-  "total_entries": 0,
-  "total_size_mb": 0.0,
-  "entries": {}
+  "total_entries": 4,
+  "total_size_mb": 0.00039005279541015625,
+  "entries": {
+    "create_engine_7314e55727859ca1": {
+      "key": "create_engine_7314e55727859ca1",
+      "created_at": "2025-11-12T03:37:27.272594Z",
+      "size_bytes": 79,
+      "access_count": 1,
+      "last_accessed": "2025-11-12T03:37:27.819653Z",
+      "checksum": "sha256:272ac21bcc405bee8692691042590c62c901f824191a3a2050423468dc4a0548"
+    },
+    "evolve_fab2ed4b09fae4b3": {
+      "key": "evolve_fab2ed4b09fae4b3",
+      "created_at": "2025-11-12T03:37:27.412371Z",
+      "size_bytes": 102,
+      "access_count": 1,
+      "last_accessed": "2025-11-12T03:37:27.851189Z",
+      "checksum": "sha256:aab70e7491d3aef57df2860496d9356e14812210876af1210aea1299d1673302"
+    },
+    "snapshot_27b13333f1762cf6": {
+      "key": "snapshot_27b13333f1762cf6",
+      "created_at": "2025-11-12T03:37:27.540799Z",
+      "size_bytes": 109,
+      "access_count": 1,
+      "last_accessed": "2025-11-12T03:37:27.882927Z",
+      "checksum": "sha256:daef5fd56bce29f0825843e74583185b773529dd31b60ac8466faf352f49cf8e"
+    },
+    "analyze_8da431fbd646992e": {
+      "key": "analyze_8da431fbd646992e",
+      "created_at": "2025-11-12T03:37:27.782151Z",
+      "size_bytes": 119,
+      "access_count": 1,
+      "last_accessed": "2025-11-12T03:37:27.924117Z",
+      "checksum": "sha256:2ed848135b883d4bdc86cd1649c9ec7200b9153a4196ffa0dda5f44cd36949ac"
+    }
+  }
 }
