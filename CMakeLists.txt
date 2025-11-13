@@ -22,6 +22,7 @@ endif()
 option(DASE_BUILD_JULIA_DLLS "Build Julia C API DLLs for all phases" ON)
 option(DASE_BUILD_PYTHON "Build Python bindings" OFF)
 option(DASE_BUILD_TESTS "Build C++ unit tests" OFF)
+option(DASE_USE_GTEST "Use Google Test framework for tests" ON)
 option(DASE_ENABLE_AVX2 "Enable AVX2 SIMD instructions" ON)
 option(DASE_ENABLE_OPENMP "Enable OpenMP parallelization" ON)
 
@@ -67,6 +68,18 @@ find_file(FFTW3_HEADER fftw3.h PATHS ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT
 if(FFTW3_HEADER)
     get_filename_component(FFTW3_INCLUDE_DIR ${FFTW3_HEADER} DIRECTORY)
     message(STATUS "Found FFTW3 header: ${FFTW3_HEADER}")
+endif()
+
+# Google Test - optional for enhanced testing
+if(DASE_BUILD_TESTS AND DASE_USE_GTEST)
+    find_package(GTest CONFIG)
+    if(GTest_FOUND)
+        message(STATUS "Found Google Test: ${GTest_VERSION}")
+        include(GoogleTest)
+    else()
+        message(STATUS "Google Test not found - will use basic test builds")
+        set(DASE_USE_GTEST OFF)
+    endif()
 endif()
 
 # ============================================================================

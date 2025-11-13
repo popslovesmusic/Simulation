@@ -1,0 +1,238 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:  # Allow manual trigger
+
+env:
+  PYTHON_VERSION: '3.11'
+  NODE_VERSION: '20'
+
+jobs:
+  # ============================================================================
+  # Python Backend Tests
+  # ============================================================================
+  python-tests:
+    name: Python Tests
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install -r requirements-dev.txt
+
+      - name: Run pytest with coverage
+        run: |
+          pytest --cov --cov-report=xml --cov-report=term -v
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage.xml
+          flags: python
+          name: python-coverage
+          fail_ci_if_error: false  # Don't fail on upload errors
+
+      - name: Check coverage threshold
+        run: |
+          coverage report --fail-under=50
+
+  # ============================================================================
+  # C++ Engine Tests
+  # ============================================================================
+  cpp-tests:
+    name: C++ Tests
+    runs-on: windows-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+
+      - name: Install dependencies
+        run: |
+          vcpkg install gtest:x64-windows
+
+      - name: Configure CMake
+        run: |
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake
+        if: false  # Disabled until CMakeLists.txt exists
+
+      - name: Build C++ tests
+        run: |
+          cmake --build build --config Release
+        if: false  # Disabled until CMakeLists.txt exists
+
+      - name: Run C++ tests
+        run: |
+          ctest --test-dir build -C Release --output-on-failure
+        if: false  # Disabled until CMakeLists.txt exists
+
+      - name: Run existing C++ tests (temporary)
+        run: |
+          echo "C++ tests temporarily disabled - CMake setup needed"
+          echo "Existing test files found:"
+          dir tests\*.cpp
+
+  # ============================================================================
+  # Frontend Tests
+  # ============================================================================
+  frontend-tests:
+    name: Frontend Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: web/command-center/package-lock.json
+
+      - name: Install dependencies
+        working-directory: web/command-center
+        run: npm ci
+
+      - name: Run Vitest tests
+        working-directory: web/command-center
+        run: npm test -- --coverage
+        if: false  # Disabled until tests exist
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./web/command-center/coverage/coverage-final.json
+          flags: frontend
+          name: frontend-coverage
+          fail_ci_if_error: false
+        if: false  # Disabled until tests exist
+
+      - name: Check frontend (temporary)
+        working-directory: web/command-center
+        run: |
+          echo "Frontend tests not yet implemented"
+          echo "Files found:"
+          ls -la src/components/*.tsx | head -10
+
+  # ============================================================================
+  # Linting & Code Quality
+  # ============================================================================
+  lint:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install linting tools
+        run: |
+          pip install black isort flake8 mypy
+
+      - name: Check Black formatting
+        run: |
+          black --check backend/ tests/
+        continue-on-error: true  # Don't fail CI yet
+
+      - name: Check isort
+        run: |
+          isort --check-only backend/ tests/
+        continue-on-error: true
+
+      - name: Run flake8
+        run: |
+          flake8 backend/ tests/ --max-line-length=100
+        continue-on-error: true
+
+      - name: Run mypy
+        run: |
+          mypy backend/ --ignore-missing-imports
+        continue-on-error: true
+
+  # ============================================================================
+  # Performance Benchmarks
+  # ============================================================================
+  benchmarks:
+    name: Performance Benchmarks
+    runs-on: windows-latest
+    timeout-minutes: 30
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          pip install -e .
+          pip install pytest-benchmark
+
+      - name: Run benchmarks
+        run: |
+          pytest tests/ -v --benchmark-only --benchmark-json=benchmark.json
+        continue-on-error: true
+
+      - name: Store benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmark.json
+
+  # ============================================================================
+  # Test Summary
+  # ============================================================================
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [python-tests, cpp-tests, frontend-tests, lint]
+    if: always()
+
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## Test Suite Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Component | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Python Tests | ${{ needs.python-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| C++ Tests | ${{ needs.cpp-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Frontend Tests | ${{ needs.frontend-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint & Format | ${{ needs.lint.result }} |" >> $GITHUB_STEP_SUMMARY

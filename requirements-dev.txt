@@ -1,1 +1,57 @@
+# Development Dependencies for IGSOA-SIM
+# Testing, profiling, and code quality tools
+
+# === Testing ===
 pytest>=8.0
+pytest-cov>=4.1.0          # Coverage reporting
+pytest-xdist>=3.3.1        # Parallel test execution
+pytest-timeout>=2.1.0      # Test timeouts
+pytest-benchmark>=4.0.0    # Performance benchmarking
+pytest-asyncio>=0.21.0     # Async test support
+
+# Property-based testing
+hypothesis>=6.82.0
+
+# Mutation testing
+mutmut>=2.4.3
+
+# Mock & fixtures
+pytest-mock>=3.11.1
+responses>=0.23.1          # Mock HTTP requests
+
+# === Code Quality ===
+# Linting
+pylint>=3.0.0
+flake8>=6.1.0
+black>=23.7.0              # Code formatter
+isort>=5.12.0              # Import sorting
+
+# Type checking
+mypy>=1.5.0
+types-requests
+types-setuptools
+
+# === Profiling & Performance ===
+py-spy>=0.3.14             # Sampling profiler
+memory-profiler>=0.61.0    # Memory profiling
+line-profiler>=4.1.0       # Line-by-line profiling
+scalene>=1.5.29            # CPU+GPU+memory profiler
+
+# === Documentation ===
+sphinx>=7.1.0
+sphinx-rtd-theme>=1.3.0
+sphinxcontrib-napoleon>=0.7  # NumPy/Google docstring support
+
+# === Utilities ===
+tqdm>=4.66.0               # Progress bars
+colorama>=0.4.6            # Colored output (Windows)
+tabulate>=0.9.0            # Pretty tables
+
+# === Data Science (for analysis) ===
+matplotlib>=3.7.2
+pandas>=2.0.3
+seaborn>=0.12.2
+
+# === Already in project (should be in main requirements.txt) ===
+# numpy>=1.24.0
+# torch>=2.0.0

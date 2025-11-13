@@ -1,0 +1,30 @@
+[
+  {
+    "timestamp": "2025-11-12T03:46:24.757796Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-12T03:46:24.766017Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-12T03:49:37.062628Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-12T03:51:25.397174Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  }
+]
