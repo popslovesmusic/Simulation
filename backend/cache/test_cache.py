@@ -18,8 +18,8 @@ from pathlib import Path
 import tempfile
 import shutil
 
-from cache_manager import CacheManager
-from backends import FilesystemBackend, ModelBackend, BinaryBackend
+from backend.cache.cache_manager import CacheManager
+from backend.cache.backends import FilesystemBackend, ModelBackend, BinaryBackend
 
 
 class TestFilesystemBackend:

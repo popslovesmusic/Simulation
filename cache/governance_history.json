@@ -26,5 +26,89 @@
     "total_entries": 0,
     "hit_rate": 0.0,
     "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-13T09:53:09.158663Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-13T09:53:09.166513Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-13T09:53:21.128210Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-13T09:53:21.136353Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-13T09:54:25.461842Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-13T09:54:25.470001Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-13T09:55:30.995237Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-13T09:59:01.539629Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-13T09:59:17.715984Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-13T09:59:17.715984Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-13T09:59:28.958585Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
+  },
+  {
+    "timestamp": "2025-11-13T09:59:28.958585Z",
+    "total_size_mb": 0.0,
+    "total_entries": 0,
+    "hit_rate": 0.0,
+    "num_warnings": 0
   }
 ]

@@ -1,6 +1,6 @@
-^D:\IGSOA-SIM\CMAKELISTS.TXT
+^D:\NEW FOLDER\CMAKELISTS.TXT
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/igsoa-sim -BD:/igsoa-sim/build --check-stamp-file D:/igsoa-sim/build/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" "-SD:/New folder" "-BD:/New folder/build" --check-stamp-file "D:/New folder/build/CMakeFiles/generate.stamp"
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

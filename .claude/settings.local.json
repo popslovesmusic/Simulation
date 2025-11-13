@@ -120,7 +120,13 @@
       "Bash(if not exist \"src\\cpp\\utils\" mkdir \"src\\cpp\\utils\")",
       "Bash(./test_logger.exe:*)",
       "Bash(timeout 30:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(pip install pytest pytest-cov pytest-timeout)",
+      "Bash(where cmake:*)",
+      "Bash(else mkdir build)",
+      "Bash(build/Release/test_logger.exe:*)",
+      "Bash(\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\dumpbin.exe\" /EXPORTS build/Release/dase_engine_phase4b.dll)",
+      "Bash(\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\dumpbin.exe\" /EXPORTS dase_engine_phase4b.dll)"
     ],
     "deny": [],
     "ask": []

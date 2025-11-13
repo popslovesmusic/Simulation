@@ -1,0 +1,36 @@
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.19045.
+-- The CXX compiler identification is MSVC 19.44.35219.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found OpenMP_CXX: -openmp (found version "2.0")
+-- Found OpenMP: TRUE (found version "2.0")
+-- OpenMP found: 2.0
+-- Found FFTW3: D:/New folder/libfftw3-3.lib
+-- Found FFTW3 header: D:/New folder/fftw3.h
+-- Could NOT find GTest (missing: GTest_DIR)
+-- Google Test not found - will use basic test builds
+-- Configured test: test_gw_engine_basic
+-- Configured test: test_gw_waveform_generation
+-- Configured test: test_echo_detection
+-- Configured test: test_logger
+-- 
+-- ========================================
+-- DASE Engine Build Configuration
+-- ========================================
+-- Build type:       Release
+-- C++ compiler:     MSVC 19.44.35219.0
+-- C++ standard:     C++17
+-- AVX2 enabled:     ON
+-- OpenMP enabled:   ON
+-- 
+-- Build targets:
+--   - dase_core (static library)
+--   - C++ unit tests
+-- ========================================
+-- 
+-- Configuring done (7.5s)
+-- Generating done (1.8s)
+-- Build files have been written to: D:/New folder/build

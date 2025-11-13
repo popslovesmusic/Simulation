@@ -1,0 +1,92 @@
+MSBuild version 17.14.23+b0019275e for .NET Framework
+
+  1>Checking Build System
+  Building Custom Rule D:/New folder/CMakeLists.txt
+cl : command line  warning D9025: overriding '/Ob2' with '/Ob3' [D:\New folder\build\dase_core.vcxproj]
+  analog_universal_node_engine_avx2.cpp
+  Building Custom Rule D:/New folder/CMakeLists.txt
+cl : command line  warning D9025: overriding '/Ob2' with '/Ob3' [D:\New folder\build\igsoa_utils.vcxproj]
+  logger.cpp
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(150,9): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(150,9): error C2512: 'PrecisionTimer::PrecisionTimer': no appropriate default constructor available [D:\New folder\build\dase_core.vcxproj]
+      D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(150,9):
+      while trying to match the argument list '()'
+  
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(151,9): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(169,9): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(224,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(225,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(304,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(304,5): error C2512: 'PrecisionTimer::PrecisionTimer': no appropriate default constructor available [D:\New folder\build\dase_core.vcxproj]
+      D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(304,5):
+      while trying to match the argument list '()'
+  
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(305,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(314,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(349,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(349,5): error C2512: 'PrecisionTimer::PrecisionTimer': no appropriate default constructor available [D:\New folder\build\dase_core.vcxproj]
+      D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(349,5):
+      while trying to match the argument list '()'
+  
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(350,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(355,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(387,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(387,5): error C2512: 'PrecisionTimer::PrecisionTimer': no appropriate default constructor available [D:\New folder\build\dase_core.vcxproj]
+      D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(387,5):
+      while trying to match the argument list '()'
+  
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(388,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(411,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(427,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(446,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(446,5): error C2512: 'PrecisionTimer::PrecisionTimer': no appropriate default constructor available [D:\New folder\build\dase_core.vcxproj]
+      D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(446,5):
+      while trying to match the argument list '()'
+  
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(447,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(470,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(485,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(505,5): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(505,5): error C2512: 'PrecisionTimer::PrecisionTimer': no appropriate default constructor available [D:\New folder\build\dase_core.vcxproj]
+      D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(505,5):
+      while trying to match the argument list '()'
+  
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(518,9): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+D:\New folder\src\cpp\analog_universal_node_engine_avx2.cpp(519,9): error C2065: 'metrics_': undeclared identifier [D:\New folder\build\dase_core.vcxproj]
+  igsoa_utils.vcxproj -> D:\New folder\build\Release\igsoa_utils.lib
+  Building Custom Rule D:/New folder/CMakeLists.txt
+  Building Custom Rule D:/New folder/CMakeLists.txt
+cl : command line  warning D9025: overriding '/Ob2' with '/Ob3' [D:\New folder\build\test_logger.vcxproj]
+  test_logger.cpp
+cl : command line  warning D9025: overriding '/Ob2' with '/Ob3' [D:\New folder\build\igsoa_gw_core.vcxproj]
+  symmetry_field.cpp
+  fractional_solver.cpp
+  test_logger.obj : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+  Generating code
+  projection_operators.cpp
+  Finished generating code
+  test_logger.vcxproj -> D:\New folder\build\Release\test_logger.exe
+  source_manager.cpp
+  echo_generator.cpp
+  igsoa_gw_core.vcxproj -> D:\New folder\build\Release\igsoa_gw_core.lib
+  Building Custom Rule D:/New folder/CMakeLists.txt
+  Building Custom Rule D:/New folder/CMakeLists.txt
+cl : command line  warning D9025: overriding '/Ob2' with '/Ob3' [D:\New folder\build\test_gw_engine_basic.vcxproj]
+  test_gw_engine_basic.cpp
+cl : command line  warning D9025: overriding '/Ob2' with '/Ob3' [D:\New folder\build\test_echo_detection.vcxproj]
+  test_echo_detection.cpp
+  Building Custom Rule D:/New folder/CMakeLists.txt
+cl : command line  warning D9025: overriding '/Ob2' with '/Ob3' [D:\New folder\build\test_gw_waveform_generation.vcxproj]
+  test_gw_waveform_generation.cpp
+  test_gw_engine_basic.obj : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+  test_echo_detection.obj : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+  Generating code
+  Generating code
+  Finished generating code
+  Finished generating code
+  test_gw_engine_basic.vcxproj -> D:\New folder\build\Release\test_gw_engine_basic.exe
+  test_echo_detection.vcxproj -> D:\New folder\build\Release\test_echo_detection.exe
+  test_gw_waveform_generation.obj : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+  Generating code
+  Finished generating code
+  test_gw_waveform_generation.vcxproj -> D:\New folder\build\Release\test_gw_waveform_generation.exe

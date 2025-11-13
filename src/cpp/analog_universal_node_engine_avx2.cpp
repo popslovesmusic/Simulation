@@ -76,11 +76,13 @@ public:
 };
 
 // Lightweight profiling macros
-#define PROFILE_TOTAL() PrecisionTimer _total_timer(&metrics_.total_execution_time_ns)
-#define COUNT_OPERATION() metrics_.total_operations++
-#define COUNT_AVX2() metrics_.avx2_operations++
-#define COUNT_NODE() metrics_.node_processes++
-#define COUNT_HARMONIC() // Disabled: use per-instance metrics
+// NOTE: These are now NO-OPs for standalone functions since metrics_ is per-instance
+// Profiling happens at the engine level in member functions
+#define PROFILE_TOTAL() do {} while(0)
+#define COUNT_OPERATION() do {} while(0)
+#define COUNT_AVX2() do {} while(0)
+#define COUNT_NODE() do {} while(0)
+#define COUNT_HARMONIC() do {} while(0)
 
 // EngineMetrics implementation
 void EngineMetrics::reset() noexcept {

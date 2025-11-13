@@ -1,6 +1,6 @@
-^D:\IGSOA-SIM\BUILD\CMAKEFILES\0C209A5F470A50603D09C3072BE1FEE4\GENERATE.STAMP.RULE
+^D:\NEW FOLDER\BUILD\CMAKEFILES\6EA83768DC2E85A08992A2C6FB07BE3C\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/igsoa-sim -BD:/igsoa-sim/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/igsoa-sim/build/DASE_Engine.sln
+"C:\Program Files\CMake\bin\cmake.exe" "-SD:/New folder" "-BD:/New folder/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "D:/New folder/build/DASE_Engine.sln"
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

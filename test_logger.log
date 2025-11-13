@@ -1,0 +1,44 @@
+
+========================================
+Logger initialized: 2025-11-13 05:25:07.851
+Log file: test_logger.log
+Console level: INFO
+File level: DEBUG
+========================================
+
+[2025-11-13 05:25:07.852] [DEBUG] [test_logger.cpp:28] This is a debug message (should only appear in file)
+[2025-11-13 05:25:07.852] [INFO] [test_logger.cpp:29] This is an info message
+[2025-11-13 05:25:07.852] [WARNING] [test_logger.cpp:30] This is a warning message
+[2025-11-13 05:25:07.852] [ERROR] [test_logger.cpp:31] This is an error message
+[2025-11-13 05:25:07.852] [FATAL] [test_logger.cpp:32] This is a fatal message
+[2025-11-13 05:25:07.852] [DEBUG] [test_logger.cpp:45] Debug message (should not appear on console)
+[2025-11-13 05:25:07.852] [INFO] [test_logger.cpp:46] Info message (should not appear on console)
+[2025-11-13 05:25:07.852] [WARNING] [test_logger.cpp:47] Warning message (should not appear on console)
+[2025-11-13 05:25:07.852] [ERROR] [test_logger.cpp:48] Error message (should appear on console)
+[2025-11-13 05:25:07.852] [FATAL] [test_logger.cpp:49] Fatal message (should appear on console)
+[2025-11-13 05:25:07.852] [INFO] Simple info message (no file:line)
+[2025-11-13 05:25:07.852] [WARNING] Simple warning message (no file:line)
+[2025-11-13 05:25:07.852] [ERROR] Simple error message (no file:line)
+[2025-11-13 05:25:07.852] [INFO] [test_logger.cpp:75] Simulation initialized: num_nodes=1024, alpha=1.500000
+[2025-11-13 05:25:07.852] [WARNING] [test_logger.cpp:77] Memory usage: 256 MB
+[2025-11-13 05:25:07.852] [ERROR] [test_logger.cpp:80] Failed to write to file: test_data.csv
+[2025-11-13 05:25:07.852] [INFO] [test_logger.cpp:88] Thread 1 message 0
+[2025-11-13 05:25:07.853] [INFO] [test_logger.cpp:88] Thread 2 message 0
+[2025-11-13 05:25:07.853] [INFO] [test_logger.cpp:88] Thread 3 message 0
+[2025-11-13 05:25:07.871] [INFO] [test_logger.cpp:88] Thread 1 message 1
+[2025-11-13 05:25:07.871] [INFO] [test_logger.cpp:88] Thread 2 message 1
+[2025-11-13 05:25:07.871] [INFO] [test_logger.cpp:88] Thread 3 message 1
+[2025-11-13 05:25:07.886] [INFO] [test_logger.cpp:88] Thread 1 message 2
+[2025-11-13 05:25:07.887] [INFO] [test_logger.cpp:88] Thread 2 message 2
+[2025-11-13 05:25:07.887] [INFO] [test_logger.cpp:88] Thread 3 message 2
+[2025-11-13 05:25:07.903] [INFO] [test_logger.cpp:88] Thread 1 message 3
+[2025-11-13 05:25:07.903] [INFO] [test_logger.cpp:88] Thread 3 message 3
+[2025-11-13 05:25:07.903] [INFO] [test_logger.cpp:88] Thread 2 message 3
+[2025-11-13 05:25:07.918] [INFO] [test_logger.cpp:88] Thread 1 message 4
+[2025-11-13 05:25:07.919] [INFO] [test_logger.cpp:88] Thread 2 message 4
+[2025-11-13 05:25:07.919] [INFO] [test_logger.cpp:88] Thread 3 message 4
+
+========================================
+Logger shutdown: 2025-11-13 05:25:07.934
+========================================
+

@@ -170,7 +170,11 @@ def test_caching():
     print("TEST: Profile Caching")
     print("=" * 60)
 
-    provider = CachedProfileProvider()
+    # Create a fresh provider with test cache directory
+    import tempfile
+    import shutil
+    temp_dir = tempfile.mkdtemp()
+    provider = CachedProfileProvider(cache_root=temp_dir)
 
     # Use a unique configuration not tested before
     # First call: cache miss
@@ -194,6 +198,9 @@ def test_caching():
 
     print(f"\nFinal hit rate: {stats2['hit_rate'] * 100:.1f}%")
     print("\n[OK] Caching working correctly")
+
+    # Cleanup
+    shutil.rmtree(temp_dir, ignore_errors=True)
     return True
 
 

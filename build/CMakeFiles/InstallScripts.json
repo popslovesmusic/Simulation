@@ -1,7 +1,7 @@
 {
 	"InstallScripts" : 
 	[
-		"D:/igsoa-sim/build/cmake_install.cmake"
+		"D:/New folder/build/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

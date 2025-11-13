@@ -2,10 +2,10 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\igsoa-sim\build\x64\Release\ZERO_CHECK</FullPath>
+      <FullPath>D:\New folder\build\x64\Release\ZERO_CHECK</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>D:\igsoa-sim\build\Release\test_echo_detection.exe</FullPath>
+      <FullPath>D:\New folder\build\Release\test_echo_detection.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

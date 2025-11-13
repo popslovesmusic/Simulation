@@ -1,40 +1,54 @@
 
 ========================================
-Logger initialized: 2025-11-11 05:05:54.541
+Logger initialized: 2025-11-13 05:25:30.396
 Log file: gw_waveform_test.log
 Console level: INFO
 File level: DEBUG
 ========================================
 
-[2025-11-11 05:05:54.545] [INFO] [echo_generator.cpp:51] EchoGenerator initialized: 168 primes, 167 gaps, 30 echoes scheduled
-[2025-11-11 05:05:54.550] [INFO] [echo_generator.cpp:187] Merger time set to 0.001000 s, 30 echoes scheduled
-[2025-11-11 05:05:54.550] [INFO] [echo_generator.cpp:273] 
+[2025-11-13 05:25:30.396] [DEBUG] [symmetry_field.cpp:232] SymmetryField configuration validated successfully
+[2025-11-13 05:25:30.396] [DEBUG] [symmetry_field.cpp:119] Allocating memory for SymmetryField: 2 MB
+[2025-11-13 05:25:30.396] [INFO] [symmetry_field.cpp:142] SymmetryField created: 32×32×32 grid (32768 points, 2 MB)
+[2025-11-13 05:25:30.396] [DEBUG] [fractional_solver.cpp:142] Allocating FractionalSolver memory: 6 MB for 32768 points (SOE rank 12)
+[2025-11-13 05:25:30.399] [INFO] [fractional_solver.cpp:150] FractionalSolver created: 32768 points, SOE rank 12 (memory usage: 6 MB)
+[2025-11-13 05:25:30.399] [DEBUG] [echo_generator.cpp:127] Configuration validated successfully
+[2025-11-13 05:25:30.399] [INFO] [echo_generator.cpp:146] EchoGenerator initialized: 168 primes, 167 gaps, 30 echoes scheduled
+[2025-11-13 05:25:30.404] [INFO] [echo_generator.cpp:282] Merger time set to 0.001000 s, 30 echoes scheduled
+[2025-11-13 05:25:30.404] [INFO] [echo_generator.cpp:368] 
 *** MERGER DETECTED at t = 1.00e-03 s ***
 Field energy: 1.38e+01
 Scheduling 30 echoes
-[2025-11-11 05:06:15.377] [INFO] [echo_generator.cpp:375] Echo schedule exported to: echo_schedule_alpha_1.500000.csv
+[2025-11-13 05:25:53.016] [INFO] [test_gw_waveform_generation.cpp:106] Waveform exported successfully: gw_waveform_alpha_1.500000.csv (500 data points)
+[2025-11-13 05:25:53.029] [INFO] [echo_generator.cpp:514] Echo schedule exported successfully: echo_schedule_alpha_1.500000.csv (30 echoes)
 
 ========================================
-Logger shutdown: 2025-11-11 05:06:15.379
+Logger shutdown: 2025-11-13 05:25:53.030
 ========================================
 
 
 ========================================
-Logger initialized: 2025-11-11 05:16:27.005
+Logger initialized: 2025-11-13 05:26:00.798
 Log file: gw_waveform_test.log
 Console level: INFO
 File level: DEBUG
 ========================================
 
-[2025-11-11 05:16:27.006] [DEBUG] [symmetry_field.cpp:232] SymmetryField configuration validated successfully
-[2025-11-11 05:16:27.006] [DEBUG] [symmetry_field.cpp:119] Allocating memory for SymmetryField: 2 MB
-[2025-11-11 05:16:27.007] [INFO] [symmetry_field.cpp:142] SymmetryField created: 32×32×32 grid (32768 points, 2 MB)
-[2025-11-11 05:16:27.007] [DEBUG] [fractional_solver.cpp:142] Allocating FractionalSolver memory: 6 MB for 32768 points (SOE rank 12)
-[2025-11-11 05:16:27.010] [INFO] [fractional_solver.cpp:150] FractionalSolver created: 32768 points, SOE rank 12 (memory usage: 6 MB)
-[2025-11-11 05:16:27.010] [DEBUG] [echo_generator.cpp:127] Configuration validated successfully
-[2025-11-11 05:16:27.010] [INFO] [echo_generator.cpp:146] EchoGenerator initialized: 168 primes, 167 gaps, 30 echoes scheduled
-[2025-11-11 05:16:27.015] [INFO] [echo_generator.cpp:282] Merger time set to 0.001000 s, 30 echoes scheduled
-[2025-11-11 05:16:27.015] [INFO] [echo_generator.cpp:368] 
+[2025-11-13 05:26:00.799] [DEBUG] [symmetry_field.cpp:232] SymmetryField configuration validated successfully
+[2025-11-13 05:26:00.799] [DEBUG] [symmetry_field.cpp:119] Allocating memory for SymmetryField: 2 MB
+[2025-11-13 05:26:00.800] [INFO] [symmetry_field.cpp:142] SymmetryField created: 32×32×32 grid (32768 points, 2 MB)
+[2025-11-13 05:26:00.800] [DEBUG] [fractional_solver.cpp:142] Allocating FractionalSolver memory: 6 MB for 32768 points (SOE rank 12)
+[2025-11-13 05:26:00.802] [INFO] [fractional_solver.cpp:150] FractionalSolver created: 32768 points, SOE rank 12 (memory usage: 6 MB)
+[2025-11-13 05:26:00.802] [DEBUG] [echo_generator.cpp:127] Configuration validated successfully
+[2025-11-13 05:26:00.802] [INFO] [echo_generator.cpp:146] EchoGenerator initialized: 168 primes, 167 gaps, 30 echoes scheduled
+[2025-11-13 05:26:00.808] [INFO] [echo_generator.cpp:282] Merger time set to 0.001000 s, 30 echoes scheduled
+[2025-11-13 05:26:00.808] [INFO] [echo_generator.cpp:368] 
 *** MERGER DETECTED at t = 1.00e-03 s ***
 Field energy: 1.38e+01
 Scheduling 30 echoes
+[2025-11-13 05:26:23.122] [INFO] [test_gw_waveform_generation.cpp:106] Waveform exported successfully: gw_waveform_alpha_1.500000.csv (500 data points)
+[2025-11-13 05:26:23.130] [INFO] [echo_generator.cpp:514] Echo schedule exported successfully: echo_schedule_alpha_1.500000.csv (30 echoes)
+
+========================================
+Logger shutdown: 2025-11-13 05:26:23.131
+========================================
+

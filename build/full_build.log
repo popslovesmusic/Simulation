@@ -1,0 +1,53 @@
+MSBuild version 17.14.23+b0019275e for .NET Framework
+
+  1>Checking Build System
+  Building Custom Rule D:/New folder/CMakeLists.txt
+  Building Custom Rule D:/New folder/CMakeLists.txt
+  dase_core.vcxproj -> D:\New folder\build\Release\dase_core.lib
+  igsoa_utils.vcxproj -> D:\New folder\build\Release\igsoa_utils.lib
+  Building Custom Rule D:/New folder/CMakeLists.txt
+  Building Custom Rule D:/New folder/CMakeLists.txt
+  Building Custom Rule D:/New folder/CMakeLists.txt
+cl : command line  warning D9025: overriding '/Ob2' with '/Ob3' [D:\New folder\build\dase_engine_phase4a.vcxproj]
+  dase_capi.cpp
+cl : command line  warning D9025: overriding '/Ob2' with '/Ob3' [D:\New folder\build\dase_engine_phase4b.vcxproj]
+  dase_capi.cpp
+  Building Custom Rule D:/New folder/CMakeLists.txt
+  Building Custom Rule D:/New folder/CMakeLists.txt
+cl : command line  warning D9025: overriding '/Ob2' with '/Ob3' [D:\New folder\build\dase_engine_phase4c.vcxproj]
+  dase_capi.cpp
+cl : command line  warning D9025: overriding '/Ob2' with '/Ob3' [D:\New folder\build\dase_engine.vcxproj]
+  dase_capi.cpp
+cl : command line  warning D9025: overriding '/Ob2' with '/Ob3' [D:\New folder\build\dase_engine_phase3.vcxproj]
+  dase_capi.cpp
+  Building Custom Rule D:/New folder/CMakeLists.txt
+  Building Custom Rule D:/New folder/CMakeLists.txt
+  igsoa_gw_core.vcxproj -> D:\New folder\build\Release\igsoa_gw_core.lib
+  test_logger.vcxproj -> D:\New folder\build\Release\test_logger.exe
+     Creating library D:/New folder/build/Release/dase_engine_phase4b.lib and object D:/New folder/build/Release/dase_engine_phase4b.exp
+  Generating code
+     Creating library D:/New folder/build/Release/dase_engine_phase4a.lib and object D:/New folder/build/Release/dase_engine_phase4a.exp
+     Creating library D:/New folder/build/Release/dase_engine.lib and object D:/New folder/build/Release/dase_engine.exp
+     Creating library D:/New folder/build/Release/dase_engine_phase3.lib and object D:/New folder/build/Release/dase_engine_phase3.exp
+  Generating code
+  Building Custom Rule D:/New folder/CMakeLists.txt
+  Generating code
+  Generating code
+     Creating library D:/New folder/build/Release/dase_engine_phase4c.lib and object D:/New folder/build/Release/dase_engine_phase4c.exp
+  Finished generating code
+  Generating code
+  Finished generating code
+  Finished generating code
+  Finished generating code
+  Finished generating code
+  Building Custom Rule D:/New folder/CMakeLists.txt
+  Building Custom Rule D:/New folder/CMakeLists.txt
+  dase_engine_phase4b.vcxproj -> D:\New folder\build\Release\dase_engine_phase4b.dll
+  dase_engine.vcxproj -> D:\New folder\build\Release\dase_engine.dll
+  dase_engine_phase4a.vcxproj -> D:\New folder\build\Release\dase_engine_phase4a.dll
+  dase_engine_phase3.vcxproj -> D:\New folder\build\Release\dase_engine_phase3.dll
+  test_gw_waveform_generation.vcxproj -> D:\New folder\build\Release\test_gw_waveform_generation.exe
+  dase_engine_phase4c.vcxproj -> D:\New folder\build\Release\dase_engine_phase4c.dll
+  test_echo_detection.vcxproj -> D:\New folder\build\Release\test_echo_detection.exe
+  test_gw_engine_basic.vcxproj -> D:\New folder\build\Release\test_gw_engine_basic.exe
+  Building Custom Rule D:/New folder/CMakeLists.txt

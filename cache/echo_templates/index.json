@@ -8,144 +8,144 @@
       "key": "echo_1.5_0.05_50_linear_exponential",
       "created_at": "2025-11-12T03:30:45.317387Z",
       "size_bytes": 1455,
-      "access_count": 2,
-      "last_accessed": "2025-11-12T03:30:45.375936Z",
+      "access_count": 18,
+      "last_accessed": "2025-11-13T10:00:22.967241Z",
       "checksum": "sha256:0d5cf471d1e305148fc903c4d4cc55ccc376ac28acbfb62624c4203d061d0491"
     },
     "echo_1.5_0.05_50_linear_exponential_meta": {
       "key": "echo_1.5_0.05_50_linear_exponential_meta",
       "created_at": "2025-11-12T03:30:45.340380Z",
       "size_bytes": 274,
-      "access_count": 2,
-      "last_accessed": "2025-11-12T03:30:45.383332Z",
+      "access_count": 18,
+      "last_accessed": "2025-11-13T10:00:22.967241Z",
       "checksum": "sha256:f5dcd5e96a8e87baa033217360e090702e763e2517392c30461dfbeba911d485"
     },
     "echo_1.5_0.1_50_linear_exponential": {
       "key": "echo_1.5_0.1_50_linear_exponential",
       "created_at": "2025-11-12T03:30:45.395809Z",
       "size_bytes": 1454,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 3,
+      "last_accessed": "2025-11-13T09:54:25.312659Z",
       "checksum": "sha256:8623cc0f2b30ecef9d3608032e40749f68f81c833778c3f1a68d3474fb4eb9a9"
     },
     "echo_1.5_0.1_50_linear_exponential_meta": {
       "key": "echo_1.5_0.1_50_linear_exponential_meta",
       "created_at": "2025-11-12T03:30:45.417911Z",
       "size_bytes": 271,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 3,
+      "last_accessed": "2025-11-13T09:54:25.320883Z",
       "checksum": "sha256:884b0f738d3f71628c26f6705312fa6d19ec82c27260f2598222dd0109c45dcd"
     },
     "echo_1.5_0.2_50_linear_exponential": {
       "key": "echo_1.5_0.2_50_linear_exponential",
       "created_at": "2025-11-12T03:30:45.440913Z",
       "size_bytes": 1450,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 3,
+      "last_accessed": "2025-11-13T09:54:25.328774Z",
       "checksum": "sha256:da1d7b22e736dc616ce19f1bde7b7dbd7bbab98488a69a5b4c0f76ee9875d674"
     },
     "echo_1.5_0.2_50_linear_exponential_meta": {
       "key": "echo_1.5_0.2_50_linear_exponential_meta",
       "created_at": "2025-11-12T03:30:45.462434Z",
       "size_bytes": 272,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 3,
+      "last_accessed": "2025-11-13T09:54:25.337117Z",
       "checksum": "sha256:e25cca03f554a5d202646f59c244e85f2c5e425267be0828fe5c3b85d0027845"
     },
     "echo_1.8_0.05_50_linear_exponential": {
       "key": "echo_1.8_0.05_50_linear_exponential",
       "created_at": "2025-11-12T03:30:45.482450Z",
       "size_bytes": 1454,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 3,
+      "last_accessed": "2025-11-13T09:54:25.345156Z",
       "checksum": "sha256:83f2706ea7c93d97e6db2c3267906df0fa577872f57031fb1781fdb78f9d005f"
     },
     "echo_1.8_0.05_50_linear_exponential_meta": {
       "key": "echo_1.8_0.05_50_linear_exponential_meta",
       "created_at": "2025-11-12T03:30:45.503156Z",
       "size_bytes": 289,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 3,
+      "last_accessed": "2025-11-13T09:54:25.359138Z",
       "checksum": "sha256:bf0ca9481b530dd947ce452d3876981cd392a70ece2b3002284a3da6a3935662"
     },
     "echo_1.8_0.1_50_linear_exponential": {
       "key": "echo_1.8_0.1_50_linear_exponential",
       "created_at": "2025-11-12T03:30:45.523462Z",
       "size_bytes": 1453,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 10,
+      "last_accessed": "2025-11-13T10:00:22.982861Z",
       "checksum": "sha256:fa14bb2b4911ee99705122ad99ebb7bd0190bbc9ded02957dda9468a385ed94d"
     },
     "echo_1.8_0.1_50_linear_exponential_meta": {
       "key": "echo_1.8_0.1_50_linear_exponential_meta",
       "created_at": "2025-11-12T03:30:45.543647Z",
       "size_bytes": 286,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 10,
+      "last_accessed": "2025-11-13T10:00:22.982861Z",
       "checksum": "sha256:da95ce4cb6df09996f3ebfb9e37aad5828e9017e7fef7a1194f70453c697546e"
     },
     "echo_1.8_0.2_50_linear_exponential": {
       "key": "echo_1.8_0.2_50_linear_exponential",
       "created_at": "2025-11-12T03:30:45.562526Z",
       "size_bytes": 1449,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 3,
+      "last_accessed": "2025-11-13T09:54:25.383543Z",
       "checksum": "sha256:89e2d0d0f5dbdc28852c1840d64cc6ab393be1a286176d8415017bc2f30b552f"
     },
     "echo_1.8_0.2_50_linear_exponential_meta": {
       "key": "echo_1.8_0.2_50_linear_exponential_meta",
       "created_at": "2025-11-12T03:30:45.582411Z",
       "size_bytes": 287,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 3,
+      "last_accessed": "2025-11-13T09:54:25.391792Z",
       "checksum": "sha256:9e800fb1dbab2d7b01a326a11f3175ff73626775e770c0116f72f244465394e5"
     },
     "echo_2_0.05_50_linear_exponential": {
       "key": "echo_2_0.05_50_linear_exponential",
       "created_at": "2025-11-12T03:30:45.601740Z",
       "size_bytes": 1453,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 3,
+      "last_accessed": "2025-11-13T09:54:25.399609Z",
       "checksum": "sha256:e1690180c5035f2896b10d97e57aace798044e84b93b6c97905ec637ea49c14d"
     },
     "echo_2_0.05_50_linear_exponential_meta": {
       "key": "echo_2_0.05_50_linear_exponential_meta",
       "created_at": "2025-11-12T03:30:45.621882Z",
       "size_bytes": 288,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 3,
+      "last_accessed": "2025-11-13T09:54:25.407166Z",
       "checksum": "sha256:e00b112e895c68dccafee4b1c6d56e795b136b64db17968bfbad7bd1e6473a9d"
     },
     "echo_2_0.1_50_linear_exponential": {
       "key": "echo_2_0.1_50_linear_exponential",
       "created_at": "2025-11-12T03:30:45.642059Z",
       "size_bytes": 1452,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 3,
+      "last_accessed": "2025-11-13T09:54:25.415241Z",
       "checksum": "sha256:c9c699c73c72f0d1e126b830f7aeed9042d9f914808275503da2e3eb030a9db3"
     },
     "echo_2_0.1_50_linear_exponential_meta": {
       "key": "echo_2_0.1_50_linear_exponential_meta",
       "created_at": "2025-11-12T03:30:45.664286Z",
       "size_bytes": 285,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 3,
+      "last_accessed": "2025-11-13T09:54:25.423518Z",
       "checksum": "sha256:42d7e2fdb968fc4d4040d7604a5bbfc42c57ce00b6bede304a9bb212b5995975"
     },
     "echo_2_0.2_50_linear_exponential": {
       "key": "echo_2_0.2_50_linear_exponential",
       "created_at": "2025-11-12T03:30:45.684740Z",
       "size_bytes": 1448,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 9,
+      "last_accessed": "2025-11-13T09:58:13.486054Z",
       "checksum": "sha256:7d71d1657fa9cd1438965478095cfca6229497ad3ee00780c61f1ce16e65fb57"
     },
     "echo_2_0.2_50_linear_exponential_meta": {
       "key": "echo_2_0.2_50_linear_exponential_meta",
       "created_at": "2025-11-12T03:30:45.704987Z",
       "size_bytes": 286,
-      "access_count": 0,
-      "last_accessed": null,
+      "access_count": 9,
+      "last_accessed": "2025-11-13T09:58:13.486054Z",
       "checksum": "sha256:dce8844c29827e613d034e10087e76399b59cc78eace2df2bf69b1b2bdff1f71"
     }
   }

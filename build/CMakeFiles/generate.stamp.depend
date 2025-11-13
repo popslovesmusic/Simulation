@@ -25,7 +25,7 @@ C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/Windows-MSVC-CXX.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/Windows-MSVC.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/Windows.cmake
 C:/Program Files/CMake/share/cmake-4.2/Modules/Platform/WindowsPaths.cmake
-D:/igsoa-sim/CMakeLists.txt
-D:/igsoa-sim/build/CMakeFiles/4.2.0-rc2/CMakeCXXCompiler.cmake
-D:/igsoa-sim/build/CMakeFiles/4.2.0-rc2/CMakeRCCompiler.cmake
-D:/igsoa-sim/build/CMakeFiles/4.2.0-rc2/CMakeSystem.cmake
+D:/New folder/CMakeLists.txt
+D:/New folder/build/CMakeFiles/4.2.0-rc2/CMakeCXXCompiler.cmake
+D:/New folder/build/CMakeFiles/4.2.0-rc2/CMakeRCCompiler.cmake
+D:/New folder/build/CMakeFiles/4.2.0-rc2/CMakeSystem.cmake
